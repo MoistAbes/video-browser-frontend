@@ -1,0 +1,79 @@
+<!--<div class="video-player-container" (mousemove)="onMouseMove()" (mouseenter)="showControls = true" (mouseleave)="showControls = false">-->
+<div class="video-player-container" (mousemove)="onMouseMove()">
+  <video #target
+         (timeupdate)="onTimeUpdate()"
+         (click)="onVideoClick()"
+         (dblclick)="onVideoDoubleClick()"
+         class="video-js vjs-default-skin"
+         controls
+         preload="auto"
+  >
+
+
+
+  </video>
+
+  @if (overlayText) {
+    <div class="overlay-message" >{{ overlayText }}</div>
+  }
+  <div class="custom-control-bar" [class.visible]="showControls">
+
+    <div class="row">
+      <div class="col-12">
+        <!-- Middle: Time Slider -->
+        <div class="center-controls">
+          <input
+            type="range"
+            min="0"
+            [max]="duration"
+            [value]="currentTime"
+            step="1"
+            (input)="onSliderInput($event)"
+            #progressSlider
+          />
+
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+
+      <div class="col-10">
+        <!-- Left: Play/Pause -->
+        <div class="left-controls">
+          <button class="netflix-button" (click)="togglePlay()">
+            @if (isPlaying) {
+              <i class="fa-solid fa-pause"></i>
+            }
+            @if (!isPlaying) {
+              <i class="fa-solid fa-play"></i>
+            }
+          </button>
+
+
+          <i class="fa-solid fa-volume-low"></i>
+          <mat-slider style="max-width: 20px" min="0" max="1" step="0.01">
+            <input matSliderThumb [value]="volume" (input)="onVolumeChange($event)" />
+          </mat-slider>
+
+          <span>{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</span>
+
+        </div>
+      </div>
+
+      <div class="col-2">
+        <!-- Right: Fullscreen -->
+        <div class="right-controls">
+          <button class="netflix-button" (click)="toggleFullscreen()" title="Toggle fullscreen">
+            <i class="fa-solid fa-expand"></i>
+          </button>
+        </div>
+      </div>
+
+      </div>
+  </div>
+
+</div>
+
+
+

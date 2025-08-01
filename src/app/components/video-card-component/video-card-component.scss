@@ -1,0 +1,42 @@
+@use '../../../styles/colors' as *;
+
+
+.video-card {
+  position: relative;
+  background-color: #222;
+  border-radius: 8px;
+  overflow: hidden; // żeby tekst nie wychodził poza kartę
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  color: white;
+  text-align: center;
+  font-weight: 500;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+
+  &:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 12px rgba(239, 8, 8, 0.71);
+  }
+
+
+  .video-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .video-title {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    color: $normal-white;
+    font-size: 1rem;
+    text-align: center;
+    word-break: break-word;
+    margin: 0;
+  }
+}

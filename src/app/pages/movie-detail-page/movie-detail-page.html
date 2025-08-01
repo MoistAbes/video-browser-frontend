@@ -1,0 +1,57 @@
+@if (contentType === 'single') {
+  <app-single-movie-component
+    [isVideoPlaying]="isVideoPlaying"
+    [videoData]="videoData"
+    [selectedVideoUrl]="selectedVideoUrl"
+    [subtitlesUrl]="subtitlesUrl"
+    [thumbnails]="thumbnails"
+    [parentTitle]="parentTitle"
+    [playVideo]="playVideo"
+  ></app-single-movie-component>
+}
+
+@if (contentType === 'seasons') {
+  <app-seasons-component
+    [isVideoPlaying]="isVideoPlaying"
+    [videoData]="videoData"
+    [seasons]="seasons"
+    [selectedSeason]="selectedSeason"
+    [episodes]="episodes"
+    [selectedEpisode]="selectedEpisode"
+    [videoInfoList]="videoInfoList"
+    [thumbnails]="thumbnails"
+    [selectedVideoUrl]="selectedVideoUrl"
+    [parentTitle]="parentTitle"
+    [playVideo]="playVideo"
+  ></app-seasons-component>
+}
+
+@if (contentType === 'series') {
+  <app-series-component
+    [isVideoPlaying]="isVideoPlaying"
+    [videoData]="videoData"
+    [videoInfoList]="videoInfoList"
+    [thumbnails]="thumbnails"
+    [selectedVideoUrl]="selectedVideoUrl"
+    [subtitlesUrl]="subtitlesUrl"
+    [parentTitle]="parentTitle"
+    [playVideo]="playVideo"
+  ></app-series-component>
+}
+
+@if (contentType === 'seasons-and-movies') {
+  <app-seasons-and-movies-component
+    [isVideoPlaying]="isVideoPlaying"
+    [videoData]="videoData"
+    [videoInfoList]="videoInfoList"
+    [seasons]="seasons"
+    [selectedSeason]="selectedSeason"
+    [episodes]="episodes"
+    [selectedEpisode]="selectedEpisode"
+    [movies]="movies"
+    [thumbnails]="thumbnails"
+    [selectedVideoUrl]="selectedVideoUrl"
+    [parentTitle]="parentTitle"
+    [playVideo]="playVideo"
+  ></app-seasons-and-movies-component>
+}

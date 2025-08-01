@@ -1,0 +1,59 @@
+@use '../../../styles/colors' as *;
+
+.topbar {
+  height: 5vh; // albo np. 4rem
+  min-height: 5vh;
+  max-height: 5vh;
+
+  display: flex;
+  align-items: center;
+  background-color: $navbar-color;
+  color: $normal-white;
+  padding: 0 1.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  flex-shrink: 0; // <<< zapobiega kurczeniu
+}
+
+/* Kontener po lewej */
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* Tytuł aplikacji */
+.home-title {
+  font-size: 2.5vh;
+  cursor: pointer;
+  margin: 0;
+  white-space: nowrap;
+  user-select: none; /* wyłącza zaznaczanie tekstu */
+}
+
+
+.home-title:hover {
+  color: #cccccc;
+}
+
+/* Linki */
+.nav-links {
+  display: flex;
+  //gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.nav-links a {
+  color: $normal-white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.3s, color 0.3s;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 1.5vh;
+
+}
+
+.nav-links a:hover,
+.nav-links a.router-link-active {
+  background-color: #333;
+}

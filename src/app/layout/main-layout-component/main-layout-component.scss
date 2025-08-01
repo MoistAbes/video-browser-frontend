@@ -1,0 +1,20 @@
+@use '../../../styles/colors' as *;
+
+/* Layout: topbar + main content */
+.layout-container {
+  display: flex;
+  flex-direction: column; /* top -> bottom */
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Główna zawartość */
+.main-content {
+  //max-height: 500px;
+  flex-grow: 1;
+  background-color: #1e1e1e;
+  color: $normal-white;
+  overflow-y: auto;
+  scrollbar-width: none;         /* Firefox */
+  -ms-overflow-style: none;      /* IE 10+ */
+}

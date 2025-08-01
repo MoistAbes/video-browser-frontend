@@ -1,0 +1,12 @@
+{
+  "/videos": {
+    "target": "http://192.168.108.13:8080",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/video-info": {
+    "target": "http://192.168.108.13:8080",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

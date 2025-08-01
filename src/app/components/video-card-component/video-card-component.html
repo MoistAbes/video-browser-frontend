@@ -1,0 +1,20 @@
+<div class="video-card" (click)="onClick()">
+<!--  ToDO to sprawdzenie bedzie mozna wywalic jak zrobimy zeby wszedzie ikonki byly zeby niepotrzenie nie sprawdzac-->
+  @if (iconFilePath && iconFilePath.trim() !== '' && !iconFilePath.endsWith('/')) {
+    <img
+      [ngSrc]="Endpoints.videos.icon + '?path=' + iconFilePath"
+      alt="thumbnail"
+      priority
+      class="video-icon"
+      width="300"
+      height="450"
+    />
+  } @else {
+    <div class="no-icon-placeholder">
+      <p>No thumbnail</p>
+    </div>
+  }
+
+  <p class="video-title">{{ title }}</p>
+</div>
+
