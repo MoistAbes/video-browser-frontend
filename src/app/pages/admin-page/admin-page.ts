@@ -1,9 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {VideoApi} from '../../services/api/video-api';
-import {VideoStoreService} from '../../services/local/video-store-service';
-import {VideoInfoModel} from '../../models/video-info-model';
 import {FormsModule} from '@angular/forms';
-import {VideoInfoApiService} from '../../services/api/video-info-api-service';
+import {ShowApiService} from '../../services/api/show-api-service';
 
 @Component({
   selector: 'app-admin-page',
@@ -11,41 +9,41 @@ import {VideoInfoApiService} from '../../services/api/video-info-api-service';
     FormsModule
   ],
   templateUrl: './admin-page.html',
+  standalone: true,
   styleUrl: './admin-page.scss'
 })
 export class AdminPage implements OnInit {
 
-  videoInfoList: VideoInfoModel[] = []
-  videoInfoListFiltered: VideoInfoModel[] = []
+  // videoInfoList: VideoInfoModel[] = []
+  // videoInfoListFiltered: VideoInfoModel[] = []
 
   audioFilterValue: string = ''
 
   constructor(private videoApiService: VideoApi,
-              private videoInfoApiService: VideoInfoApiService,
-              private videoStoreService: VideoStoreService) {}
+              private showApiService: ShowApiService,) {}
 
   ngOnInit(): void {
-    this.videoStoreService.getAllVideos().subscribe({
-      next: (videos) => {
-        this.videoInfoList = videos
-        this.videoInfoListFiltered = videos
-      },
-      error: (err) => console.error('Błąd przy ładowaniu listy filmów:', err)
-    });
+    // this.videoStoreService.getAllVideos().subscribe({
+    //   next: (videos) => {
+    //     this.videoInfoList = videos
+    //     this.videoInfoListFiltered = videos
+    //   },
+    //   error: (err) => console.error('Błąd przy ładowaniu listy filmów:', err)
+    // });
 
   }
 
-  findAllParentTitle() {
-    this.videoInfoApiService.findAllVideoInfoParentTitle().subscribe({
-      next: (videos) => {
-        console.log(videos);
-      },
-      error: (err) => {
-        console.log(err)
-      },
-      complete: () => {}
-    })
-  }
+  // findAllParentTitle() {
+  //   this.videoInfoApiService.findAllVideoInfoParentTitle().subscribe({
+  //     next: (videos) => {
+  //       console.log(videos);
+  //     },
+  //     error: (err) => {
+  //       console.log(err)
+  //     },
+  //     complete: () => {}
+  //   })
+  // }
 
   scanAllMovies() {
     console.log('ScanAllMovies');
@@ -64,12 +62,11 @@ export class AdminPage implements OnInit {
 
   filterVideoInfo() {
 
-    console.log('filterVideoInfo');
-    this.videoInfoListFiltered = this.videoInfoList;
-
-    this.videoInfoListFiltered = this.videoInfoListFiltered.filter(videoInfo =>
-      videoInfo.videoTechnicalDetails?.audio.includes(this.audioFilterValue)
-    );
+    // this.videoInfoListFiltered = this.videoInfoList;
+    //
+    // this.videoInfoListFiltered = this.videoInfoListFiltered.filter(videoInfo =>
+    //   videoInfo.videoTechnicalDetails?.audio.includes(this.audioFilterValue)
+    // );
   }
 
 
@@ -81,4 +78,15 @@ export class AdminPage implements OnInit {
     })
   }
 
+  testFindAllShows() {
+    this.showApiService.findAllShows().subscribe({
+      next: (result) => {
+        console.log("SHOWS: ", result);
+      },
+      error: (err) => {
+        console.log("Error while loading shows: ", err);
+      },
+      complete: () => {}
+    })
+  }
 }

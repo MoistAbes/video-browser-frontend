@@ -16,6 +16,11 @@ export const Endpoints = {
     findAllSmall: `${BASE_URL}/video-info/find-all-small`,
     findAllParentTitle: `${BASE_URL}/video-info/find-all/parent-title`,
     findAllByParentTitle: `${BASE_URL}/video-info/find-all-by/parent-title`,
-}
+  },
+  show: {
+    findAll: `${BASE_URL}/show/find/all`,
+    findByParentTitle: `${BASE_URL}/show/find`,
+    findWithRootPath: `${BASE_URL}/show/find/with-root-path`,
+  }
 
 };

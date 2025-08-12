@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {VideoInfoModel} from '../../models/video-info-model';
 import {Endpoints} from '../../endpoints/endpoints';
-import {VideoInfoApiService} from '../../services/api/video-info-api-service';
 import {FormsModule} from '@angular/forms';
-import {VideoApi} from '../../services/api/video-api';
 import {SingleMovieComponent} from './components/single-movie-component/single-movie-component';
 import {SeasonsComponent} from './components/seasons-component/seasons-component';
 import {SeriesComponent} from './components/series-component/series-component';
 import {SeasonsAndMoviesComponent} from './components/seasons-and-movies-component/seasons-and-movies-component';
+import {ShowApiService} from '../../services/api/show-api-service';
+import {ShowModel} from '../../models/show-model';
+import {MediaItemModel} from '../../models/media-item-model';
 
 @Component({
   standalone: true,
@@ -26,167 +26,114 @@ import {SeasonsAndMoviesComponent} from './components/seasons-and-movies-compone
 export class MovieDetailPage implements OnInit {
 
   contentType: 'single' | 'series' | 'seasons' | 'seasons-and-movies' | undefined;
-
-  parentTitle: string = '';
-  videoInfoList: VideoInfoModel[] = [];
-  videoData: VideoInfoModel | null = null;
+  show: ShowModel | undefined;
+  // currentVideoInfo: VideoInfoModel = new VideoInfoModel();
+  currentMediaItem: MediaItemModel | undefined;
   selectedVideoUrl: string = '';
   subtitlesUrl: string = '';
 
-  seasons: number[] = []
-  episodes: number[] = []
-  movies: VideoInfoModel[] = [];
-
   selectedSeason: number | undefined
-  selectedEpisode: number | undefined
-
-  thumbnails: string[] = []
 
   isVideoPlaying: boolean = false;
 
   constructor(private route: ActivatedRoute,
-              private videoApi: VideoApi,
-              private videoInfoApiService: VideoInfoApiService,) {}
+              private showApiService: ShowApiService,) {}
 
   ngOnInit() {
-    this.parentTitle = this.route.snapshot.params['parentTitle'];
+    const parentTitle: string = this.route.snapshot.params['parentTitle'];
+    this.findShowDetailByParentTitle(parentTitle);
 
-    this.videoInfoApiService.findAllVideoInfoByParentTitle(this.parentTitle).subscribe({
+  }
+
+  findShowDetailByParentTitle(parentTitle: string): void {
+    this.showApiService.findShowByParentTitle(parentTitle).subscribe({
       next: data => {
-        this.videoInfoList = data;
-        console.log("find by parent title", this.videoInfoList);
-        this.determineVideoCategory();
+        this.show = data;
+        console.log("show details: ", this.show);
+
       },
       error: err => {
-        console.log(err);
+        console.log("Error while findShowDetailByParentTitle: ", err);
       },
       complete: () => {
+        this.determineVideoCategory();
 
       }
     })
   }
 
 
-  loadVideoThumbnails() {
-    this.videoApi.getThumbnails(this.videoData!.rootPath).subscribe({
-      next: data => {
-        this.thumbnails = data;
-      },
-      error: err => {
-        console.log(err);
-      },
-      complete: () => {}
-    })
-  }
-
-  playVideo() {
-    if (this.videoData) {
-      this.isVideoPlaying = true;
-
-      const fullVideoPath = `${this.videoData.rootPath}/${this.videoData.videoDetails!.fileName}`;
-      this.selectedVideoUrl = `${Endpoints.videos.stream}?path=${encodeURIComponent(fullVideoPath)}`;
-
-      const subtitleName = this.videoData.title; // assuming this matches the subtitle file name
-      const rootPath = encodeURIComponent(this.videoData.rootPath);
-
-      this.subtitlesUrl = `${Endpoints.videos.subtitles}/${encodeURIComponent(subtitleName)}?path=${rootPath}`;
-      console.log('subtitlesUrl', this.subtitlesUrl);
-    }
-  }
+  // onUpdateVideoData(update: Partial<VideoInfoModel>) {
+  //   console.log("onUpdateVideoData: ", update);
+  //   this.currentVideoInfo = { ...this.currentVideoInfo, ...update } as VideoInfoModel;
+  //
+  //   //reset video data
+  //   this.isVideoPlaying = false;
+  //   this.selectedVideoUrl = '';
+  // }
 
 
-  setUpMovies() {
-    this.videoInfoList.forEach((videoInfo: VideoInfoModel) => {
-      if (videoInfo.videoDetails?.episode == null && videoInfo.videoDetails?.episode == null) {
-        this.movies.push(videoInfo);
-      }
-    })
-  }
-
-
-  setUpSeasons() {
-    this.videoInfoList.forEach((videoInfo: VideoInfoModel) => {
-      if (!this.seasons.includes(videoInfo.videoDetails!.season) && videoInfo.videoDetails!.season !=  null) {
-          this.seasons.push(videoInfo.videoDetails!.season);
-      }
-    })
-
-    if (this.seasons.length > 0) {
-      this.selectedSeason = this.seasons[0];
-      this.setUpEpisodes()
-    }
-
-  }
-
-  setUpEpisodes() {
-
-    this.episodes = []
-
-    this.videoInfoList.forEach((videoInfo: VideoInfoModel) => {
-      if (videoInfo.videoDetails?.season == this.selectedSeason) {
-        this.episodes.push(videoInfo.videoDetails!.episode);
-      }
-    })
-
-    if (this.episodes.length > 0) {
-      this.selectedEpisode = this.episodes[0];
-      this.watchEpisode();
-    }
-
-  }
-
-
-  watchEpisode() {
-
-    this.videoInfoList.forEach((videoInfo: VideoInfoModel) => {
-      if (videoInfo.videoDetails!.season == this.selectedSeason && videoInfo.videoDetails?.episode == this.selectedEpisode) {
-        this.videoData = videoInfo;
-        this.selectedVideoUrl = ''
-        this.isVideoPlaying = false;
-        return
-      }
-    })
-  }
+  // playVideo() {
+  //   if (this.currentVideoInfo) {
+  //
+  //     console.log("playVideo: ", this.currentVideoInfo);
+  //
+  //     this.isVideoPlaying = true;
+  //
+  //     const fullVideoPath = `${this.currentVideoInfo.rootPath}/${this.currentVideoInfo.videoDetails!.fileName}`;
+  //     this.selectedVideoUrl = `${Endpoints.videos.stream}?path=${encodeURIComponent(fullVideoPath)}`;
+  //
+  //     const subtitleName = this.currentVideoInfo.title; // assuming this matches the subtitle file name
+  //     const rootPath = encodeURIComponent(this.currentVideoInfo.rootPath);
+  //
+  //     this.subtitlesUrl = `${Endpoints.videos.subtitles}/${encodeURIComponent(subtitleName)}?path=${rootPath}`;
+  //   }
+  //
+  // }
 
   determineVideoCategory() {
-    if (this.isSingleMovie()) {
+    if (this.isSingleMovie2()) {
+
       this.contentType = 'single';
-      this.videoData = this.videoInfoList[0];
-      this.loadVideoThumbnails();
-    } else if (this.isSeasonOnly()) {
-      this.setUpSeasons();
+      this.currentMediaItem = this.show!.movies[0].mediaItem!;
+
+
+    } else if (this.isSeasonOnly2()) {
+
       this.contentType = 'seasons';
-    } else if (this.hasOnlyMovies()) {
+      this.currentMediaItem = this.show!.seasons[0].episodes[0].mediaItem!;
+
+
+
+    } else if (this.hasOnlyMovies2()) {
+
       this.contentType = 'series';
-    } else if (this.hasMoviesAndSeasons()) {
+
+
+    } else if (this.hasMoviesAndSeasons2()) {
+
       this.contentType = 'seasons-and-movies';
     }
 
-
   }
 
-  private isSingleMovie(): boolean {
-    return this.videoInfoList.length === 1 &&
-      this.videoInfoList[0].videoDetails?.season == null &&
-      this.videoInfoList[0].videoDetails?.episode == null;
+  private isSingleMovie2(): boolean {
+    return this.show?.seasons.length == 0 &&
+      this.show.movies.length == 1
   }
 
-  private isSeasonOnly(): boolean {
-    return this.videoInfoList.every(videoInfo =>
-      videoInfo.videoDetails?.season != null || videoInfo.videoDetails?.episode != null
-    );
+  private isSeasonOnly2(): boolean {
+    return this.show!.seasons.length > 0 &&
+      this.show?.movies.length == 0
   }
 
-
-  private hasOnlyMovies(): boolean {
-    this.setUpMovies();
-    this.setUpSeasons();
-    return this.movies.length > 0 && this.seasons.length === 0;
+  private hasOnlyMovies2(): boolean {
+    return this.show?.seasons.length == 0 &&
+      this.show.movies.length > 1
   }
 
-  private hasMoviesAndSeasons(): boolean {
-    return this.movies.length > 0 && this.seasons.length > 0;
+  private hasMoviesAndSeasons2(): boolean {
+    return this.show!.seasons.length > 0 &&
+      this.show!.movies.length > 0
   }
-
-
 }

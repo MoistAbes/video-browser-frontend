@@ -9,6 +9,7 @@ import {NgOptimizedImage} from '@angular/common';
 
   ],
   templateUrl: './video-card-component.html',
+  standalone: true,
   styleUrl: './video-card-component.scss'
 })
 export class VideoCardComponent {
