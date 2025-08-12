@@ -1,11 +1,12 @@
-import {Component, Input, CUSTOM_ELEMENTS_SCHEMA, OnInit} from '@angular/core';
-import {VideoInfoModel} from '../../../../models/video-info-model';
+import {Component, Input, CUSTOM_ELEMENTS_SCHEMA, OnInit, Output, EventEmitter} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {VideoCardComponent} from '../../../../components/video-card-component/video-card-component';
 import {VideoPlayerComponent} from '../../../../components/video-player-component/video-player-component';
 import {NgOptimizedImage} from '@angular/common';
 import {Endpoints} from '../../../../endpoints/endpoints';
 import {VideoApi} from '../../../../services/api/video-api';
+import {EpisodeModel} from '../../../../models/episode-model';
+import {ShowModel} from '../../../../models/show-model';
 
 @Component({
   selector: 'app-seasons-and-movies-component',
@@ -17,91 +18,45 @@ import {VideoApi} from '../../../../services/api/video-api';
     NgOptimizedImage
   ],
   templateUrl: './seasons-and-movies-component.html',
+  standalone: true,
   styleUrl: './seasons-and-movies-component.scss'
 })
 export class SeasonsAndMoviesComponent implements OnInit {
+
+  // @Input() currentVideoInfo: VideoInfoModel | undefined;
   @Input() isVideoPlaying: boolean = false;
-  @Input() videoData: any;
-  @Input() thumbnails: string[] = [];
   @Input() selectedVideoUrl: string = '';
-  @Input() parentTitle: string = '';
-  @Input() seasons: number[] = []
-  @Input() episodes: number[] = []
-  @Input() videoInfoList: VideoInfoModel[] = []
+  @Input() show: ShowModel | undefined;
+
   @Input() selectedSeason: number | undefined
-  @Input() selectedEpisode: number | undefined
-  @Input() movies: VideoInfoModel[] = [];
+
+  // @Output() updateVideoData = new EventEmitter<Partial<VideoInfoModel>>();
+  @Output() playVideoClicked = new EventEmitter<void>();
 
   selectedContentType: string = 'seasons';
 
-  @Input() playVideo!: () => void; // funkcja do wywołania play z zewnątrz
+  episodes: EpisodeModel[] = [];
+  selectedEpisode: EpisodeModel | undefined
 
   constructor(private videoApi: VideoApi) {}
 
   ngOnInit(): void {
-    console.log("videos: ", this.videoInfoList);
-    console.log("selected sesason: ", this.selectedSeason);
-    console.log("selected episode: ", this.selectedEpisode);
+    this.selectedSeason = this.show?.seasons[0].number;
+    this.setUpEpisodes();
   }
 
+  // getBackdropUrl(): string {
+  //   return `${Endpoints.videos.icon}?path=${encodeURIComponent(this.currentVideoInfo!.rootPath + '/backdrop/backdrop.jpg')}`;
+  // }
 
 
-  getThumbnailUrl(fileName: string): string {
-    return `${Endpoints.videos.icon}?path=${encodeURIComponent(this.videoData!.rootPath + '/thumbnails/' + fileName)}`;
-  }
 
-  getBackdropUrl(): string {
-    return `${Endpoints.videos.icon}?path=${encodeURIComponent(this.videoData!.rootPath + '/backdrop/backdrop.jpg')}`;
-  }
-
-  setUpEpisodes() {
-
-    this.episodes = []
-
-    this.videoInfoList.forEach((videoInfo: VideoInfoModel) => {
-      if (videoInfo.videoDetails?.season == this.selectedSeason) {
-        this.episodes.push(videoInfo.videoDetails!.episode);
-      }
-    })
-
-    if (this.episodes.length > 0) {
-      this.selectedEpisode = this.episodes[0];
-      this.selectEpisode();
-    }
-
-  }
-
-  selectEpisode() {
-    console.log("selectEpisode");
-    this.thumbnails = []
-    this.videoInfoList.forEach((videoInfo: VideoInfoModel) => {
-      if (videoInfo.videoDetails!.season == this.selectedSeason && videoInfo.videoDetails?.episode == this.selectedEpisode) {
-        this.videoData = videoInfo;
-        this.selectedVideoUrl = ''
-        this.isVideoPlaying = false;
-        return
-      }
-    })
-  }
-
-  watchMovie(videoInfo: VideoInfoModel) {
-    this.videoData = videoInfo;
-    this.loadVideoThumbnails()
-    this.resetPlayingVideo()
-  }
-
-  loadVideoThumbnails() {
-    this.thumbnails = []
-    this.videoApi.getThumbnails(this.videoData!.rootPath).subscribe({
-      next: data => {
-        this.thumbnails = data;
-      },
-      error: err => {
-        console.log(err);
-      },
-      complete: () => {}
-    })
-  }
+  // watchMovie(videoInfo: VideoInfoModel) {
+  //   console.log("watch movie: ", videoInfo);
+  //   this.currentVideoInfo = videoInfo;
+  //   this.updateVideoData.emit(this.currentVideoInfo)
+  //   this.resetPlayingVideo()
+  // }
 
   resetPlayingVideo() {
     this.selectedVideoUrl = '';
@@ -110,15 +65,30 @@ export class SeasonsAndMoviesComponent implements OnInit {
 
   selectSeasonContentType() {
     this.selectedContentType = 'seasons';
-    this.selectEpisode();
   }
 
   selectMoviesContentType() {
     this.selectedContentType = 'movies';
-    console.log("movies: ", this.movies);
-    this.videoData = this.movies[0];
-    this.loadVideoThumbnails()
+    // this.currentVideoInfo = this.show!.movies[0].videoInfo;
+    // this.updateVideoData.emit(this.currentVideoInfo)
     this.resetPlayingVideo()
 
+  }
+
+  setUpEpisodes() {
+    console.log("Setup episodes");
+
+    this.episodes = this.show?.seasons
+      .filter(season => season.number == this.selectedSeason)
+      .flatMap(season => season.episodes) || [];
+
+    if (this.episodes.length > 0) {
+      this.selectedEpisode = this.episodes[0];
+      // this.updateVideoData.emit(this.selectedEpisode.videoInfo);
+    }
+  }
+
+  onEpisodeSelect() {
+    // this.updateVideoData.emit(this.selectedEpisode!.videoInfo);
   }
 }

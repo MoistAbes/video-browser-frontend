@@ -9,28 +9,23 @@
         class="preview-swiper"
       >
         <swiper-slide>
-          <img priority [ngSrc]="getBackdropUrl()" fill alt="backdrop"
-               style="width: 100%; height: 100%; object-fit: cover;" />
+<!--          <img priority [ngSrc]="getBackdropUrl()" fill alt="backdrop"-->
+<!--               style="width: 100%; height: 100%; object-fit: cover;" />-->
         </swiper-slide>
-<!--        @for (thumb of thumbnails; track thumb) {-->
-<!--          <swiper-slide>-->
-<!--            <img priority [ngSrc]="getThumbnailUrl(thumb)" fill alt="thumbnail"-->
-<!--                 style="width: 100%; height: 100%; object-fit: cover;" />-->
-<!--          </swiper-slide>-->
-<!--        }-->
+
       </swiper-container>
 
         <div class="movie-details-overlay">
           <div class="movie-header">
-            <h1 class="movie-title">{{parentTitle}}</h1>
-            @if (videoData) {
-              <h5>{{videoData.title}}</h5>
-            }
+            <h1 class="movie-title">{{show?.name}}</h1>
+<!--            @if (currentVideoInfo) {-->
+<!--              <h5>{{currentVideoInfo.title}}</h5>-->
+<!--            }-->
           </div>
           <p class="movie-description">
             To jest przykładowy opis filmu. Możesz go później podmienić na dane z backendu.
           </p>
-          <button class="play-button" (click)="playVideo()">
+          <button class="play-button" (click)="playVideoClicked.emit()">
             <i class="fa-solid fa-play"></i> Play
           </button>
         </div>
@@ -40,25 +35,19 @@
   @if (selectedVideoUrl.length > 0) {
 
     <div class="video-wrapper">
-      <app-video-player-component [src]="selectedVideoUrl"></app-video-player-component>
-
-        <div class="movie-details-overlay">
-          <div class="movie-header">
-            <h1 class="movie-title">{{parentTitle}}</h1>
-            @if (videoData) {
-              <h5>{{videoData.title}}</h5>
-            }
-          </div>
-          <p class="movie-description">
-            To jest przykładowy opis filmu. Możesz go później podmienić na dane z backendu not single video.
-          </p>
-        </div>
+<!--      <app-video-player-component-->
+<!--        [show]="show"-->
+<!--        [currentVideoInfo]="currentVideoInfo"-->
+<!--        [src]="selectedVideoUrl"-->
+<!--        (playVideoClicked)="playVideoClicked.emit()"-->
+<!--        (updateVideoData)="updateVideoData.emit($event)"-->
+<!--      ></app-video-player-component>-->
     </div>
   }
 
 </div>
 
-@if (parentTitle) {
+@if (show) {
   <div class="movie-details-container">
 
       <div class="content-container">
@@ -71,23 +60,21 @@
             </button>
 
         </div>
-          @if (selectedSeason) {
-            <div class="season-container">
-              <select [(ngModel)]="selectedSeason" (ngModelChange)="setUpEpisodes()" class="form-select">
-                @for (season of seasons; track season) {
-                  <option [value]="season">Season {{season}}</option>
-                }
-              </select>
-            </div>
-            <div class="episode-container">
-              <select [(ngModel)]="selectedEpisode" (ngModelChange)="watchEpisode()" class="form-select">
-                @for (episode of episodes; track episode) {
-                  <option [value]="episode">Episode {{episode}}</option>
-                }
-              </select>
-            </div>
-          }
-
+          <div class="season-container">
+            <select [(ngModel)]="selectedSeason" (ngModelChange)="setUpEpisodes()" class="form-select">
+              @for (season of show.seasons; track season.id) {
+                <option [value]="season.number">Season {{season.number}}</option>
+              }
+            </select>
+          </div>
+          <div class="episode-container">
+            <select [(ngModel)]="selectedEpisode" (ngModelChange)="onEpisodeSelect()" class="form-select">
+              @for (episode of episodes; track episode.id) {
+                <option [ngValue]="episode">Episode {{ episode.number }}</option>
+              }
+            </select>
+          </div>
       </div>
+
   </div>
 }

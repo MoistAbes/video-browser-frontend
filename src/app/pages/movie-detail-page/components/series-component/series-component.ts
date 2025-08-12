@@ -1,64 +1,50 @@
-import {Component, Input, CUSTOM_ELEMENTS_SCHEMA, OnInit} from '@angular/core';
-import {VideoInfoModel} from '../../../../models/video-info-model';
+import {Component, Input, CUSTOM_ELEMENTS_SCHEMA, OnInit, Output, EventEmitter} from '@angular/core';
 import {NgOptimizedImage} from '@angular/common';
 import {Endpoints} from '../../../../endpoints/endpoints';
 import {VideoPlayerComponent} from '../../../../components/video-player-component/video-player-component';
 import {VideoCardComponent} from '../../../../components/video-card-component/video-card-component';
 import {VideoApi} from '../../../../services/api/video-api';
+import {ShowModel} from '../../../../models/show-model';
 
 @Component({
   selector: 'app-series-component',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
-    NgOptimizedImage,
     VideoPlayerComponent,
     VideoCardComponent
   ],
   templateUrl: './series-component.html',
+  standalone: true,
   styleUrl: './series-component.scss'
 })
 export class SeriesComponent implements OnInit {
+  // @Input() currentVideoInfo: VideoInfoModel | undefined;
+  @Input() show: ShowModel | undefined;
+
   @Input() isVideoPlaying: boolean = false;
-  @Input() videoData: any;
-  @Input() thumbnails: string[] = [];
   @Input() selectedVideoUrl: string = '';
   @Input() subtitlesUrl: string = '';
-  @Input() parentTitle: string = '';
-  @Input() videoInfoList: VideoInfoModel[] = []
 
-  @Input() playVideo!: () => void; // funkcja do wywołania play z zewnątrz
+  // @Output() updateVideoData = new EventEmitter<Partial<VideoInfoModel>>();
+  @Output() playVideoClicked = new EventEmitter<void>();
+
 
   constructor(private videoApi: VideoApi) {}
 
   ngOnInit(): void {
-    console.log('Series Component loaded.', this.videoInfoList);
+    // this.currentVideoInfo = this.show?.movies[0].videoInfo;
+    // this.updateVideoData.emit(this.currentVideoInfo);
   }
 
+  // watchMovie(videoInfo: VideoInfoModel) {
+  //
+  //   console.log("watchMovie: ", videoInfo);
+  //
+  //   this.currentVideoInfo = videoInfo;
+  //   this.updateVideoData.emit(this.currentVideoInfo);
+  //   this.resetPlayingVideo()
+  // }
 
-  getThumbnailUrl(fileName: string): string {
-    return `${Endpoints.videos.icon}?path=${encodeURIComponent(this.videoData!.rootPath + '/thumbnails/' + fileName)}`;
-  }
-
-
-
-  watchMovie(videoInfo: VideoInfoModel) {
-    this.videoData = videoInfo;
-    this.loadVideoThumbnails()
-    this.resetPlayingVideo()
-  }
-
-  loadVideoThumbnails() {
-    this.videoApi.getThumbnails(this.videoData!.rootPath).subscribe({
-      next: data => {
-        this.thumbnails = data;
-        console.log("thumbnails: ", this.thumbnails);
-      },
-      error: err => {
-        console.log(err);
-      },
-      complete: () => {}
-    })
-  }
 
   resetPlayingVideo() {
     this.selectedVideoUrl = '';

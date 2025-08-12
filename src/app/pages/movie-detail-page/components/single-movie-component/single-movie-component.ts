@@ -1,8 +1,9 @@
-import {Component, Input, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {Component, Input, CUSTOM_ELEMENTS_SCHEMA, Output, EventEmitter} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {NgOptimizedImage} from '@angular/common';
 import {VideoPlayerComponent} from '../../../../components/video-player-component/video-player-component';
 import {Endpoints} from '../../../../endpoints/endpoints';
+import {ShowModel} from '../../../../models/show-model';
 
 @Component({
   selector: 'app-single-movie-component',
@@ -13,26 +14,22 @@ import {Endpoints} from '../../../../endpoints/endpoints';
     VideoPlayerComponent
   ],
   templateUrl: './single-movie-component.html',
+  standalone: true,
   styleUrl: './single-movie-component.scss'
 })
 export class SingleMovieComponent {
+  @Input() show: ShowModel | undefined;
   @Input() isVideoPlaying: boolean = false;
-  @Input() videoData: any;
+  // @Input() currentVideoInfo: VideoInfoModel | undefined;
   @Input() selectedVideoUrl: string = '';
   @Input() subtitlesUrl: string = '';
-  @Input() parentTitle: string = '';
-  @Input() thumbnails: string[] = []
+  @Output() playVideoClicked = new EventEmitter<void>();
+  // @Output() updateVideoData = new EventEmitter<Partial<VideoInfoModel>>();
 
 
-  @Input() playVideo!: () => void; // funkcja do wywołania play z zewnątrz
 
-
-  getThumbnailUrl(fileName: string): string {
-    return `${Endpoints.videos.icon}?path=${encodeURIComponent(this.videoData!.rootPath + '/thumbnails/' + fileName)}`;
-  }
-
-  getBackdropUrl(): string {
-    return `${Endpoints.videos.icon}?path=${encodeURIComponent(this.videoData!.rootPath + '/backdrop/backdrop.jpg')}`;
-  }
+  // getBackdropUrl(): string {
+  //   return `${Endpoints.videos.icon}?path=${encodeURIComponent(this.currentVideoInfo!.rootPath + '/backdrop/backdrop.jpg')}`;
+  // }
 
 }

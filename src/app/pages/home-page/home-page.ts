@@ -1,14 +1,14 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {VideoInfoModel} from '../../models/video-info-model';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {VideoInfoTypeEnum} from '../../enums/video-info-type-enum';
 import {VideoCardComponent} from '../../components/video-card-component/video-card-component';
-import {VideoPlayerComponent} from '../../components/video-player-component/video-player-component';
 import {Router} from '@angular/router';
-import {VideoInfoApiService} from '../../services/api/video-info-api-service';
+import {MainIconPathPipe} from '../../pipes/main-icon-path-pipe';
+import {ShowApiService} from '../../services/api/show-api-service';
+import {ShowModel} from '../../models/show-model';
 
-type VideoTypeOption = { label: string; value: VideoInfoTypeEnum }; // <-- TU
+type VideoTypeOption = { label: string; value: VideoInfoTypeEnum };
 
 @Component({
   standalone: true,
@@ -17,6 +17,7 @@ type VideoTypeOption = { label: string; value: VideoInfoTypeEnum }; // <-- TU
     FormsModule,
     FontAwesomeModule,
     VideoCardComponent,
+    MainIconPathPipe,
   ],
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss'
@@ -24,29 +25,35 @@ type VideoTypeOption = { label: string; value: VideoInfoTypeEnum }; // <-- TU
 export class HomePage implements OnInit  {
   @ViewChild('target', { static: false }) target!: ElementRef;
 
-  videoFileList: VideoInfoModel[] = []
-  videoFileListFiltered: VideoInfoModel[] = []
-  selectedVideoUrl: string = '';
+  // videoFileList: VideoInfoModel[] = []
+  // videoFileListFiltered: VideoInfoModel[] = []
+  // selectedVideoUrl: string = '';
 
   filterTitleValue: string = '';
   filterTypeValue: VideoInfoTypeEnum = VideoInfoTypeEnum.ALL;
 
   videoTypes: VideoTypeOption[] = [];
+  hoverTimer: number | null = null;
+
+  showList: ShowModel[] = []
+  showListFiltered: ShowModel[] = []
 
   constructor(private router: Router,
-              private videoInfoApiService: VideoInfoApiService) { }
+              // private videoInfoApiService: VideoInfoApiService,
+              private showApiService: ShowApiService,) { }
 
   ngOnInit(): void {
-    this.videoInfoApiService.findAllVideoInfoParentTitle().subscribe({
-      next: data => {
-        this.videoFileList = data;
-        this.videoFileListFiltered = data;
 
-        console.log("Fetched video info list: ", this.videoFileList)
+    this.showApiService.findWithRootPath().subscribe({
+      next: (result) => {
+        this.showList = result
+        this.showListFiltered = result
+        console.log("result: ", this.showList)
       },
       error: err => {
-        console.log(err);
-      }
+        console.log("error: ", err)
+      },
+      complete: () => {}
     })
 
     this.videoTypes = Object.entries(VideoInfoTypeEnum).map(([key, value]) => ({
@@ -56,24 +63,24 @@ export class HomePage implements OnInit  {
   }
 
 
-  moveToMovieDetails(videoInfo: VideoInfoModel) {
-    this.router.navigate(['/movie-details', videoInfo.title])
+  moveToMovieDetails(title: string) {
+    this.router.navigate(['/movie-details', title])
       .catch(error => {
         console.error('❌ Błąd podczas nawigacji:', error);
       });
   }
 
   onFilterChange() {
-    this.videoFileListFiltered = this.videoFileList;
+    this.showListFiltered = this.showList;
 
-    if (this.filterTypeValue.toLowerCase() != "wszystko") {
-      this.videoFileListFiltered = this.videoFileListFiltered.filter(video =>
-        this.getTrimAndLowercase(video.type).includes(this.getTrimAndLowercase(this.filterTypeValue))
-      )
-    }
+    // if (this.filterTypeValue.toLowerCase() != "wszystko") {
+    //   this.showListFiltered = this.showListFiltered.filter(video =>
+    //     this.getTrimAndLowercase(video.type).includes(this.getTrimAndLowercase(this.filterTypeValue))
+    //   )
+    // }
 
-    this.videoFileListFiltered = this.videoFileListFiltered.filter(video =>
-      this.getTrimAndLowercase(video.title).includes(this.getTrimAndLowercase(this.filterTitleValue))
+    this.showListFiltered = this.showListFiltered.filter(video =>
+      this.getTrimAndLowercase(video.name).includes(this.getTrimAndLowercase(this.filterTitleValue))
     );
 
   }
@@ -88,5 +95,24 @@ export class HomePage implements OnInit  {
     return value.toLowerCase().replace(/\s+/g, '');
   }
 
+
+  //ToDO to jest na kiedys do dodatkowego info na hover
+  startHoverTimer(videoInfo: any) {
+    this.hoverTimer = setTimeout(() => {
+      this.onHoverOneSecond(videoInfo);
+    }, 1000); // 1000 ms = 1 second
+  }
+
+  cancelHoverTimer() {
+    if (this.hoverTimer) {
+      clearTimeout(this.hoverTimer);
+      this.hoverTimer = null;
+    }
+  }
+
+  onHoverOneSecond(videoInfo: any) {
+    console.log('Hovered for 1 second over:', videoInfo);
+    // put your delayed hover action here
+  }
 
 }

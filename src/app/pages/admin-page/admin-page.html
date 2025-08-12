@@ -1,8 +1,9 @@
 <div>
 
   <button (click)="scanAllMovies()" class="btn btn-success">SKANUJ FILMY</button>
-  <button (click)="findAllParentTitle()" class="btn btn-success">PARENT TITLE TEST</button>
+<!--  <button (click)="findAllParentTitle()" class="btn btn-success">PARENT TITLE TEST</button>-->
   <button (click)="testSubtitleEndpoint()" class="btn btn-success">SUBTITLE TEST</button>
+  <button (click)="testFindAllShows()" class="btn btn-success">SHOW STRUCTURE TEST</button>
 
 <!--  <div>-->
 <!--    aac	✅	Najlepszy wybór-->
@@ -31,15 +32,15 @@
       </tr>
       </thead>
       <tbody>
-        @for (videoInfo of videoInfoListFiltered; track videoInfo.id) {
-          <tr>
-            <th scope="row">{{videoInfo.id}}</th>
-            <td>{{videoInfo.title}}</td>
-            <td>{{ videoInfo.videoDetails?.fileName }}</td>
-            <td>{{ videoInfo.videoTechnicalDetails?.codec }}</td>
-            <td>{{ videoInfo.videoTechnicalDetails?.audio }}</td>
-          </tr>
-        }
+<!--        @for (videoInfo of videoInfoListFiltered; track videoInfo.id) {-->
+<!--          <tr>-->
+<!--            <th scope="row">{{videoInfo.id}}</th>-->
+<!--            <td>{{videoInfo.title}}</td>-->
+<!--            <td>{{ videoInfo.videoDetails?.fileName }}</td>-->
+<!--            <td>{{ videoInfo.videoTechnicalDetails?.codec }}</td>-->
+<!--            <td>{{ videoInfo.videoTechnicalDetails?.audio }}</td>-->
+<!--          </tr>-->
+<!--        }-->
       </tbody>
     </table>
 

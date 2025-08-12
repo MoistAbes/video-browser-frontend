@@ -30,11 +30,13 @@
   </div>
 
   <div class="video-grid">
-    @for (videoInfo of videoFileListFiltered; track videoInfo.id) {
+    @for (show of showListFiltered; track show.id) {
       <app-video-card-component
-        [title]="videoInfo.title"
-        (cardClick)="moveToMovieDetails(videoInfo)"
-        [iconFilePath]="videoInfo.rootPath + '/icon/' + videoInfo.iconFileName"
+        [title]="show.name"
+        (mouseenter)="startHoverTimer(show)"
+        (mouseleave)="cancelHoverTimer()"
+        (cardClick)="moveToMovieDetails(show.name)"
+        [iconFilePath]="show.rootPath | MainIconPathPipe"
       ></app-video-card-component>
     }
   </div>
