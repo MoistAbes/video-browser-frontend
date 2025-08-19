@@ -13,6 +13,8 @@ import videojs from 'video.js';
 import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 import {VideoSelectorComponent} from './video-selector-component/video-selector-component';
 import {ShowModel} from '../../models/show-model';
+import {MediaItemModel} from '../../models/media-item-model';
+
 
 type VideoJSPlayer = ReturnType<typeof videojs>;
 
@@ -33,13 +35,14 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
   @ViewChild('progressSlider') progressSlider!: ElementRef<HTMLInputElement>;
 
 
-  // @Input() currentVideoInfo: VideoInfoModel | undefined;
+  @Input() currentMediaItem: MediaItemModel | undefined;
   @Input() show: ShowModel | undefined;
 
   @Input() src: string = '';
   @Input() subtitlesUrl: string = '';
   @Output() playVideoClicked = new EventEmitter<void>();
-  // @Output() updateVideoData = new EventEmitter<Partial<VideoInfoModel>>();
+  @Output() updateMediaItem = new EventEmitter<Partial<MediaItemModel>>();
+  @Output() seekChange = new EventEmitter<number>();
 
   player!: VideoJSPlayer;
   // currentPlaybackSpeed: number = 1;
@@ -60,10 +63,63 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
   tooltipPosition = 0; // w pikselach
   tooltipTime: string = '00:00:00';
 
+  nextEpisodeTimerCounter: number = 16;
+  isNextEpisodeNoticeVisible: boolean = false;
+
   constructor(private cdr: ChangeDetectorRef) {
   }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit(): void {
+    this.player = videojs(this.target.nativeElement, {
+      controls: false,
+      autoplay: true,
+      preload: 'auto',
+      textTrackSettings: false,
+      fluid: true,
+      sources: [{ src: this.src, type: 'video/mp4' }],
+      tracks: [
+        {
+          kind: 'captions',
+          src: this.subtitlesUrl,
+          srclang: 'en',
+          label: 'English',
+          default: true
+        }
+      ]
+    }, () => {
+
+      // Add key event listener
+      document.addEventListener('keydown', this.handleKeydown);
+
+      //on time update
+      this.player.on('timeupdate', () => {
+        this.currentTime = this.player.currentTime()!;
+        this.duration = this.player.duration()!;
+
+        const timeLeft: number = this.duration - this.currentTime;
+
+        if (timeLeft <= 15) {
+          this.isNextEpisodeNoticeVisible = true;
+          // licznik w sekundach, zaokrąglony w dół
+          this.nextEpisodeTimerCounter = Math.floor(timeLeft);
+        } else {
+          this.isNextEpisodeNoticeVisible = false;
+        }
+      });
+
+
+      this.player.on('ended', () => {
+        this.onVideoEnd();
+      });
+
+      this.player.on('play', () => (this.isPlaying = true));
+      this.player.on('pause', () => (this.isPlaying = false));
+
+      this.volume = this.player.volume()!;
+    });
   }
 
   onSliderHover(event: MouseEvent) {
@@ -75,12 +131,11 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
     const sliderRect = this.progressSlider.nativeElement.getBoundingClientRect();
     const relativeX = event.clientX - sliderRect.left; // pozycja kursora względem lewego krańca slidera
 
-// ograniczamy do szerokości slidera
+    // ograniczamy do szerokości slidera
     this.tooltipPosition = Math.max(0, Math.min(relativeX, sliderRect.width));
 
     this.tooltipVisible = true;
 
-    // this.tooltipPosition = ((event.clientX - this.progressSlider.nativeElement.getBoundingClientRect().left) / this.progressSlider.nativeElement.clientWidth) * this.progressSlider.nativeElement.clientWidth;this.tooltipVisible = true;
   }
 
   hideTooltip() {
@@ -112,6 +167,7 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
     const percent = (event.clientX - rect.left) / rect.width;
     return Math.round(percent * this.duration * 10) / 10; // krok 0.1
   }
+
   seek(time: number | null) {
     if (time !== null && !isNaN(time)) {
       this.player.currentTime(time);
@@ -126,12 +182,12 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
   }
 
   // Metoda wywoływana, gdy zmienia się odcinek w selektorze
-  // onUpdateVideoData(videoInfo: Partial<VideoInfoModel>) {
-  //   this.currentVideoInfo = { ...this.currentVideoInfo, ...videoInfo } as VideoInfoModel;
-  //   this.updateVideoData.emit(videoInfo)
-  //
-  //   // tu możesz też uruchomić odtwarzanie itp.
-  // }
+  onUpdateVideoData(videoInfo: Partial<MediaItemModel>) {
+    this.currentMediaItem = { ...this.currentMediaItem, ...videoInfo } as MediaItemModel;
+    this.updateMediaItem.emit(videoInfo)
+
+    // tu możesz też uruchomić odtwarzanie itp.
+  }
 
   onTimeUpdate(): void {
 
@@ -145,90 +201,91 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
   }
 
-  ngAfterViewInit(): void {
-    this.player = videojs(this.target.nativeElement, {
-      controls: false,
-      autoplay: true,
-      preload: 'auto',
-      textTrackSettings: false,
-      fluid: true,
-      sources: [{ src: this.src, type: 'video/mp4' }],
-      tracks: [
-        {
-          kind: 'captions',
-          src: this.subtitlesUrl,
-          srclang: 'en',
-          label: 'English',
-          default: true
-        }
-      ]
-    }, () => {
 
-      // Add key event listener
-      document.addEventListener('keydown', this.handleKeydown);
-
-      // Update time and duration
-      this.player.on('timeupdate', () => {
-        this.currentTime = this.player.currentTime()!;
-        this.duration = this.player.duration()!;
-      });
-
-      this.player.on('ended', () => {
-        this.onVideoEnd();
-      });
-
-      this.player.on('play', () => (this.isPlaying = true));
-      this.player.on('pause', () => (this.isPlaying = false));
-
-      this.volume = this.player.volume()!;
-    });
-  }
 
   onVideoEnd() {
-    // this.handlePlayNextEpisode();
+    console.log("on video end")
+
+    if (this.isSeason()) {
+      this.handlePlayNextEpisode();
+    }else if (this.isSeries()) {
+      this.handlePlayNextMovie();
+    }
   }
 
-  // handlePlayNextEpisode(): void {
-  //
-  //   // if (!this.show || !this.currentVideoInfo) return;
-  //   //
-  //   // const currentSeasonNumber = this.currentVideoInfo!.videoDetails!.season;
-  //   // const currentEpisodeNumber = this.currentVideoInfo!.videoDetails!.episode;
-  //
-  //   // Znajdź aktualny sezon
-  //   const currentSeasonIndex = this.show.seasons.findIndex(
-  //     season => season.number === currentSeasonNumber
-  //   );
-  //
-  //   if (currentSeasonIndex === -1) return;
-  //
-  //   const currentSeason = this.show.seasons[currentSeasonIndex];
-  //
-  //   // 1. Szukamy następnego odcinka w tym samym sezonie
-  //   const nextEpisode = currentSeason.episodes.find(
-  //     ep => ep.number === currentEpisodeNumber + 1
-  //   );
-  //
-  //   if (nextEpisode) {
-  //     // this.currentVideoInfo = nextEpisode.videoInfo;
-  //     // this.updateVideoData.emit(this.currentVideoInfo);
-  //     this.playVideoClicked.emit();
-  //     return;
-  //   }
-  //
-  //   // 2. Jeśli nie ma, sprawdzamy kolejny sezon
-  //   const nextSeason = this.show.seasons[currentSeasonIndex + 1];
-  //   if (nextSeason && nextSeason.episodes.length > 0) {
-  //     const firstEpisodeOfNextSeason = nextSeason.episodes[0];
-  //     // this.currentVideoInfo = firstEpisodeOfNextSeason.videoInfo;
-  //     // this.updateVideoData.emit(this.currentVideoInfo);
-  //     this.playVideoClicked.emit();
-  //     return;
-  //   }
-  //
-  //   // 3. Jeśli to ostatni sezon i odcinek
-  //   console.log('Brak następnego odcinka ani sezonu – autoplay zakończony');
-  // }
+  isSeason(): boolean {
+    return this.show?.seasons.length !== 0;
+  }
+
+  isSeries(): boolean {
+    return this.show!.movies.length > 1
+  }
+
+  handlePlayNextMovie(): void {
+    if (!this.show || !this.currentMediaItem) return;
+
+    // Znajdź aktualny sezon
+    const currentMovieIndex = this.show.movies.findIndex(
+      movie => movie.mediaItem.id === this.currentMediaItem?.id
+    );
+
+    if (currentMovieIndex === -1) return;
+
+
+    const nextMovie: MediaItemModel = this.show.movies[currentMovieIndex + 1].mediaItem;
+
+    if (nextMovie) {
+      this.playNextMedia(nextMovie);
+      return;
+    }
+
+
+  }
+
+
+  handlePlayNextEpisode(): void {
+    if (!this.show || !this.currentMediaItem) return;
+
+    const currentSeasonNumber = this.currentMediaItem.seasonNumber ?? 1;
+    const currentEpisodeNumber = this.currentMediaItem.episodeNumber ?? 1;
+
+    // Znajdź aktualny sezon
+    const currentSeasonIndex = this.show.seasons.findIndex(
+      season => season.number === currentSeasonNumber
+    );
+    if (currentSeasonIndex === -1) return;
+
+    const currentSeason = this.show.seasons[currentSeasonIndex];
+
+    // Znajdź indeks obecnego odcinka w sezonie
+    const currentEpisodeIndex = currentSeason.episodes.findIndex(
+      ep => ep.mediaItem.episodeNumber === currentEpisodeNumber
+    );
+
+    // 1. Próba pobrania następnego odcinka w tym samym sezonie
+    const nextEpisode = currentSeason.episodes[currentEpisodeIndex + 1];
+    if (nextEpisode) {
+      this.playNextMedia(nextEpisode.mediaItem);
+      return;
+    }
+
+    // 2. Próba pobrania pierwszego odcinka następnego sezonu
+    const nextSeason = this.show.seasons[currentSeasonIndex + 1];
+    if (nextSeason && nextSeason.episodes.length > 0) {
+      this.playNextMedia(nextSeason.episodes[0].mediaItem);
+      return;
+    }
+
+    // 3. Koniec listy
+    console.log('Brak następnego odcinka ani sezonu – autoplay zakończony');
+  }
+
+// wydzielona metoda, aby uniknąć duplikacji
+  private playNextMedia(mediaItem: MediaItemModel): void {
+    this.currentMediaItem = mediaItem;
+    this.updateMediaItem.emit(mediaItem);
+    this.playVideoClicked.emit();
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['src'] && !changes['src'].firstChange && this.player) {

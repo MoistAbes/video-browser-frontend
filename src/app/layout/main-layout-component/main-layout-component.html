@@ -1,6 +1,8 @@
 <div class="layout-container">
-  <app-topbar-component></app-topbar-component>
-  <main class="main-content">
-    <router-outlet></router-outlet>
+  @if (jwtService.isLoggedIn()) {
+    <app-topbar-component></app-topbar-component>
+  }
+  <main class="main-content" [@routeAnimations]="prepareRoute(o)">
+    <router-outlet #o="outlet"></router-outlet>
   </main>
 </div>

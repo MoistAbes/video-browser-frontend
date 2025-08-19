@@ -1,0 +1,31 @@
+.form-row {
+  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); // 5 kolumn po równo
+  gap: 1.5rem; // odstęp między kolumnami
+  align-items: start; // równa góra
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column; // label nad selectem
+}
+
+.form-field label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #ccc; // np. szare labele
+}
+
+tr:hover {
+  background-color: #c9c9c9;
+}
+td:hover {
+  background-color: #c9c9c9;
+}
+
+
+.extra-td {
+  background-color: #a7fde2 !important;
+}
+

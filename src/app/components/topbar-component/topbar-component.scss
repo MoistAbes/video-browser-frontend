@@ -1,6 +1,7 @@
 @use '../../../styles/colors' as *;
 
 .topbar {
+  z-index: 10;
   height: 5vh; // albo np. 4rem
   min-height: 5vh;
   max-height: 5vh;
@@ -38,7 +39,7 @@
 /* Linki */
 .nav-links {
   display: flex;
-  //gap: 1rem;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
@@ -50,10 +51,90 @@
   padding: 0.4rem 0.8rem;
   border-radius: 6px;
   font-size: 1.5vh;
-
 }
 
-.nav-links a:hover,
-.nav-links a.router-link-active {
+/* Hover efekt */
+.nav-links a:hover {
   background-color: #333;
 }
+
+/* Styl aktywnego linku (Angular doda klasę "active-link") */
+.nav-links a.active-link {
+  background-color: #4d4d4d;
+  //color: #e50914; // Netflixowy czerwony
+  font-weight: bold;
+  border-bottom: 2px solid #e50914;
+}
+
+.user-icon-wrapper {
+  position: relative;
+  margin-left: auto; // całość maksymalnie po prawej
+  cursor: pointer;
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; // odstęp między username a ikoną
+
+    .username {
+      margin: 0;
+      font-size: 1rem;
+      color: #fff;
+    }
+
+    .user-icon {
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: bold;
+      background-color: #363636;
+      color: #fff;
+      transition: background 0.2s;
+    }
+  }
+
+  .user-dropdown {
+    z-index: 20;
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0;
+    position: absolute;
+    top: 100%; // pod ikoną
+    right: 0;
+    background-color: #222;
+    border: 1px solid #000;
+    border-radius: 6px;
+    display: none; // ukryte domyślnie
+    min-width: 120px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+
+    i {
+      max-width: 25px;
+      min-width: 25px;
+    }
+
+    li {
+      padding: 0.5rem 1rem;
+      color: #fff;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+
+      &:hover {
+        background-color: #444;
+      }
+    }
+  }
+
+  &:hover .user-dropdown {
+    display: block; // pokaz dropdown na hover
+  }
+}
+
+
+
+

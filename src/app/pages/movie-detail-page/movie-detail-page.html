@@ -1,46 +1,48 @@
 @if (contentType === 'single') {
-<!--  <app-single-movie-component-->
-<!--    [isVideoPlaying]="isVideoPlaying"-->
-<!--    [selectedVideoUrl]="selectedVideoUrl"-->
-<!--    [subtitlesUrl]="subtitlesUrl"-->
-<!--    [currentVideoInfo] = "currentVideoInfo"-->
-<!--    [show]="show"-->
-<!--    (playVideoClicked)="playVideo()"-->
-<!--  ></app-single-movie-component>-->
+  <app-single-movie-component
+    [isVideoPlaying]="isVideoPlaying"
+    [selectedVideoUrl]="selectedVideoUrl"
+    [subtitlesUrl]="subtitlesUrl"
+    [currentMediaItem]="currentMediaItem"
+    [show]="show"
+    (playVideoClicked)="playVideo()"
+    (updateMediaItem)="onUpdateVideoData($event)"
+    ></app-single-movie-component>
 }
 
 @if (contentType === 'seasons') {
-<!--  <app-seasons-component-->
-<!--    [isVideoPlaying]="isVideoPlaying"-->
-<!--    [currentVideoInfo]="currentVideoInfo"-->
-<!--    [show]="show"-->
-<!--    [selectedSeason]="selectedSeason"-->
-<!--    [selectedVideoUrl]="selectedVideoUrl"-->
-<!--    (playVideoClicked)="playVideo()"-->
-<!--    (updateVideoData)="onUpdateVideoData($event)"-->
-<!--  ></app-seasons-component>-->
+  <app-seasons-component
+    [isVideoPlaying]="isVideoPlaying"
+    [currentMediaItem]="currentMediaItem"
+    [show]="show"
+    [selectedSeason]="selectedSeason"
+    [selectedVideoUrl]="selectedVideoUrl"
+    (playVideoClicked)="playVideo()"
+    (updateMediaItem)="onUpdateVideoData($event)"
+    (seekChange)="onSeekTimeSelected($event)"
+  ></app-seasons-component>
 }
 
 @if (contentType === 'series') {
-<!--  <app-series-component-->
-<!--    [isVideoPlaying]="isVideoPlaying"-->
-<!--    [selectedVideoUrl]="selectedVideoUrl"-->
-<!--    [subtitlesUrl]="subtitlesUrl"-->
-<!--    [currentVideoInfo] = "currentVideoInfo"-->
-<!--    [show]="show"-->
-<!--    (updateVideoData)="onUpdateVideoData($event)"-->
-<!--    (playVideoClicked)="playVideo()"-->
-<!--  ></app-series-component>-->
+  <app-series-component
+    [isVideoPlaying]="isVideoPlaying"
+    [selectedVideoUrl]="selectedVideoUrl"
+    [subtitlesUrl]="subtitlesUrl"
+    [currentMediaItem] = "currentMediaItem"
+    [show]="show"
+    (updateVideoData)="onUpdateVideoData($event)"
+    (playVideoClicked)="playVideo()"
+  ></app-series-component>
 }
 
 @if (contentType === 'seasons-and-movies') {
-<!--  <app-seasons-and-movies-component-->
-<!--    [currentVideoInfo] = "currentVideoInfo"-->
-<!--    [isVideoPlaying]="isVideoPlaying"-->
-<!--    [selectedSeason]="selectedSeason"-->
-<!--    [selectedVideoUrl]="selectedVideoUrl"-->
-<!--    [show]="show"-->
-<!--    (updateVideoData)="onUpdateVideoData($event)"-->
-<!--    (playVideoClicked)="playVideo()"-->
-<!--  ></app-seasons-and-movies-component>-->
+  <app-seasons-and-movies-component
+    [currentMediaItem]="currentMediaItem"
+    [isVideoPlaying]="isVideoPlaying"
+    [selectedSeason]="selectedSeason"
+    [selectedVideoUrl]="selectedVideoUrl"
+    [show]="show"
+    (updateMediaItem)="onUpdateVideoData($event)"
+    (playVideoClicked)="playVideo()"
+  ></app-seasons-and-movies-component>
 }

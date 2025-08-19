@@ -9,18 +9,24 @@
         class="preview-swiper"
       >
         <swiper-slide>
-<!--          <img priority [ngSrc]="getBackdropUrl()" fill alt="backdrop"-->
-<!--               style="width: 100%; height: 100%; object-fit: cover;" />-->
+          <img priority [ngSrc]="getBackdropUrl()" fill alt="backdrop"
+               style="width: 100%; height: 100%; object-fit: cover;" />
         </swiper-slide>
 
       </swiper-container>
 
         <div class="movie-details-overlay">
           <div class="movie-header">
-            <h1 class="movie-title">{{show?.name}}</h1>
-<!--            @if (currentVideoInfo) {-->
-<!--              <h5>{{currentVideoInfo.title}}</h5>-->
-<!--            }-->
+            <div class="title-row">
+              <h1 class="movie-title">{{show?.name}}</h1>
+              <h1 class="seasons-count">{{show?.seasons?.length}} Seasons</h1>
+            </div>
+            @if (currentMediaItem) {
+              <div class="title-row">
+                <h5>{{ currentMediaItem.title }}</h5>
+                <h6 class="duration">{{ formatDuration(currentMediaItem.duration) }}</h6>
+              </div>
+            }
           </div>
           <p class="movie-description">
             To jest przykładowy opis filmu. Możesz go później podmienić na dane z backendu.
@@ -35,13 +41,14 @@
   @if (selectedVideoUrl.length > 0) {
 
     <div class="video-wrapper">
-<!--      <app-video-player-component-->
-<!--        [show]="show"-->
-<!--        [currentVideoInfo]="currentVideoInfo"-->
-<!--        [src]="selectedVideoUrl"-->
-<!--        (playVideoClicked)="playVideoClicked.emit()"-->
-<!--        (updateVideoData)="updateVideoData.emit($event)"-->
-<!--      ></app-video-player-component>-->
+      <app-video-player-component
+        [show]="show"
+        [currentMediaItem]="currentMediaItem"
+        [src]="selectedVideoUrl"
+        (playVideoClicked)="playVideoClicked.emit()"
+        (updateMediaItem)="updateMediaItem.emit($event)"
+        (seekChange)="onSeekTimeSelected($event)"
+      ></app-video-player-component>
     </div>
   }
 
@@ -70,7 +77,7 @@
           <div class="episode-container">
             <select [(ngModel)]="selectedEpisode" (ngModelChange)="onEpisodeSelect()" class="form-select">
               @for (episode of episodes; track episode.id) {
-                <option [ngValue]="episode">Episode {{ episode.number }}</option>
+                <option [ngValue]="episode">Episode {{ episode.episodeNumber }}</option>
               }
             </select>
           </div>

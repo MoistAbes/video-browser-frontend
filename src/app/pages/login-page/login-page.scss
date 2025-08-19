@@ -1,0 +1,52 @@
+.login-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // żywszy animowany gradient
+  background: linear-gradient(-45deg, #802626, #805c26, #266680, #4b2666);
+  background-size: 400% 400%;
+  animation: gradientMove 15s ease infinite;
+
+  color: #fff;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.login-box {
+  background-color: rgba(37, 37, 37, 0.42);
+  max-width: 400px;
+  width: 100%;
+}
+
+
+
+
+h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.5rem;
+  color: #e50914; // Netflix red
+  letter-spacing: 2px;
+}
+
+.register-link {
+  color: #e1e1e1;
+  font-size: 0.9rem;
+}
+
+.register-link:hover {
+    cursor: pointer;
+    color: #3a98c0;
+
+}

@@ -1,0 +1,73 @@
+<div class="login-container d-flex align-items-center justify-content-center">
+  <div class="login-box shadow-lg rounded p-4">
+    <h1 class="text-center mb-4">Zymflix</h1>
+
+
+
+
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>
+        <i class="fa-solid fa-user"></i>
+        Username
+      </mat-label>
+      <input [(ngModel)]="username" matInput type="text" placeholder="Enter username">
+      <mat-icon matSuffix>person</mat-icon>
+    </mat-form-field>
+
+    <!-- Password z oczkiem -->
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>
+        <i class="fa-solid fa-key me-2"></i> Password
+      </mat-label>
+
+      <input [(ngModel)]="password" matInput [type]="hide() ? 'password' : 'text'" placeholder="Enter password">
+
+
+      <!-- oczko po prawej -->
+      <button mat-icon-button matSuffix (click)="togglePassword($event)">
+        <i class="fa-solid" [ngClass]="hide() ? 'fa-eye-slash' : 'fa-eye'"></i>
+      </button>
+
+    </mat-form-field>
+
+
+
+    @if (!isLogin) {
+      <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>
+          <i class="fa-solid fa-key"></i>
+          Repeat Password</mat-label>
+        <input [(ngModel)]="repeatPassword" matInput type="password" placeholder="Repeat password">
+        <mat-icon matSuffix>lock</mat-icon>
+      </mat-form-field>
+    }
+
+
+
+
+    @if (isLogin) {
+      <button [disabled]="!validateLoginValues()" (click)="loginUser()" mat-raised-button color="warn" class="w-100 mb-3">
+        <i class="fa fa-sign-in-alt me-2"></i> Login
+      </button>
+    } @else {
+      <button [disabled]="!areRegisterValuesFilled()" (click)="registerUser()" mat-raised-button color="warn" class="w-100 mb-3">
+        <i class="fa fa-sign-in-alt me-2"></i> Register
+      </button>
+    }
+
+
+
+    <div class="text-center">
+      @if (isLogin) {
+        <a (click)="isLogin = !isLogin; clearForm()" class="register-link">
+          <span>Don't have an account? Register here</span>
+        </a>
+      } @else {
+        <a (click)="isLogin = !isLogin; clearForm()" class="register-link">
+          <span>Already have account? Login here</span>
+        </a>
+      }
+
+    </div>
+  </div>
+</div>

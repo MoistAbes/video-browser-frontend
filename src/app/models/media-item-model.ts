@@ -1,23 +1,18 @@
 import {MediaTypeEnum} from '../enums/media-type-enum';
 
 export class MediaItemModel {
-  constructor(
-    public id: number,
-    public title: string,
-    public parentTitle: string,
-    public seasonNumber: number | null,
-    public episodeNumber: number | null,
-    public type: MediaTypeEnum,
-    public rootPath: string,
-    public fileName: string,
-    public codec: string | null,
-    public audio: string | null,
-    public videoHash: string
-  ) {}
 
+   id: number = 0
+   title: string = ""
+   parentTitle: string = ""
+   seasonNumber: number | null = null
+   episodeNumber: number | null = null
+   type: MediaTypeEnum | undefined
+   rootPath: string = ""
+   fileName: string = ""
+   codec: string | null = null
+   audio: string | null = null
+   duration: number = 0;
+   videoHash: string = ""
 
-
-  get isEpisode(): boolean {
-    return this.type === MediaTypeEnum.EPISODE;
-  }
 }

@@ -4,11 +4,9 @@
     <img
       [ngSrc]="Endpoints.videos.icon + '?path=' + iconFilePath"
       alt="thumbnail"
-      priority
       class="video-icon"
-      width="300"
-      height="450"
-    />
+      loading="lazy"
+      fill/>
   } @else {
     <div class="no-icon-placeholder">
       <p>No thumbnail</p>

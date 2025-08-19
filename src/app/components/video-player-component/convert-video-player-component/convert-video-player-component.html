@@ -1,0 +1,126 @@
+<!--<div class="video-player-container" (mousemove)="onMouseMove()" (mouseenter)="showControls = true" (mouseleave)="showControls = false">-->
+<div class="video-player-container" (mousemove)="onMouseMove()">
+  <video #target
+         (timeupdate)="onTimeUpdate()"
+         (click)="onVideoClick()"
+         (dblclick)="onVideoDoubleClick()"
+         class="video-js vjs-default-skin"
+         controls
+         preload="auto"
+  >
+  </video>
+
+  <div [class.visible]="showControls" class="movie-details-overlay">
+    <div class="movie-header">
+      <h1 class="movie-title">{{show?.name}}</h1>
+      @if (currentMediaItem) {
+        <h5>{{currentMediaItem.title}}</h5>
+      }
+    </div>
+    <p class="movie-description">
+      To jest przykładowy opis filmu. Możesz go później podmienić na dane z backendu not single video.
+    </p>
+  </div>
+
+  @if (overlayText) {
+    <div class="overlay-message" >{{ overlayText }}</div>
+  }
+  <div class="custom-control-bar" [class.visible]="showControls">
+
+    <div class="row">
+      <div class="col-12">
+        <div class="center-controls" style="position: relative;">
+          <input
+            type="range"
+            min="0"
+            [max]="totalDuration"
+            [value]="currentTime"
+            step="0.1"
+            (input)="onSeekChangeFromSlider($event)"
+            (mousemove)="onSliderHover($event)"
+            (mouseleave)="hideTooltip()"
+            #progressSlider
+          />
+
+          <!-- Tooltip -->
+          @if (tooltipVisible) {
+            <div
+              class="slider-tooltip"
+              [style.left.px]="tooltipPosition"
+            >
+              {{ tooltipTime }}
+            </div>
+          }
+
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row">
+
+      <div class="col-10">
+        <!-- Left: Play/Pause -->
+        <div class="left-controls">
+          <button class="netflix-button" (click)="togglePlay()">
+            @if (isPlaying) {
+              <i class="fa-solid fa-pause"></i>
+            }
+            @if (!isPlaying) {
+              <i class="fa-solid fa-play"></i>
+            }
+          </button>
+
+
+          @if (volume > 0) {
+            <i style="cursor: pointer" (click)="changeVolume(0)" class="fa-solid fa-volume-low me-1"></i>
+          }
+          @if (volume == 0) {
+            <i class="fas fa-volume-mute"></i>
+          }
+          <mat-slider min="0" max="1" step="0.01" showTickMarks discrete [displayWith]="formatLabel">
+            <input y
+                   matSliderThumb [value]="volume" (input)="onVolumeChange($event)" />
+          </mat-slider>
+          <span>{{ formatTime(currentTime) }} / {{ formatTime(totalDuration) }}</span>
+        </div>
+      </div>
+
+      <div class="col-2">
+        <!-- Right: Fullscreen -->
+        <div class="right-controls float-end">
+
+          @if (isVideoListVisible) {
+            <app-video-selector-component
+              (updateVideoData)="onUpdateVideoData($event)"
+              (playVideoClicked)="playVideoClicked.emit()"
+              [currentMediaItem]="currentMediaItem"
+              [show]="show"
+            >
+            </app-video-selector-component>
+          }
+
+
+          <div class="video-list-container">
+
+          </div>
+
+          @if (show!.movies.length > 1 || show!.seasons.length > 0) {
+            <button (click)="isVideoListVisible = !isVideoListVisible" class="netflix-button">
+              <i class="fa-solid fa-list"></i>
+            </button>
+          }
+          <button class="netflix-button" (click)="toggleFullscreen()">
+            <i class="fa-solid fa-expand"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+

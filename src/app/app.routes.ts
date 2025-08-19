@@ -1,28 +1,40 @@
 import { Routes } from '@angular/router';
-import {HomePage} from './pages/home-page/home-page';
 import {MovieDetailPage} from './pages/movie-detail-page/movie-detail-page';
 import {AdminPage} from './pages/admin-page/admin-page';
 import {MainLayoutComponent} from './layout/main-layout-component/main-layout-component';
 import {MoviePage} from './pages/movie-page/movie-page';
 import {ShowPage} from './pages/show-page/show-page';
+import {SearchPage} from './pages/search-page/search-page';
 import {AnimePage} from './pages/anime-page/anime-page';
-
+import {HomePage} from './pages/home-page/home-page';
+import {LoginPage} from './pages/login-page/login-page';
+import {authGuard} from './guards/auth-guard';
+import {redirectGuard} from './guards/redirect-guard';
+import {adminGuard} from './guards/admin-guard';
+import {AccountPage} from './pages/account-page/account-page';
 export const routes: Routes = [
   {
     path: '',
-    component: MainLayoutComponent, // ← ten komponent zawiera sidebar i router-outlet
+    canActivate: [redirectGuard], // 👈 tu używamy guarda
+    pathMatch: 'full',
+    component: MainLayoutComponent, // Angular wymaga componentu
+  },
+  {
+    path: '',
+    component: MainLayoutComponent,
     children: [
-      { path: 'home', component: HomePage },
-      { path: 'movies', component: MoviePage },
-      { path: 'shows', component: ShowPage },
-      { path: 'anime', component: AnimePage },
-      { path: 'movie-details/:parentTitle', component: MovieDetailPage },
-      { path: 'admin', component: AdminPage },
-      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: 'home', component: HomePage, canActivate: [authGuard], data: { animation: 'Home' } },
+      { path: 'search', component: SearchPage, canActivate: [authGuard], data: { animation: 'Search' } },
+      { path: 'movies', component: MoviePage, canActivate: [authGuard], data: { animation: 'Movies' } },
+      { path: 'shows', component: ShowPage, canActivate: [authGuard], data: { animation: 'Shows' } },
+      { path: 'anime', component: AnimePage, canActivate: [authGuard], data: { animation: 'Anime' } },
+      { path: 'account', component: AccountPage,canActivate: [authGuard], data: { animation: 'Account' } },
+      { path: 'movie-details/:parentTitle', component: MovieDetailPage, canActivate: [authGuard], data: { animation: 'MovieDetails' } },
+      { path: 'admin', component: AdminPage, canActivate: [authGuard, adminGuard], data: { animation: 'Admin' } },
+      { path: 'login', component: LoginPage, data: { animation: 'Login' } },
     ],
   },
-
-
-  // fallback route
-  { path: '**', redirectTo: 'home' },
+  { path: '**', redirectTo: 'login' },
 ];
+
+

@@ -127,10 +127,6 @@
     font-size: 24px;
     text-align: center;
 
-    //display: flex;
-    //align-items: center;
-    //justify-content: center;
-
     margin-left: 5px;
     background: transparent;
     border: none;
@@ -139,11 +135,9 @@
     padding: 8px;
     border-radius: 50%;
     color: white;
-    //transition: box-shadow 0.3s ease, transform 0.2s ease;
 
 
     &:hover {
-      //box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
       transform: scale(1.1);
     }
 
@@ -217,4 +211,40 @@
 
   }
 
+
+}
+
+.next-episode-notice {
+  position: absolute;
+  bottom: 100px;
+  right: 100px;
+
+  padding: 10px;
+
+  /* Frosted glass effect */
+  background-color: rgba(20, 20, 20, 0.5); /* semi-transparent dark */
+  backdrop-filter: blur(10px); /* main blur */
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
+  border-radius: 10px; /* rounded edges */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* depth */
+}
+
+.notice-content {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* odstęp między tekstem a przyciskiem */
+}
+
+.play-btn {
+  background-color: #e50914;
+  color: white;
+  padding: 4px 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.play-btn:hover {
+  background-color: #f6121d;
 }

@@ -13,14 +13,24 @@
       <div [class.visible]="showControls" class="movie-details-overlay">
         <div class="movie-header">
           <h1 class="movie-title">{{show?.name}}</h1>
-<!--          @if (currentVideoInfo) {-->
-<!--            <h5>{{currentVideoInfo.title}}</h5>-->
-<!--          }-->
+          @if (currentMediaItem) {
+            <h5>{{currentMediaItem.title}}</h5>
+          }
         </div>
         <p class="movie-description">
           To jest przykładowy opis filmu. Możesz go później podmienić na dane z backendu not single video.
         </p>
       </div>
+
+  @if (isNextEpisodeNoticeVisible) {
+    <div class="next-episode-notice">
+      <div class="notice-content">
+        <p class="font-bold text-lg mr-4 mb-0">Next episode in {{nextEpisodeTimerCounter}}</p>
+        <i class="fa-solid fa-chevron-right"></i>
+      </div>
+    </div>
+  }
+
 
   @if (overlayText) {
     <div class="overlay-message" >{{ overlayText }}</div>
@@ -82,9 +92,7 @@
           <mat-slider min="0" max="1" step="0.01" showTickMarks discrete [displayWith]="formatLabel">
             <input matSliderThumb [value]="volume" (input)="onVolumeChange($event)" />
           </mat-slider>
-
           <span>{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</span>
-
         </div>
       </div>
 
@@ -93,13 +101,13 @@
         <div class="right-controls float-end">
 
           @if (isVideoListVisible) {
-<!--            <app-video-selector-component-->
-<!--              (updateVideoData)="onUpdateVideoData($event)"-->
-<!--              (playVideoClicked)="playVideoClicked.emit()"-->
-<!--              [currentVideoInfo]="currentVideoInfo"-->
-<!--              [show]="show"-->
-<!--            >-->
-<!--            </app-video-selector-component>-->
+            <app-video-selector-component
+              (updateVideoData)="onUpdateVideoData($event)"
+              (playVideoClicked)="playVideoClicked.emit()"
+              [currentMediaItem]="currentMediaItem"
+              [show]="show"
+            >
+            </app-video-selector-component>
           }
 
 

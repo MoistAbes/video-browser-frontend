@@ -19,13 +19,20 @@
     box-shadow: 0 0 12px rgba(239, 8, 8, 0.71);
   }
 
-
   .video-icon {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+    width: 300px;
+    height: 450px;
+    object-fit: cover; /* dopasuje i przytnie, bez rozciągania */
+    border-radius: 8px; /* opcjonalnie, zaokrąglone rogi */
   }
+
+
+  //.video-icon {
+  //  width: 100%;
+  //  height: 100%;
+  //  object-fit: cover;
+  //  display: block;
+  //}
 
   .video-title {
     position: absolute;

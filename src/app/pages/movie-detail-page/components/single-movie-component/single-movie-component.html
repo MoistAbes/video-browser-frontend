@@ -8,16 +8,16 @@
         class="preview-swiper"
       >
 
-<!--        <swiper-slide>-->
-<!--          <img priority [ngSrc]="getBackdropUrl()" fill alt="backdrop"-->
-<!--               style="width: 100%; height: 100%; object-fit: cover;" />-->
-<!--        </swiper-slide>-->
+        <swiper-slide>
+          <img priority [ngSrc]="getBackdropUrl()" fill alt="backdrop"
+               style="width: 100%; height: 100%; object-fit: cover;" />
+        </swiper-slide>
 
       </swiper-container>
 
       <div class="movie-details-overlay">
         <div class="movie-header">
-<!--          <h1 class="movie-title">{{currentVideoInfo!.title}}</h1>-->
+          <h1 class="movie-title">{{currentMediaItem!.title}}</h1>
 
         </div>
         <p class="movie-description">
@@ -32,14 +32,14 @@
 
   @if (selectedVideoUrl.length > 0) {
     <div class="video-wrapper">
-<!--    <app-video-player-component-->
-<!--      [show]="show"-->
-<!--      [currentVideoInfo]="currentVideoInfo"-->
-<!--      [src]="selectedVideoUrl"-->
-<!--      [subtitlesUrl]="subtitlesUrl"-->
-<!--      (playVideoClicked)="playVideoClicked.emit()"-->
-<!--      (updateVideoData)="updateVideoData.emit($event)"-->
-<!--    ></app-video-player-component>-->
+    <app-video-player-component
+      [show]="show"
+      [currentMediaItem]="currentMediaItem"
+      [src]="selectedVideoUrl"
+      [subtitlesUrl]="subtitlesUrl"
+      (playVideoClicked)="playVideoClicked.emit()"
+      (updateMediaItem)="updateMediaItem.emit($event)"
+    ></app-video-player-component>
   </div>
   }
 </div>
