@@ -1,0 +1,44 @@
+<div>
+
+  <div class="searchbar-container">
+    <div class="searchbar-wrapper">
+      <input
+        type="text"
+        [(ngModel)]="filterTitleValue"
+        (input)="onFilterChange()"
+        placeholder="Wyszukaj tytuł..."
+        class="searchbar-input"
+      />
+      <button (click)="onFilterClearClick()" class="clear-btn" aria-label="Clear filter">
+        <i class="fa-solid fa-x" ></i>
+      </button>
+    </div>
+
+    <div class="ng-select-container">
+      <select
+        [(ngModel)]="filterTypeValue"
+        (change)="onFilterChange()"
+        class="video-type-select"
+      >
+        @for (type of videoTypes; track type.label) {
+          <option [ngValue]="type.value">
+            {{ type.label }}
+          </option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="video-grid">
+    @for (show of showListFiltered; track show.id) {
+      <app-video-card-component
+        [title]="show.name"
+        (mouseenter)="startHoverTimer(show)"
+        (mouseleave)="cancelHoverTimer()"
+        (cardClick)="moveToMovieDetails(show.name)"
+        [iconFilePath]="show.rootPath | MainIconPathPipe"
+      ></app-video-card-component>
+    }
+  </div>
+
+</div>
