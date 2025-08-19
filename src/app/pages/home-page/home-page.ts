@@ -1,67 +1,102 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {VideoInfoTypeEnum} from '../../enums/video-info-type-enum';
-import {VideoCardComponent} from '../../components/video-card-component/video-card-component';
-import {Router} from '@angular/router';
-import {MainIconPathPipe} from '../../pipes/main-icon-path-pipe';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ShowApiService} from '../../services/api/show-api-service';
 import {ShowModel} from '../../models/show-model';
-
-type VideoTypeOption = { label: string; value: VideoInfoTypeEnum };
+import {MainIconPathPipe} from '../../pipes/main-icon-path-pipe';
+import {VideoCardComponent} from '../../components/video-card-component/video-card-component';
+import {Router} from '@angular/router';
+import {NgOptimizedImage} from '@angular/common';
+import {Endpoints} from '../../endpoints/endpoints';
+import {interval, Subscription} from 'rxjs';
+import {MatProgressBar} from '@angular/material/progress-bar';
 
 @Component({
-  standalone: true,
-  selector: 'app-home-page',
+  selector: 'app-search-page',
   imports: [
-    FormsModule,
-    FontAwesomeModule,
-    VideoCardComponent,
     MainIconPathPipe,
+    VideoCardComponent,
+    NgOptimizedImage,
+    MatProgressBar
   ],
   templateUrl: './home-page.html',
+  standalone: true,
   styleUrl: './home-page.scss'
 })
-export class HomePage implements OnInit  {
-  @ViewChild('target', { static: false }) target!: ElementRef;
-
-  // videoFileList: VideoInfoModel[] = []
-  // videoFileListFiltered: VideoInfoModel[] = []
-  // selectedVideoUrl: string = '';
-
-  filterTitleValue: string = '';
-  filterTypeValue: VideoInfoTypeEnum = VideoInfoTypeEnum.ALL;
-
-  videoTypes: VideoTypeOption[] = [];
+export class HomePage implements OnInit, AfterViewInit, OnDestroy{
   hoverTimer: number | null = null;
 
-  showList: ShowModel[] = []
-  showListFiltered: ShowModel[] = []
+  selectedShow: ShowModel | undefined;
+  randomShows: ShowModel[] = [];
+  private timerSubscription?: Subscription;
+  progressValue: number = 0; // wartość dla progress bara (0–100)
+  isTimerRunning: boolean = true;
+  private showIndex: number = 0; // przeniosłem index jako pole klasy
 
-  constructor(private router: Router,
-              // private videoInfoApiService: VideoInfoApiService,
-              private showApiService: ShowApiService,) { }
+  @ViewChild('carousel', { static: false }) carousel!: ElementRef;
+  isDragging = false;
+  startX = 0;
+  scrollLeft = 0;
+
+  constructor(private showApiService: ShowApiService,
+              private router: Router) {
+  }
 
   ngOnInit(): void {
+    this.findRandomShows();
+  }
 
-    this.showApiService.findWithRootPath().subscribe({
-      next: (result) => {
-        this.showList = result
-        this.showListFiltered = result
-        console.log("result: ", this.showList)
+  //ToDO to nie dziala chyba trzeba bedzie ogarnac
+  ngAfterViewInit() {
+    const el = this.carousel.nativeElement;
+
+    el.addEventListener('mousedown', (e: MouseEvent) => {
+      this.isDragging = true;
+      el.classList.add('dragging'); // opcjonalnie do stylowania
+      this.startX = e.pageX - el.offsetLeft;
+      this.scrollLeft = el.scrollLeft;
+    });
+
+    el.addEventListener('mouseleave', () => {
+      this.isDragging = false;
+      el.classList.remove('dragging');
+    });
+
+    el.addEventListener('mouseup', () => {
+      this.isDragging = false;
+      el.classList.remove('dragging');
+    });
+
+    el.addEventListener('mousemove', (e: MouseEvent) => {
+      if (!this.isDragging) return;
+      e.preventDefault();
+      const x = e.pageX - el.offsetLeft;
+      const walk = (x - this.startX) * 2; // *2 = szybkość scrollowania
+      el.scrollLeft = this.scrollLeft - walk;
+    });
+  }
+
+
+  findRandomShows() {
+    this.showApiService.findRandomShows().subscribe({
+      next: value => {
+        this.randomShows = value;
+        console.log("random shows: ", this.randomShows)
+        this.selectedShow = this.randomShows[0];
+        this.startTimer()
       },
-      error: err => {
-        console.log("error: ", err)
+      error: (err) => {
+        console.log("Error: ", err)
       },
       complete: () => {}
     })
-
-    this.videoTypes = Object.entries(VideoInfoTypeEnum).map(([key, value]) => ({
-      label: value,
-      value: value as VideoInfoTypeEnum
-    }));
   }
 
+  scrollLeftBtn() {
+    this.carousel.nativeElement.scrollBy({ left: -200, behavior: 'smooth' });
+  }
+
+  scrollRightBtn() {
+    this.carousel.nativeElement.scrollBy({ left: 200, behavior: 'smooth' });
+  }
 
   moveToMovieDetails(title: string) {
     this.router.navigate(['/movie-details', title])
@@ -69,32 +104,6 @@ export class HomePage implements OnInit  {
         console.error('❌ Błąd podczas nawigacji:', error);
       });
   }
-
-  onFilterChange() {
-    this.showListFiltered = this.showList;
-
-    // if (this.filterTypeValue.toLowerCase() != "wszystko") {
-    //   this.showListFiltered = this.showListFiltered.filter(video =>
-    //     this.getTrimAndLowercase(video.type).includes(this.getTrimAndLowercase(this.filterTypeValue))
-    //   )
-    // }
-
-    this.showListFiltered = this.showListFiltered.filter(video =>
-      this.getTrimAndLowercase(video.name).includes(this.getTrimAndLowercase(this.filterTitleValue))
-    );
-
-  }
-
-  onFilterClearClick() {
-    this.filterTitleValue = '';
-    this.onFilterChange();
-  }
-
-
-  getTrimAndLowercase(value: string): string {
-    return value.toLowerCase().replace(/\s+/g, '');
-  }
-
 
   //ToDO to jest na kiedys do dodatkowego info na hover
   startHoverTimer(videoInfo: any) {
@@ -113,6 +122,69 @@ export class HomePage implements OnInit  {
   onHoverOneSecond(videoInfo: any) {
     console.log('Hovered for 1 second over:', videoInfo);
     // put your delayed hover action here
+  }
+
+  getBackdropUrl(): string {
+    return `${Endpoints.videos.icon}?path=${encodeURIComponent(this.selectedShow!.rootPath + '/backdrop/backdrop.jpg')}`;
+  }
+
+  private startTimer() {
+    this.stopTimer();
+
+    const duration: number = 10000; // 10s
+    const step: number = 100;       // co ile ms aktualizujemy progress bar
+    let elapsed: number = 0;
+
+    this.timerSubscription = interval(step).subscribe(() => {
+      elapsed += step;
+      this.progressValue = (elapsed / duration) * 100;
+
+      if (elapsed >= duration) {
+        this.nextShow();   // <-- używamy metody
+        elapsed = 0;
+      }
+    });
+
+    this.isTimerRunning = true;
+  }
+
+  nextShow() {
+    if (this.randomShows.length > 0) {
+      this.showIndex = (this.showIndex + 1) % this.randomShows.length;
+      this.selectedShow = this.randomShows[this.showIndex];
+      this.progressValue = 0; // reset progress bara
+    }
+  }
+
+  onNextButtonClick() {
+    this.nextShow();
+
+    // dodatkowo resetujemy timer
+    if (this.isTimerRunning) {
+      this.startTimer();
+    }
+  }
+
+
+  private stopTimer() {
+    if (this.timerSubscription) {
+      this.timerSubscription.unsubscribe();
+      this.timerSubscription = undefined;
+    }
+    this.isTimerRunning = false;
+  }
+
+  toggleTimer() {
+    if (this.isTimerRunning) {
+      this.stopTimer();
+    } else {
+      this.startTimer();
+    }
+  }
+
+  ngOnDestroy() {
+    // zatrzymanie timera przy opuszczeniu komponentu
+    this.stopTimer();
   }
 
 }

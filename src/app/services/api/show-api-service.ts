@@ -11,9 +11,14 @@ export class ShowApiService {
 
   constructor(private http: HttpClient) { }
 
-  findAllShows(): Observable<any> {
-    return this.http.get<any>(Endpoints.show.findAll)
+  findAllShows(): Observable<ShowModel[]> {
+    return this.http.get<ShowModel[]>(Endpoints.show.findAll)
   }
+
+  findRandomShows(): Observable<ShowModel[]> {
+    return this.http.get<ShowModel[]>(Endpoints.show.findRandom)
+  }
+
 
   findShowByParentTitle(parentTitle: string): Observable<ShowModel> {
     return this.http.get<ShowModel>(Endpoints.show.findByParentTitle + '/' + parentTitle)

@@ -1,12 +1,12 @@
-import {Component, Input, CUSTOM_ELEMENTS_SCHEMA, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, Input, CUSTOM_ELEMENTS_SCHEMA, OnInit, Output, EventEmitter, OnChanges} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {VideoCardComponent} from '../../../../components/video-card-component/video-card-component';
 import {VideoPlayerComponent} from '../../../../components/video-player-component/video-player-component';
 import {NgOptimizedImage} from '@angular/common';
 import {Endpoints} from '../../../../endpoints/endpoints';
 import {VideoApi} from '../../../../services/api/video-api';
-import {EpisodeModel} from '../../../../models/episode-model';
 import {ShowModel} from '../../../../models/show-model';
+import {MediaItemModel} from '../../../../models/media-item-model';
 
 @Component({
   selector: 'app-seasons-and-movies-component',
@@ -21,42 +21,50 @@ import {ShowModel} from '../../../../models/show-model';
   standalone: true,
   styleUrl: './seasons-and-movies-component.scss'
 })
-export class SeasonsAndMoviesComponent implements OnInit {
+export class SeasonsAndMoviesComponent implements OnInit, OnChanges {
 
-  // @Input() currentVideoInfo: VideoInfoModel | undefined;
+  @Input() currentMediaItem: MediaItemModel | undefined;
   @Input() isVideoPlaying: boolean = false;
   @Input() selectedVideoUrl: string = '';
   @Input() show: ShowModel | undefined;
 
-  @Input() selectedSeason: number | undefined
+  @Input() selectedSeason: number | null = null
 
-  // @Output() updateVideoData = new EventEmitter<Partial<VideoInfoModel>>();
+  @Output() updateMediaItem = new EventEmitter<Partial<MediaItemModel>>();
   @Output() playVideoClicked = new EventEmitter<void>();
 
   selectedContentType: string = 'seasons';
 
-  episodes: EpisodeModel[] = [];
-  selectedEpisode: EpisodeModel | undefined
+  episodes: MediaItemModel[] = [];
+  selectedEpisode: MediaItemModel | undefined
 
-  constructor(private videoApi: VideoApi) {}
+  private initialized = false;
+
+  constructor() {}
 
   ngOnInit(): void {
-    this.selectedSeason = this.show?.seasons[0].number;
-    this.setUpEpisodes();
   }
 
-  // getBackdropUrl(): string {
-  //   return `${Endpoints.videos.icon}?path=${encodeURIComponent(this.currentVideoInfo!.rootPath + '/backdrop/backdrop.jpg')}`;
-  // }
+  ngOnChanges() {
+    if (!this.initialized && this.show?.seasons?.length) {
+      this.initialized = true;
+      this.selectedSeason = this.show.seasons[0].episodes[0].mediaItem.seasonNumber;
+      this.setUpEpisodes();
+    }
+  }
 
+  getBackdropUrl(): string {
+    return `${Endpoints.videos.icon}?path=${encodeURIComponent(this.currentMediaItem!.rootPath + '/backdrop/backdrop.jpg')}`;
+  }
 
+  watchMovie(mediaItem: MediaItemModel) {
 
-  // watchMovie(videoInfo: VideoInfoModel) {
-  //   console.log("watch movie: ", videoInfo);
-  //   this.currentVideoInfo = videoInfo;
-  //   this.updateVideoData.emit(this.currentVideoInfo)
-  //   this.resetPlayingVideo()
-  // }
+    console.log("watchMovie: ", mediaItem);
+
+    this.currentMediaItem = mediaItem;
+    this.updateMediaItem.emit(this.currentMediaItem);
+    this.resetPlayingVideo()
+  }
 
   resetPlayingVideo() {
     this.selectedVideoUrl = '';
@@ -65,12 +73,17 @@ export class SeasonsAndMoviesComponent implements OnInit {
 
   selectSeasonContentType() {
     this.selectedContentType = 'seasons';
+    if (this.show) {
+      this.selectedSeason = this.show.seasons[0].episodes[0].mediaItem.seasonNumber;
+      this.setUpEpisodes();
+    }
+
   }
 
   selectMoviesContentType() {
     this.selectedContentType = 'movies';
-    // this.currentVideoInfo = this.show!.movies[0].videoInfo;
-    // this.updateVideoData.emit(this.currentVideoInfo)
+    this.currentMediaItem = this.show!.movies[0].mediaItem;
+    this.updateMediaItem.emit(this.currentMediaItem)
     this.resetPlayingVideo()
 
   }
@@ -80,15 +93,18 @@ export class SeasonsAndMoviesComponent implements OnInit {
 
     this.episodes = this.show?.seasons
       .filter(season => season.number == this.selectedSeason)
-      .flatMap(season => season.episodes) || [];
+      .flatMap(season => season.episodes)
+      .flatMap(episode => episode.mediaItem) || [];
 
     if (this.episodes.length > 0) {
-      this.selectedEpisode = this.episodes[0];
-      // this.updateVideoData.emit(this.selectedEpisode.videoInfo);
+      setTimeout(() => { // <-- opóźnienie do następnego cyklu
+        this.selectedEpisode = this.episodes[0];
+        this.updateMediaItem.emit(this.selectedEpisode);
+      });
     }
   }
 
   onEpisodeSelect() {
-    // this.updateVideoData.emit(this.selectedEpisode!.videoInfo);
+    this.updateMediaItem.emit(this.selectedEpisode);
   }
 }

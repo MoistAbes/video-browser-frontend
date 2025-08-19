@@ -2,11 +2,19 @@ import {Component, OnInit} from '@angular/core';
 import {VideoApi} from '../../services/api/video-api';
 import {FormsModule} from '@angular/forms';
 import {ShowApiService} from '../../services/api/show-api-service';
+import {ShowModel} from '../../models/show-model';
+import {MatTab, MatTabGroup} from '@angular/material/tabs';
+import {NgSelectComponent} from '@ng-select/ng-select';
+import {CategoryApiService} from '../../services/api/category-api-service';
+import {CategoryModel} from '../../models/category-model';
 
 @Component({
   selector: 'app-admin-page',
   imports: [
-    FormsModule
+    FormsModule,
+    MatTabGroup,
+    MatTab,
+    NgSelectComponent
   ],
   templateUrl: './admin-page.html',
   standalone: true,
@@ -14,36 +22,23 @@ import {ShowApiService} from '../../services/api/show-api-service';
 })
 export class AdminPage implements OnInit {
 
-  // videoInfoList: VideoInfoModel[] = []
-  // videoInfoListFiltered: VideoInfoModel[] = []
+ showList: ShowModel[] = [];
+ selectedShow: ShowModel | undefined;
 
-  audioFilterValue: string = ''
+ categories: CategoryModel[] = []
 
   constructor(private videoApiService: VideoApi,
-              private showApiService: ShowApiService,) {}
+              private showApiService: ShowApiService,
+              private categoryApiService: CategoryApiService) {}
 
   ngOnInit(): void {
-    // this.videoStoreService.getAllVideos().subscribe({
-    //   next: (videos) => {
-    //     this.videoInfoList = videos
-    //     this.videoInfoListFiltered = videos
-    //   },
-    //   error: (err) => console.error('Błąd przy ładowaniu listy filmów:', err)
-    // });
+    this.testFindAllShows()
+    this.findAllCategories();
 
   }
 
-  // findAllParentTitle() {
-  //   this.videoInfoApiService.findAllVideoInfoParentTitle().subscribe({
-  //     next: (videos) => {
-  //       console.log(videos);
-  //     },
-  //     error: (err) => {
-  //       console.log(err)
-  //     },
-  //     complete: () => {}
-  //   })
-  // }
+
+
 
   scanAllMovies() {
     console.log('ScanAllMovies');
@@ -62,25 +57,28 @@ export class AdminPage implements OnInit {
 
   filterVideoInfo() {
 
-    // this.videoInfoListFiltered = this.videoInfoList;
-    //
-    // this.videoInfoListFiltered = this.videoInfoListFiltered.filter(videoInfo =>
-    //   videoInfo.videoTechnicalDetails?.audio.includes(this.audioFilterValue)
-    // );
+
   }
 
-
-  testSubtitleEndpoint() {
-    this.videoApiService.getSubtitles('MOVIE/Fast and Furious/Fast and Furious 1', 'Fast and Furious 1').subscribe({
-      next: (result) => {},
-      error: (err) => {},
+  findAllCategories() {
+    this.categoryApiService.findAllCategories().subscribe({
+      next: value => {
+        this.categories = value;
+        console.log("categories: ", this.categories)
+      },
+      error: err => {
+        console.log("Error: ", err)
+      },
       complete: () => {}
     })
   }
 
+
   testFindAllShows() {
     this.showApiService.findAllShows().subscribe({
       next: (result) => {
+        this.showList = result
+        this.showList.sort((a, b) => a.id! - b.id!)
         console.log("SHOWS: ", result);
       },
       error: (err) => {
@@ -88,5 +86,9 @@ export class AdminPage implements OnInit {
       },
       complete: () => {}
     })
+  }
+
+  onShowRowClick(show: ShowModel) {
+    this.selectedShow = show;
   }
 }

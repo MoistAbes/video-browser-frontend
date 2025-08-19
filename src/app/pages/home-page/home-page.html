@@ -1,44 +1,78 @@
-<div>
+<div class="main-box">
+  <div class="random-show-box">
 
-  <div class="searchbar-container">
-    <div class="searchbar-wrapper">
-      <input
-        type="text"
-        [(ngModel)]="filterTitleValue"
-        (input)="onFilterChange()"
-        placeholder="Wyszukaj tytuł..."
-        class="searchbar-input"
-      />
-      <button (click)="onFilterClearClick()" class="clear-btn" aria-label="Clear filter">
-        <i class="fa-solid fa-x" ></i>
-      </button>
+    <div class="content-box">
+      @if (selectedShow) {
+        <div class="movie-details-overlay">
+          <div class="movie-header">
+            <div class="title-row">
+              <h1 class="movie-title">{{selectedShow.name}}</h1>
+              @if (selectedShow.seasons.length > 0) {
+                <h1 class="seasons-count">{{selectedShow.seasons.length}} Seasons</h1>
+              }
+            </div>
+          </div>
+          <p class="movie-description">
+            To jest przykładowy opis filmu. Możesz go później podmienić na dane z backendu.
+          </p>
+          <button class="play-button"
+          (click)="moveToMovieDetails(selectedShow.name)"
+          >
+            <i class="fa-solid fa-play"></i> Watch
+          </button>
+        </div>
+
+        <img class="content" priority [ngSrc]="getBackdropUrl()" fill alt="backdrop"/>
+      }
     </div>
 
-    <div class="ng-select-container">
-      <select
-        [(ngModel)]="filterTypeValue"
-        (change)="onFilterChange()"
-        class="video-type-select"
-      >
-        @for (type of videoTypes; track type.label) {
-          <option [ngValue]="type.value">
-            {{ type.label }}
-          </option>
-        }
-      </select>
+    <div>
+      <div class="carousel-container">
+        <h2 class="carousel-title">Proponowane</h2>
+        <div class="progress-bar-box">
+
+          <button class="netflix-button progress-bar-next" (click)="onNextButtonClick()">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+
+          <button class="netflix-button progress-bar-play" (click)="toggleTimer()">
+            @if (isTimerRunning) {
+              <i class="fa-solid fa-pause"></i>
+            }
+            @if (!isTimerRunning) {
+              <i class="fa-solid fa-play"></i>
+            }
+          </button>
+
+
+          <mat-progress-bar
+            class="carousel-progress-bar"
+            mode="determinate"
+            [value]="progressValue">
+          </mat-progress-bar>
+        </div>
+        <button class="arrow left" (click)="scrollLeftBtn()">‹</button>
+
+        <div class="carousel" #carousel>
+          @for (show of randomShows; track show.id) {
+
+            <div class="item">
+              <app-video-card-component
+                [title]="show.name"
+                [iconFilePath]="show.rootPath | MainIconPathPipe"
+                (cardClick)="moveToMovieDetails(show.name)">
+              </app-video-card-component>
+            </div>
+
+          }
+        </div>
+
+        <button class="arrow right" (click)="scrollRightBtn()">›</button>
+      </div>
     </div>
+
+
   </div>
 
-  <div class="video-grid">
-    @for (show of showListFiltered; track show.id) {
-      <app-video-card-component
-        [title]="show.name"
-        (mouseenter)="startHoverTimer(show)"
-        (mouseleave)="cancelHoverTimer()"
-        (cardClick)="moveToMovieDetails(show.name)"
-        [iconFilePath]="show.rootPath | MainIconPathPipe"
-      ></app-video-card-component>
-    }
-  </div>
 
 </div>

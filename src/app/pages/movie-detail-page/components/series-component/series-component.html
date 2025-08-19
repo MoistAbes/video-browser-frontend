@@ -6,29 +6,27 @@
         autoplay-delay="5000"
         class="preview-swiper"
       >
-<!--        @for (thumb of thumbnails; track thumb) {-->
-<!--          <swiper-slide>-->
-<!--            <img priority [ngSrc]="getThumbnailUrl(thumb)" fill alt="thumbnail"-->
-<!--                 style="width: 100%; height: 100%; object-fit: cover;" />-->
-<!--          </swiper-slide>-->
-<!--        }-->
+        <swiper-slide>
+          <img priority [ngSrc]="getBackdropUrl()" fill alt="backdrop"
+               style="width: 100%; height: 100%; object-fit: cover;" />
+        </swiper-slide>
       </swiper-container>
 
         <div class="movie-details-overlay">
           <div class="movie-header">
             <h1 class="movie-title">{{show!.name}}</h1>
-<!--            @if (currentVideoInfo) {-->
-<!--              <h5>{{currentVideoInfo.title}}</h5>-->
-<!--            }-->
+            @if (currentMediaItem) {
+              <h5>{{currentMediaItem.title}}</h5>
+            }
           </div>
           <p class="movie-description">
             To jest przykładowy opis filmu. Możesz go później podmienić na dane z backendu.
           </p>
-<!--          @if (currentVideoInfo) {-->
-<!--            <button class="play-button" (click)="playVideoClicked.emit()">-->
-<!--              <i class="fa-solid fa-play"></i> Play-->
-<!--            </button>-->
-<!--          }-->
+          @if (currentMediaItem) {
+            <button class="play-button" (click)="playVideoClicked.emit()">
+              <i class="fa-solid fa-play"></i> Play
+            </button>
+          }
 
         </div>
     </div>
@@ -36,15 +34,14 @@
 
   @if (selectedVideoUrl.length > 0) {
     <div class="video-wrapper">
-<!--      <app-video-player-component-->
-<!--        [show]="show"-->
-<!--        [currentVideoInfo]="currentVideoInfo"-->
-<!--        [src]="selectedVideoUrl"-->
-<!--        [subtitlesUrl]="subtitlesUrl"-->
-<!--        (playVideoClicked)="playVideoClicked.emit()"-->
-<!--        (updateVideoData)="updateVideoData.emit($event)"-->
-<!--      ></app-video-player-component>-->
-
+      <app-video-player-component
+        [show]="show"
+        [currentMediaItem]="currentMediaItem"
+        [src]="selectedVideoUrl"
+        [subtitlesUrl]="subtitlesUrl"
+        (playVideoClicked)="playVideoClicked.emit()"
+        (updateMediaItem)="updateVideoData.emit($event)"
+      ></app-video-player-component>
     </div>
   }
 
@@ -64,11 +61,11 @@
         </div>
           <div class="video-grid">
             @for (movie of show.movies; track movie.id) {
-<!--              <app-video-card-component-->
-<!--                [title]="movie.videoInfo!.title"-->
-<!--                (cardClick)="watchMovie(movie.videoInfo!)"-->
-<!--                [iconFilePath]="movie.videoInfo!.rootPath + '/icon/' + movie.videoInfo!.iconFileName"-->
-<!--              ></app-video-card-component>-->
+              <app-video-card-component
+                [title]="movie.mediaItem!.title"
+                (cardClick)="watchMovie(movie.mediaItem!)"
+                [iconFilePath]="movie.mediaItem!.rootPath + '/icon/icon.webp'"
+              ></app-video-card-component>
             }
           </div>
       </div>

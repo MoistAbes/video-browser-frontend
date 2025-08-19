@@ -3,9 +3,12 @@
 const BASE_URL = '';
 
 export const Endpoints = {
+  auth: {
+    register: `${BASE_URL}/auth/register`,
+    login: `${BASE_URL}/auth/login`,
+  },
   videos: {
     base: `${BASE_URL}/videos`,
-    stream: `${BASE_URL}/videos/stream`,
     subtitles: `${BASE_URL}/videos/subtitles`,
     icon: `${BASE_URL}/videos/icon`,
     scan: `${BASE_URL}/videos/scan`,
@@ -19,8 +22,16 @@ export const Endpoints = {
   },
   show: {
     findAll: `${BASE_URL}/show/find/all`,
+    findRandom: `${BASE_URL}/show/find/random`,
     findByParentTitle: `${BASE_URL}/show/find`,
     findWithRootPath: `${BASE_URL}/show/find/with-root-path`,
+  },
+  stream: {
+    normal: `${BASE_URL}/stream/normal`,
+    convert: `${BASE_URL}/stream/convert`,
+  },
+  category: {
+    findAll: `${BASE_URL}/category/find/all`,
   }
 
 };

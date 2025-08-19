@@ -1,0 +1,22 @@
+.title-row {
+  display: flex;
+  justify-content: flex-start; /* lub flex-start, jeśli chcesz blisko siebie */
+  align-items: center;
+}
+
+.duration {
+  border-radius: 4px;
+  background: #727272;
+  padding-left: 4px;
+  padding-right: 4px;
+  margin-left: 5px;
+  color: #c5c5c5; /* przykładowy styl */
+  font-weight: normal;
+}
+
+.seasons-count {
+  margin-left: 5px;
+  font-size: 1.25rem;
+  font-weight: normal;
+  color: #aaa;
+}

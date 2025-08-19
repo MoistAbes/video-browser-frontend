@@ -27,14 +27,14 @@ export class MovieDetailPage implements OnInit {
 
   contentType: 'single' | 'series' | 'seasons' | 'seasons-and-movies' | undefined;
   show: ShowModel | undefined;
-  // currentVideoInfo: VideoInfoModel = new VideoInfoModel();
   currentMediaItem: MediaItemModel | undefined;
   selectedVideoUrl: string = '';
   subtitlesUrl: string = '';
 
-  selectedSeason: number | undefined
+  selectedSeason: number | null = null
 
   isVideoPlaying: boolean = false;
+  private seekStartTime: number = 0;
 
   constructor(private route: ActivatedRoute,
               private showApiService: ShowApiService,) {}
@@ -63,76 +63,100 @@ export class MovieDetailPage implements OnInit {
   }
 
 
-  // onUpdateVideoData(update: Partial<VideoInfoModel>) {
-  //   console.log("onUpdateVideoData: ", update);
-  //   this.currentVideoInfo = { ...this.currentVideoInfo, ...update } as VideoInfoModel;
-  //
-  //   //reset video data
-  //   this.isVideoPlaying = false;
-  //   this.selectedVideoUrl = '';
-  // }
+  onUpdateVideoData(update: Partial<MediaItemModel>) {
+    console.log("onUpdateVideoData: ", update);
+    this.currentMediaItem = { ...this.currentMediaItem, ...update } as MediaItemModel;
+
+    //reset video data
+    this.isVideoPlaying = false;
+    this.selectedVideoUrl = '';
+  }
+
+  private updateVideoUrl() {
+    if (!this.currentMediaItem) return;
+
+    const fullVideoPath: string = `${this.currentMediaItem.rootPath}/${this.currentMediaItem.fileName}`;
+    const needsConversion: boolean = !['aac', 'mp3'].includes(this.currentMediaItem.audio!);
+
+    if (needsConversion) {
+      this.selectedVideoUrl =
+        `${Endpoints.stream.convert}?path=${encodeURIComponent(fullVideoPath)}&start=${this.seekStartTime}`;
+    } else {
+      this.selectedVideoUrl =
+        `${Endpoints.stream.normal}?path=${encodeURIComponent(fullVideoPath)}`;
+    }
+  }
 
 
-  // playVideo() {
-  //   if (this.currentVideoInfo) {
-  //
-  //     console.log("playVideo: ", this.currentVideoInfo);
-  //
-  //     this.isVideoPlaying = true;
-  //
-  //     const fullVideoPath = `${this.currentVideoInfo.rootPath}/${this.currentVideoInfo.videoDetails!.fileName}`;
-  //     this.selectedVideoUrl = `${Endpoints.videos.stream}?path=${encodeURIComponent(fullVideoPath)}`;
-  //
-  //     const subtitleName = this.currentVideoInfo.title; // assuming this matches the subtitle file name
-  //     const rootPath = encodeURIComponent(this.currentVideoInfo.rootPath);
-  //
-  //     this.subtitlesUrl = `${Endpoints.videos.subtitles}/${encodeURIComponent(subtitleName)}?path=${rootPath}`;
-  //   }
-  //
-  // }
+  playVideo() {
+
+    if (!this.currentMediaItem) return;
+
+    console.log("playVideo: ", this.currentMediaItem);
+    this.isVideoPlaying = true;
+
+    this.updateVideoUrl()
+
+    // Ustawienie napisów
+    const subtitleName = this.currentMediaItem.title;
+    const rootPath = encodeURIComponent(this.currentMediaItem.rootPath);
+    this.subtitlesUrl = `${Endpoints.videos.subtitles}/${encodeURIComponent(subtitleName)}?path=${rootPath}`;
+
+    console.log("subtitle path: ", this.subtitlesUrl);
+  }
+
+  onSeekTimeSelected(time: number) {
+    console.log("Otrzymany czas z dziecka:", time);
+    this.seekStartTime = time;
+    this.updateVideoUrl()
+
+
+
+  }
+
 
   determineVideoCategory() {
-    if (this.isSingleMovie2()) {
+    if (this.isSingleMovie()) {
 
       this.contentType = 'single';
       this.currentMediaItem = this.show!.movies[0].mediaItem!;
 
 
-    } else if (this.isSeasonOnly2()) {
+    } else if (this.isSeasonOnly()) {
 
       this.contentType = 'seasons';
       this.currentMediaItem = this.show!.seasons[0].episodes[0].mediaItem!;
 
 
 
-    } else if (this.hasOnlyMovies2()) {
+    } else if (this.hasOnlyMovies()) {
 
       this.contentType = 'series';
 
 
-    } else if (this.hasMoviesAndSeasons2()) {
+    } else if (this.hasMoviesAndSeasons()) {
 
       this.contentType = 'seasons-and-movies';
     }
 
   }
 
-  private isSingleMovie2(): boolean {
+  private isSingleMovie(): boolean {
     return this.show?.seasons.length == 0 &&
       this.show.movies.length == 1
   }
 
-  private isSeasonOnly2(): boolean {
+  private isSeasonOnly(): boolean {
     return this.show!.seasons.length > 0 &&
       this.show?.movies.length == 0
   }
 
-  private hasOnlyMovies2(): boolean {
+  private hasOnlyMovies(): boolean {
     return this.show?.seasons.length == 0 &&
       this.show.movies.length > 1
   }
 
-  private hasMoviesAndSeasons2(): boolean {
+  private hasMoviesAndSeasons(): boolean {
     return this.show!.seasons.length > 0 &&
       this.show!.movies.length > 0
   }

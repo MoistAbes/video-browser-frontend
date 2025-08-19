@@ -1,58 +1,58 @@
 <div class="video-selector-container">
   <mat-tab-group dynamicHeight>
-<!--    @if (show!.seasons!.length > 0) {-->
-<!--      <mat-tab label="Seasons">-->
-<!--        <mat-nav-list>-->
-<!--          @for (season of show?.seasons; track season.id) {-->
-<!--            <div class="season-block">-->
-<!--              <h3 class="season-title">Sezon {{ season.number }}</h3>-->
+    @if (show!.seasons!.length > 0) {
+      <mat-tab label="Seasons">
+        <mat-nav-list>
+          @for (season of show?.seasons; track season.id) {
+            <div class="season-block">
+              <h3 class="season-title">Sezon {{ season.number }}</h3>
 
-<!--              <div class="episode-list">-->
-<!--                @for (episode of season.episodes; track episode.id) {-->
-<!--                  <div class="episode-card"-->
-<!--                       (click)="selectEpisode(episode.videoInfo)"-->
-<!--                       [class.playing]="isCurrentlyPlaying(episode.videoInfo)">-->
-<!--                    <div class="thumbnail"></div>-->
-<!--                    <div class="episode-info">-->
-<!--                <span class="episode-title">-->
-<!--                  @if (isCurrentlyPlaying(episode.videoInfo)) {-->
-<!--                    <ng-container>▶</ng-container>-->
-<!--                  }-->
-<!--                  {{ episode.videoInfo?.title }}-->
-<!--                </span>-->
-<!--                    </div>-->
-<!--                  </div>-->
+              <div class="episode-list">
+                @for (episode of season.episodes; track episode.id) {
+                  <div class="episode-card"
+                       (click)="selectEpisode(episode.mediaItem)"
+                       [class.playing]="isCurrentlyPlaying(episode.mediaItem)">
+                    <div class="thumbnail"></div>
+                    <div class="episode-info">
+                <span class="episode-title">
+                  @if (isCurrentlyPlaying(episode.mediaItem)) {
+                    <ng-container>▶</ng-container>
+                  }
+                  {{ episode.mediaItem.title }}
+                </span>
+                    </div>
+                  </div>
 
-<!--                }-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          }-->
-<!--        </mat-nav-list>-->
-<!--      </mat-tab>-->
-<!--    }-->
+                }
+              </div>
+            </div>
+          }
+        </mat-nav-list>
+      </mat-tab>
+    }
 
     @if (show!.movies!.length > 0) {
       <mat-tab label="Movies">
         <mat-nav-list>
-<!--          @for (movie of show?.movies; track movie.id) {-->
-<!--            <div class="season-block">-->
-<!--              <div class="episode-list">-->
-<!--                <div class="episode-card"-->
-<!--                     (click)="selectEpisode(movie.videoInfo)"-->
-<!--                     [class.playing]="isCurrentlyPlaying(movie.videoInfo)">-->
-<!--                  <div class="thumbnail"></div>-->
-<!--                  <div class="episode-info">-->
-<!--                  <span class="episode-title">-->
-<!--                    @if (isCurrentlyPlaying(movie.videoInfo)) {-->
-<!--                      <ng-container>▶</ng-container>-->
-<!--                    }-->
-<!--                    {{ movie.videoInfo?.title }}-->
-<!--                  </span>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          }-->
+          @for (movie of show?.movies; track movie.id) {
+            <div class="season-block">
+              <div class="episode-list">
+                <div class="episode-card"
+                     (click)="selectEpisode(movie.mediaItem)"
+                     [class.playing]="isCurrentlyPlaying(movie.mediaItem)">
+                  <div class="thumbnail"></div>
+                  <div class="episode-info">
+                  <span class="episode-title">
+                    @if (isCurrentlyPlaying(movie.mediaItem)) {
+                      <ng-container>▶</ng-container>
+                    }
+                    {{ movie.mediaItem.title }}
+                  </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
         </mat-nav-list>
 
       </mat-tab>

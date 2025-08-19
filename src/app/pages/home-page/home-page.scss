@@ -1,95 +1,231 @@
-.video-player-container{
-  width: 100%;
-  min-height: 60vh;
+.main-box {
+  width: 100vw;
+  //height: 100vh;
 }
-.video-player{
-  min-width: 100%;
-  min-height: 100%;
+
+.random-show-box {
+  position: relative;
 }
-.searchbar-container {
+
+.content-box {
+  height: 60vh;         /* 90% wysokości okna */
+  width: 100vw;
+  //overflow: hidden;
+  //margin: 0;
+}
+
+.content-box img.content {
+  object-fit: cover;    /* dopasowanie do kontenera */
+  object-position: center;
+}
+
+.carousel-container {
+  position: relative;
   display: flex;
-  justify-content: center;
-  margin: 2rem 0;
+  align-items: center;
+  overflow: hidden;
 }
 
-.searchbar-wrapper {
-  position: relative; /* kluczowe dla absolute buttona */
-  width: 100%;
-  max-width: 600px;
+.carousel {
+  margin: 4rem 2rem 2rem;
+  display: flex;
+  gap: 1rem;
+  overflow: hidden;
+  scroll-behavior: smooth;
+  padding: 0 2rem;
+
 }
 
-.searchbar-input {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  font-size: 1.1rem;
-  border: 1px solid #444;
-  border-radius: 999px;
-  background-color: #1c1c1c;
-  color: #fff;
-  outline: none;
-  transition: border 0.2s ease, box-shadow 0.2s ease;
+.item {
+  flex: 0 0 auto;   /* zapobiega rozciąganiu */
+  width: 180px;     /* szerokość jednego elementu */
 }
 
-.searchbar-input::placeholder {
-  color: #aaa;
-}
-
-.searchbar-input:focus {
-  border-color: #b9030c;
-  box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.4);
-}
-
-.clear-btn {
+.arrow {
   position: absolute;
-  width: 40px;       /* stała szerokość */
-  height: 40px;      /* stała wysokość */
-  right: 15px;
   top: 50%;
-  border-radius: 50%; /* pełne koło */
   transform: translateY(-50%);
+  z-index: 1;
+  background: rgba(194, 194, 194, 0.5);
+  color: white;
+  border: none;
+  font-size: 3rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.arrow.left {
+  left: 0;
+}
+
+.arrow.right {
+  right: 0;
+}
+.carousel.dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+.carousel {
+  cursor: grab;
+}
+
+.carousel-title {
+  position: absolute;
+  z-index: 10;
+  top: -0.4rem;
+  left: 1rem;
+  font-size: 3rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow:
+    2px 2px 0 #000,
+    -2px 2px 0 #000,
+    2px -2px 0 #000,
+    -2px -2px 0 #000; /* czarne kontury wokół tekstu */
+}
+
+.progress-bar-box{
+  position: absolute;
+  width: 240px;
+  right: 1rem;
+  top: 1rem;
+  z-index: 10;
+  padding: 20px 20px 20px 120px;
+
+  /* Frosted glass effect */
+  background-color: rgba(20, 20, 20, 0.5); /* semi-transparent dark */
+  backdrop-filter: blur(10px); /* main blur */
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
+  border-radius: 20px; /* rounded edges */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* depth */
+}
+
+.netflix-button {
+
+  width: 48px;       // Fixed width
+  height: 48px;      // Fixed height (optional)
+  font-size: 24px;
+  text-align: center;
+
+  margin-left: 5px;
   background: transparent;
   border: none;
-  cursor: pointer;
-  color: #666;
-  font-size: 18px;
-  padding: 0;        /* usuń padding */
-  display: flex;     /* żeby ikonka była wyśrodkowana */
-  align-items: center;
-  justify-content: center;
-}
-
-.clear-btn:hover {
-  color: #e50914;
-}
-
-.video-type-select {
-  margin-left: 10px;
-  min-width: 100px;
-  width: 100%;
-  padding: 0.75rem 1rem;
-  font-size: 1.1rem;
-  border: 1px solid #444;
-  border-radius: 999px;
-  background-color: #1c1c1c;
-  color: #fff;
   outline: none;
-  appearance: none; /* usuwa natywną strzałkę w większości przeglądarek */
-  transition: border 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  color: white;
+
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
 }
 
-/* strzałka od selecta – opcjonalnie */
-.video-type-select:focus {
-  border-color: #b9030c;
-  box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.4);
+.progress-bar-next {
+  position: absolute;
+  right: 12rem;
+  top: -0.3rem;
+  z-index: 10;
 }
 
-/* Dla <option>, jeśli chcesz spójność kolorystyczną */
-.video-type-select option {
-  background-color: #1c1c1c;
-  color: #fff;
+.progress-bar-play{
+  position: absolute;
+  right: 10rem;
+  top: -0.3rem;
+  z-index: 10;
 }
 
+.carousel-progress-bar {
+  position: absolute;
+  width: 150px;       /* długość paska */
+  height: 6px;        /* grubość paska */
+  right: 1rem;
+  top: 1rem;
+  z-index: 10;
+  border-radius: 3px;
+  padding: 5px;
+  background: #141414; /* ciemne tło jak w Netflix */
+  overflow: hidden;
+}
+
+/* styl dla wypełnienia (czerwony pasek) */
+::ng-deep .carousel-progress-bar .mat-progress-bar-fill::after {
+  background-color: #e50914 !important; /* Netflix red */
+  border-radius: 3px;
+  height: 6px; /* dopasowanie do wysokości kontenera */
+}
+
+
+.movie-details-overlay {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  z-index: 10;
+  color: white;
+  max-width: 500px;
+  padding: 1rem;
+
+  /* Frosted glass effect */
+  background-color: rgba(20, 20, 20, 0.5); /* semi-transparent dark */
+  backdrop-filter: blur(10px); /* main blur */
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
+  border-radius: 10px; /* rounded edges */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* depth */
+}
+
+.movie-details-overlay .movie-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.movie-details-overlay .movie-description {
+  margin-top: 10px;
+  font-size: 1.1rem;
+}
+
+.movie-details-overlay .play-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #e50914;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+}
+.movie-details-overlay .play-button:hover {
+  background-color: #fc353f;
+}
+
+.title-row {
+  display: flex;
+  justify-content: flex-start; /* lub flex-start, jeśli chcesz blisko siebie */
+  align-items: center;
+}
+
+.duration {
+  border-radius: 4px;
+  background: #727272;
+  padding-left: 4px;
+  padding-right: 4px;
+  margin-left: 5px;
+  color: #c5c5c5; /* przykładowy styl */
+  font-weight: normal;
+}
+
+.seasons-count {
+  margin-left: 5px;
+  font-size: 1.25rem;
+  font-weight: normal;
+  color: #aaa;
+}
 
 
 

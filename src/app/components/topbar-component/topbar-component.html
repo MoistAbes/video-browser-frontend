@@ -8,10 +8,43 @@
       <a routerLink="/movies" routerLinkActive="active-link">Filmy</a>
       <a routerLink="/shows" routerLinkActive="active-link">Seriale</a>
       <a routerLink="/anime" routerLinkActive="active-link">Anime</a>
-      <a routerLink="/admin" routerLinkActive="active-link">Panel admina</a>
+      @if (jwtService.hasAdminRole()) {
+        <a routerLink="/admin" routerLinkActive="active-link">Panel admina</a>
+      }
     </nav>
   </div>
   <p style="font-size: 14px; color: #d7d7d7; margin: 0" class="float-end">1.0.1</p>
+
+
+  @if (jwtService.isLoggedIn()) {
+    <div class="user-icon-wrapper">
+      <div class="user-info">
+        <p class="username">{{ jwtService.getUsername() }}</p>
+        <div class="user-icon">
+          <i style="font-size: 1.5rem; color: #ecb784" class="fa-solid fa-face-flushed"></i>
+        </div>
+      </div>
+
+      <ul class="user-dropdown">
+        <li (click)="routeToAccountPage()">
+          <i class="fa-solid fa-user pe-1"></i>
+          Konto
+        </li>
+        <li >
+          <i class="fa-solid fa-user-group pe-1"></i>
+          Znajomi
+        </li>
+        <li (click)="logout()">
+          <i class="fa fa-sign-out pe-1" aria-hidden="true"></i>
+          Wyloguj
+        </li>
+      </ul>
+    </div>
+  }
+
+
+
+
 
 
 </header>

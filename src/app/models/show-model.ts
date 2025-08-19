@@ -1,5 +1,5 @@
 import {SeasonModel} from './season-model';
-import {MovieModel} from './movie-model';
+import {ContentModel} from './content-model';
 
 export class ShowModel {
   id: number | undefined;
@@ -7,6 +7,9 @@ export class ShowModel {
   rootPath: string = '';
 
   seasons: SeasonModel[] = []
-  movies: MovieModel[] = []
+  movies: ContentModel[] = []
+
+  category: string = ''
+  genres: string[] = []
 
 }

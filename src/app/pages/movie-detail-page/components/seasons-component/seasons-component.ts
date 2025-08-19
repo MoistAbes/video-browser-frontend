@@ -1,10 +1,10 @@
 import {Component, Input, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Output, OnInit} from '@angular/core';
-import {Endpoints} from '../../../../endpoints/endpoints';
 import {VideoPlayerComponent} from '../../../../components/video-player-component/video-player-component';
 import {NgOptimizedImage} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {ShowModel} from '../../../../models/show-model';
-import {EpisodeModel} from '../../../../models/episode-model';
+import {MediaItemModel} from '../../../../models/media-item-model';
+import {Endpoints} from '../../../../endpoints/endpoints';
 
 @Component({
   selector: 'app-seasons-component',
@@ -22,41 +22,63 @@ export class SeasonsComponent implements OnInit {
 
   @Input() show: ShowModel | undefined;
   @Input() isVideoPlaying: boolean = false;
-  // @Input() currentVideoInfo: VideoInfoModel | undefined;
+  @Input() currentMediaItem: MediaItemModel | undefined;
   @Input() selectedVideoUrl: string = '';
-  @Input() selectedSeason: number | undefined
+  @Input() selectedSeason: number | null = null
 
-  // @Output() updateVideoData = new EventEmitter<Partial<VideoInfoModel>>();
+  @Output() updateMediaItem = new EventEmitter<Partial<MediaItemModel>>();
   @Output() playVideoClicked = new EventEmitter<void>();
+  @Output() seekChange = new EventEmitter<number>();
 
-  episodes: EpisodeModel[] = [];
-  selectedEpisode: EpisodeModel | undefined
+  episodes: MediaItemModel[] = [];
+  selectedEpisode: MediaItemModel | undefined
 
 
   ngOnInit(): void {
-    this.selectedSeason = this.show?.seasons[0].number;
+    this.selectedSeason = this.show!.seasons[0].episodes[0].mediaItem.seasonNumber;
     this.setUpEpisodes();
   }
 
-  // getBackdropUrl(): string {
-  //   return `${Endpoints.videos.icon}?path=${encodeURIComponent(this.currentVideoInfo!.rootPath + '/backdrop/backdrop.jpg')}`;
-  // }
+  getBackdropUrl(): string {
+    return `${Endpoints.videos.icon}?path=${encodeURIComponent(this.currentMediaItem!.rootPath + '/backdrop/backdrop.jpg')}`;
+  }
 
   setUpEpisodes() {
     console.log("Setup episodes");
 
+
     this.episodes = this.show?.seasons
       .filter(season => season.number == this.selectedSeason)
-      .flatMap(season => season.episodes) || [];
+      .flatMap(season => season.episodes)
+      .flatMap(episode => episode.mediaItem) || [];
 
     if (this.episodes.length > 0) {
       this.selectedEpisode = this.episodes[0];
-      // this.updateVideoData.emit(this.selectedEpisode.videoInfo);
+      this.updateMediaItem.emit(this.selectedEpisode);
     }
   }
 
 
   onEpisodeSelect() {
-    // this.updateVideoData.emit(this.selectedEpisode!.videoInfo);
+    this.updateMediaItem.emit(this.selectedEpisode);
   }
+
+  onSeekTimeSelected(time: number) {
+    // np. ustawiamy nowy URL streamu
+    this.seekChange.emit(time); // wysyłamy wartość do rodzica
+
+  }
+
+  formatDuration(seconds: number): string {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+
+    if (h > 0) {
+      return `${h}h ${m}m`;
+    } else {
+      return `${m}m`;
+    }
+  }
+
+
 }
