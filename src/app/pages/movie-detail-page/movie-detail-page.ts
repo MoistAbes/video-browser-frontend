@@ -102,15 +102,11 @@ export class MovieDetailPage implements OnInit {
     const rootPath = encodeURIComponent(this.currentMediaItem.rootPath);
     this.subtitlesUrl = `${Endpoints.videos.subtitles}/${encodeURIComponent(subtitleName)}?path=${rootPath}`;
 
-    console.log("subtitle path: ", this.subtitlesUrl);
   }
 
   onSeekTimeSelected(time: number) {
-    console.log("Otrzymany czas z dziecka:", time);
     this.seekStartTime = time;
     this.updateVideoUrl()
-
-
 
   }
 

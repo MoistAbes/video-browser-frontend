@@ -22,7 +22,7 @@
           </button>
         </div>
 
-        <img class="content" priority [ngSrc]="getBackdropUrl()" fill alt="backdrop"/>
+        <img class="content" priority [ngSrc]="utilService.getBackdropUrl(selectedShow.rootPath)" fill alt="backdrop"/>
       }
     </div>
 
@@ -59,7 +59,7 @@
             <div class="item">
               <app-video-card-component
                 [title]="show.name"
-                [iconFilePath]="show.rootPath | MainIconPathPipe"
+                [iconFilePath]="utilService.getIconUrl(show.rootPath)"
                 (cardClick)="moveToMovieDetails(show.name)">
               </app-video-card-component>
             </div>

@@ -8,6 +8,7 @@ import {NgOptimizedImage} from '@angular/common';
 import {Endpoints} from '../../endpoints/endpoints';
 import {interval, Subscription} from 'rxjs';
 import {MatProgressBar} from '@angular/material/progress-bar';
+import {UtilService} from '../../services/local/util-service';
 
 @Component({
   selector: 'app-search-page',
@@ -32,12 +33,13 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy{
   private showIndex: number = 0; // przeniosłem index jako pole klasy
 
   @ViewChild('carousel', { static: false }) carousel!: ElementRef;
-  isDragging = false;
-  startX = 0;
-  scrollLeft = 0;
+  isDragging: boolean = false;
+  startX: number = 0;
+  scrollLeft: number = 0;
 
   constructor(private showApiService: ShowApiService,
-              private router: Router) {
+              private router: Router,
+              public utilService: UtilService,) {
   }
 
   ngOnInit(): void {
@@ -79,7 +81,6 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy{
     this.showApiService.findRandomShows().subscribe({
       next: value => {
         this.randomShows = value;
-        console.log("random shows: ", this.randomShows)
         this.selectedShow = this.randomShows[0];
         this.startTimer()
       },
@@ -124,9 +125,9 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy{
     // put your delayed hover action here
   }
 
-  getBackdropUrl(): string {
-    return `${Endpoints.videos.icon}?path=${encodeURIComponent(this.selectedShow!.rootPath + '/backdrop/backdrop.jpg')}`;
-  }
+  // getBackdropUrl(): string {
+  //   return `${Endpoints.videos.icon}?path=${encodeURIComponent(this.selectedShow!.rootPath + '/backdrop/backdrop.jpg')}`;
+  // }
 
   private startTimer() {
     this.stopTimer();

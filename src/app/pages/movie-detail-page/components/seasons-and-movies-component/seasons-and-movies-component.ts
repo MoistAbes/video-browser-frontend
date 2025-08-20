@@ -3,10 +3,9 @@ import {FormsModule} from '@angular/forms';
 import {VideoCardComponent} from '../../../../components/video-card-component/video-card-component';
 import {VideoPlayerComponent} from '../../../../components/video-player-component/video-player-component';
 import {NgOptimizedImage} from '@angular/common';
-import {Endpoints} from '../../../../endpoints/endpoints';
-import {VideoApi} from '../../../../services/api/video-api';
 import {ShowModel} from '../../../../models/show-model';
 import {MediaItemModel} from '../../../../models/media-item-model';
+import {UtilService} from '../../../../services/local/util-service';
 
 @Component({
   selector: 'app-seasons-and-movies-component',
@@ -30,17 +29,17 @@ export class SeasonsAndMoviesComponent implements OnInit, OnChanges {
 
   @Input() selectedSeason: number | null = null
 
-  @Output() updateMediaItem = new EventEmitter<Partial<MediaItemModel>>();
-  @Output() playVideoClicked = new EventEmitter<void>();
+  @Output() updateMediaItem: EventEmitter<Partial<MediaItemModel>> = new EventEmitter<Partial<MediaItemModel>>();
+  @Output() playVideoClicked: EventEmitter<void> = new EventEmitter<void>();
 
   selectedContentType: string = 'seasons';
 
   episodes: MediaItemModel[] = [];
   selectedEpisode: MediaItemModel | undefined
 
-  private initialized = false;
+  private initialized: boolean = false;
 
-  constructor() {}
+  constructor(public utilService: UtilService) {}
 
   ngOnInit(): void {
   }
@@ -53,9 +52,6 @@ export class SeasonsAndMoviesComponent implements OnInit, OnChanges {
     }
   }
 
-  getBackdropUrl(): string {
-    return `${Endpoints.videos.icon}?path=${encodeURIComponent(this.currentMediaItem!.rootPath + '/backdrop/backdrop.jpg')}`;
-  }
 
   watchMovie(mediaItem: MediaItemModel) {
 
@@ -97,10 +93,8 @@ export class SeasonsAndMoviesComponent implements OnInit, OnChanges {
       .flatMap(episode => episode.mediaItem) || [];
 
     if (this.episodes.length > 0) {
-      setTimeout(() => { // <-- opóźnienie do następnego cyklu
-        this.selectedEpisode = this.episodes[0];
-        this.updateMediaItem.emit(this.selectedEpisode);
-      });
+      this.selectedEpisode = this.episodes[0];
+      this.updateMediaItem.emit(this.selectedEpisode);
     }
   }
 

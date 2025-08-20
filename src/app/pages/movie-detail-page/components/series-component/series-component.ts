@@ -4,7 +4,7 @@ import {VideoCardComponent} from '../../../../components/video-card-component/vi
 import {ShowModel} from '../../../../models/show-model';
 import {MediaItemModel} from '../../../../models/media-item-model';
 import {NgOptimizedImage} from '@angular/common';
-import {Endpoints} from '../../../../endpoints/endpoints';
+import {UtilService} from '../../../../services/local/util-service';
 
 @Component({
   selector: 'app-series-component',
@@ -30,7 +30,7 @@ export class SeriesComponent implements OnInit {
   @Output() playVideoClicked = new EventEmitter<void>();
 
 
-  constructor() {}
+  constructor(public utilService: UtilService) {}
 
   ngOnInit(): void {
     this.currentMediaItem = this.show?.movies[0].mediaItem;
@@ -46,15 +46,9 @@ export class SeriesComponent implements OnInit {
     this.resetPlayingVideo()
   }
 
-
   resetPlayingVideo() {
     this.selectedVideoUrl = '';
     this.isVideoPlaying = false;
   }
-
-  getBackdropUrl(): string {
-    return `${Endpoints.videos.icon}?path=${encodeURIComponent(this.currentMediaItem!.rootPath + '/backdrop/backdrop.jpg')}`;
-  }
-
 
 }

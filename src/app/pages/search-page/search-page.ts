@@ -7,6 +7,7 @@ import {Router} from '@angular/router';
 import {MainIconPathPipe} from '../../pipes/main-icon-path-pipe';
 import {ShowApiService} from '../../services/api/show-api-service';
 import {ShowModel} from '../../models/show-model';
+import {UtilService} from '../../services/local/util-service';
 
 type VideoTypeOption = { label: string; value: VideoInfoTypeEnum };
 
@@ -35,7 +36,8 @@ export class SearchPage implements OnInit  {
   showListFiltered: ShowModel[] = []
 
   constructor(private router: Router,
-              private showApiService: ShowApiService,) { }
+              private showApiService: ShowApiService,
+              public utilService: UtilService,) { }
 
   ngOnInit(): void {
 
@@ -71,22 +73,18 @@ export class SearchPage implements OnInit  {
     //ToDO to jest do zrobienia jak bede mial ogarniete kategorie show
     // this.showListFiltered = this.showListFiltered.filter(show => show.category == this.filterTypeValue);
 
-    this.showListFiltered = this.showListFiltered.filter(video =>
-      this.getTrimAndLowercase(video.name).includes(this.getTrimAndLowercase(this.filterTitleValue))
-    );
+    const filterText: string = this.utilService.normalizeText(this.filterTitleValue);
 
+
+    this.showListFiltered = this.showListFiltered.filter(video =>
+      this.utilService.normalizeText(video.name).includes(filterText)
+    );
   }
 
   onFilterClearClick() {
     this.filterTitleValue = '';
     this.onFilterChange();
   }
-
-
-  getTrimAndLowercase(value: string): string {
-    return value.toLowerCase().replace(/\s+/g, '');
-  }
-
 
   //ToDO to jest na kiedys do dodatkowego info na hover
   startHoverTimer(videoInfo: any) {

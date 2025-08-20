@@ -9,7 +9,7 @@
       >
 
         <swiper-slide>
-          <img priority [ngSrc]="getBackdropUrl()" fill alt="backdrop"
+          <img priority [ngSrc]="utilService.getBackdropUrl(currentMediaItem?.rootPath)" fill alt="backdrop"
                style="width: 100%; height: 100%; object-fit: cover;" />
         </swiper-slide>
 

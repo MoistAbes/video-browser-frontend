@@ -8,7 +8,7 @@
         class="preview-swiper"
       >
         <swiper-slide>
-          <img priority [ngSrc]="getBackdropUrl()" fill alt="backdrop"
+          <img priority [ngSrc]="utilService.getBackdropUrl(currentMediaItem.rootPath)" fill alt="backdrop"
                style="width: 100%; height: 100%; object-fit: cover;" />
         </swiper-slide>
 
@@ -94,7 +94,7 @@
               <app-video-card-component
                 [title]="movie.mediaItem!.title"
                 (cardClick)="watchMovie(movie.mediaItem!)"
-                [iconFilePath]="movie.mediaItem!.rootPath + '/icon/icon.webp'"
+                [iconFilePath]=utilService.getIconUrl(movie.mediaItem.rootPath)
               ></app-video-card-component>
             }
           </div>

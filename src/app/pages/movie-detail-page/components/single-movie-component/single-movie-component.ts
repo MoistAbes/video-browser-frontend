@@ -4,7 +4,7 @@ import {NgOptimizedImage} from '@angular/common';
 import {VideoPlayerComponent} from '../../../../components/video-player-component/video-player-component';
 import {ShowModel} from '../../../../models/show-model';
 import {MediaItemModel} from '../../../../models/media-item-model';
-import {Endpoints} from '../../../../endpoints/endpoints';
+import {UtilService} from '../../../../services/local/util-service';
 
 @Component({
   selector: 'app-single-movie-component',
@@ -27,10 +27,6 @@ export class SingleMovieComponent {
   @Output() playVideoClicked = new EventEmitter<void>();
   @Output() updateMediaItem = new EventEmitter<Partial<MediaItemModel>>();
 
-
-
-  getBackdropUrl(): string {
-    return `${Endpoints.videos.icon}?path=${encodeURIComponent(this.currentMediaItem!.rootPath + '/backdrop/backdrop.jpg')}`;
-  }
+  constructor(public utilService: UtilService) {}
 
 }

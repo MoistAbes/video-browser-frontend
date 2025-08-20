@@ -1,5 +1,5 @@
 import {Component, HostListener, signal} from '@angular/core';
-import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/input';
+import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatIcon} from '@angular/material/icon';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {NgClass} from '@angular/common';
