@@ -11,6 +11,12 @@
 
 
 .video-player-container {
+
+  user-select: none;      /* standard */
+  -webkit-user-select: none; /* Safari/Chrome */
+  -moz-user-select: none;    /* Firefox */
+  -ms-user-select: none;     /* IE/Edge */
+
   //position: relative; // <-- this is critical for overlays
   z-index: 0;
 
@@ -107,6 +113,11 @@
     }
 
     .slider-tooltip {
+      user-select: none;      /* standard */
+      -webkit-user-select: none; /* Safari/Chrome */
+      -moz-user-select: none;    /* Firefox */
+      -ms-user-select: none;     /* IE/Edge */
+
       position: absolute;
       top: -30px;
       transform: translateX(-50%);
@@ -164,6 +175,11 @@
 
 
   .movie-details-overlay {
+    user-select: none;      /* standard */
+    -webkit-user-select: none; /* Safari/Chrome */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE/Edge */
+
     position: absolute;
     top: 0;
     left: 0;

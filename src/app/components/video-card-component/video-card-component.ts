@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Endpoints} from '../../endpoints/endpoints';
 import {NgOptimizedImage} from '@angular/common';
 
 @Component({
@@ -22,5 +21,4 @@ export class VideoCardComponent {
     this.cardClick.emit();
   }
 
-  protected readonly Endpoints = Endpoints;
 }

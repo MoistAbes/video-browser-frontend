@@ -73,7 +73,11 @@
       <div class="col-10">
         <!-- Left: Play/Pause -->
         <div class="left-controls">
-          <button class="netflix-button" (click)="togglePlay()">
+          <button
+            class="netflix-button"
+            (click)="togglePlay()"
+            (keydown.space)="$event.preventDefault()"
+            (keydown.enter)="$event.preventDefault()">
             @if (isPlaying) {
               <i class="fa-solid fa-pause"></i>
             }
@@ -116,11 +120,18 @@
           </div>
 
           @if (show!.movies.length > 1 || show!.seasons.length > 0) {
-            <button (click)="isVideoListVisible = !isVideoListVisible" class="netflix-button">
+            <button
+              (click)="isVideoListVisible = !isVideoListVisible"
+              class="netflix-button"
+              (keydown.space)="$event.preventDefault()"
+              (keydown.enter)="$event.preventDefault()">
               <i class="fa-solid fa-list"></i>
             </button>
           }
-          <button class="netflix-button" (click)="toggleFullscreen()">
+          <button class="netflix-button"
+                  (click)="toggleFullscreen()"
+                  (keydown.space)="$event.preventDefault()"
+                  (keydown.enter)="$event.preventDefault()">
             <i class="fa-solid fa-expand"></i>
           </button>
         </div>

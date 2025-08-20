@@ -22,7 +22,19 @@
           </button>
         </div>
 
-        <img class="content" priority [ngSrc]="utilService.getBackdropUrl(selectedShow.rootPath)" fill alt="backdrop"/>
+        <div class="image-wrapper">
+          <div class="image-placeholder"></div>
+          <img
+            class="content"
+            [ngSrc]="utilService.getBackdropUrl(selectedShow.rootPath)"
+            fill
+            (load)="onImageLoad($event)"
+            alt="backdrop"
+          />
+        </div>
+
+
+        <!--        <img class="content" priority [ngSrc]="utilService.getBackdropUrl(selectedShow.rootPath)" fill alt="backdrop"/>-->
       }
     </div>
 

@@ -9,6 +9,7 @@ import {SeasonsAndMoviesComponent} from './components/seasons-and-movies-compone
 import {ShowApiService} from '../../services/api/show-api-service';
 import {ShowModel} from '../../models/show-model';
 import {MediaItemModel} from '../../models/media-item-model';
+import {StructureTypeEnum} from '../../enums/structure-type-enum';
 
 @Component({
   standalone: true,
@@ -112,48 +113,20 @@ export class MovieDetailPage implements OnInit {
 
 
   determineVideoCategory() {
-    if (this.isSingleMovie()) {
-
+    if (this.show?.structure == StructureTypeEnum.SINGLE_MOVIE) {
       this.contentType = 'single';
       this.currentMediaItem = this.show!.movies[0].mediaItem!;
-
-
-    } else if (this.isSeasonOnly()) {
-
+    } else if (this.show?.structure == StructureTypeEnum.SEASONAL_SERIES) {
       this.contentType = 'seasons';
       this.currentMediaItem = this.show!.seasons[0].episodes[0].mediaItem!;
-
-
-
-    } else if (this.hasOnlyMovies()) {
-
+    } else if (this.show?.structure == StructureTypeEnum.MOVIE_COLLECTION) {
       this.contentType = 'series';
-
-
-    } else if (this.hasMoviesAndSeasons()) {
-
+    } else if (this.show?.structure == StructureTypeEnum.HYBRID) {
       this.contentType = 'seasons-and-movies';
+    }else {
+      console.warn('Nieznany typ struktury show:', this.show?.structure);
     }
 
   }
 
-  private isSingleMovie(): boolean {
-    return this.show?.seasons.length == 0 &&
-      this.show.movies.length == 1
-  }
-
-  private isSeasonOnly(): boolean {
-    return this.show!.seasons.length > 0 &&
-      this.show?.movies.length == 0
-  }
-
-  private hasOnlyMovies(): boolean {
-    return this.show?.seasons.length == 0 &&
-      this.show.movies.length > 1
-  }
-
-  private hasMoviesAndSeasons(): boolean {
-    return this.show!.seasons.length > 0 &&
-      this.show!.movies.length > 0
-  }
 }

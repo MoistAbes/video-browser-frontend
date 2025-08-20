@@ -9,7 +9,7 @@ export class ShowModel {
   seasons: SeasonModel[] = []
   movies: ContentModel[] = []
 
-  category: string = ''
+  structure: string = ''
   genres: string[] = []
 
 }

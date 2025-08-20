@@ -33,7 +33,7 @@ export class UtilService {
     if (!rootPath) {
       return ""
     }
-    return `${Endpoints.videos.icon}?path=${encodeURIComponent(rootPath + '/backdrop/backdrop.jpg')}`;
+    return `${Endpoints.videos.image}?path=${encodeURIComponent(rootPath + '/backdrop/backdrop.jpg')}`;
   }
 
 
@@ -43,7 +43,7 @@ export class UtilService {
       return ""
     }
 
-    return `${Endpoints.videos.icon}?path=${encodeURIComponent(rootPath + '/icon/icon.webp')}`;
+    return `${Endpoints.videos.image}?path=${encodeURIComponent(rootPath + '/icon/icon.webp')}`;
   }
 
 

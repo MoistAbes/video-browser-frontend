@@ -10,7 +10,7 @@ export const Endpoints = {
   videos: {
     base: `${BASE_URL}/videos`,
     subtitles: `${BASE_URL}/videos/subtitles`,
-    icon: `${BASE_URL}/videos/icon`,
+    image: `${BASE_URL}/videos/image`,
     scan: `${BASE_URL}/videos/scan`,
     thumbnails: `${BASE_URL}/videos/thumbnails`,
   },

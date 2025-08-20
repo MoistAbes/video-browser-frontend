@@ -79,6 +79,9 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
       preload: 'auto',
       textTrackSettings: false,
       fluid: true,
+      userActions: {
+        hotkeys: false // 👈 wyłącza wbudowane hotkeye
+      },
       sources: [{ src: this.src, type: 'video/mp4' }],
       tracks: [
         {
@@ -397,22 +400,10 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
         // this.showOverlay(`⏩ +5s`);
         break;
 
-
-      // case 'ArrowLeft':
-      //   if (this.currentPlaybackSpeed > 0.5) {
-      //     this.currentPlaybackSpeed = Math.round((this.currentPlaybackSpeed - 0.5) * 10) / 10;
-      //     player.playbackRate(this.currentPlaybackSpeed);
-      //     this.showOverlay(`Speed: ${this.currentPlaybackSpeed}x`);
-      //   }
-      //   break;
-      //
-      // case 'ArrowRight':
-      //   if (this.currentPlaybackSpeed < 2.0) {
-      //     this.currentPlaybackSpeed = Math.round((this.currentPlaybackSpeed + 0.5) * 10) / 10;
-      //     player.playbackRate(this.currentPlaybackSpeed);
-      //     this.showOverlay(`Speed: ${this.currentPlaybackSpeed}x`);
-      //   }
-      //   break;
+      case ' ':
+      case 'Spacebar': // starsze przeglądarki
+        this.onVideoClick()
+        break;
 
       case 'ArrowUp':
         const volUp = Math.min(1, player.volume()! + 0.01);

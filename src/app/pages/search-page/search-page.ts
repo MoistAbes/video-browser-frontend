@@ -18,7 +18,6 @@ type VideoTypeOption = { label: string; value: VideoInfoTypeEnum };
     FormsModule,
     FontAwesomeModule,
     VideoCardComponent,
-    MainIconPathPipe,
   ],
   templateUrl: './search-page.html',
   styleUrl: './search-page.scss'

@@ -2,7 +2,7 @@
 <!--  ToDO to sprawdzenie bedzie mozna wywalic jak zrobimy zeby wszedzie ikonki byly zeby niepotrzenie nie sprawdzac-->
   @if (iconFilePath && iconFilePath.trim() !== '' && !iconFilePath.endsWith('/')) {
     <img
-      [ngSrc]="Endpoints.videos.icon + '?path=' + iconFilePath"
+      [ngSrc]="iconFilePath"
       alt="thumbnail"
       class="video-icon"
       loading="lazy"

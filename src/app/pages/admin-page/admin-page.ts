@@ -5,8 +5,7 @@ import {ShowApiService} from '../../services/api/show-api-service';
 import {ShowModel} from '../../models/show-model';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {NgSelectComponent} from '@ng-select/ng-select';
-import {CategoryApiService} from '../../services/api/category-api-service';
-import {CategoryModel} from '../../models/category-model';
+
 
 @Component({
   selector: 'app-admin-page',
@@ -25,15 +24,12 @@ export class AdminPage implements OnInit {
  showList: ShowModel[] = [];
  selectedShow: ShowModel | undefined;
 
- categories: CategoryModel[] = []
 
   constructor(private videoApiService: VideoApi,
-              private showApiService: ShowApiService,
-              private categoryApiService: CategoryApiService) {}
+              private showApiService: ShowApiService) {}
 
   ngOnInit(): void {
     this.testFindAllShows()
-    this.findAllCategories();
 
   }
 
@@ -60,18 +56,7 @@ export class AdminPage implements OnInit {
 
   }
 
-  findAllCategories() {
-    this.categoryApiService.findAllCategories().subscribe({
-      next: value => {
-        this.categories = value;
-        console.log("categories: ", this.categories)
-      },
-      error: err => {
-        console.log("Error: ", err)
-      },
-      complete: () => {}
-    })
-  }
+
 
 
   testFindAllShows() {

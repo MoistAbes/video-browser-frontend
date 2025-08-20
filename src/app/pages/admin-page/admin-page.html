@@ -66,7 +66,7 @@
                 <th scope="row">{{ show.id }}</th>
                 <td>{{ show.name }}</td>
                 <td>{{ show.rootPath }}</td>
-                <td>{{ show.category }}</td>
+                <td>{{ show.structure }}</td>
                 <td>
                   @for (genre of show.genres; track genre) {
                     <p>{{ genre }}</p>
@@ -188,12 +188,7 @@
         </tr>
         </thead>
         <tbody>
-        @for (category of categories; track category.id) {
-          <tr>
-            <td>{{category.id}}</td>
-            <td>{{category.name}}</td>
-          </tr>
-        }
+
 
         </tbody>
       </table>

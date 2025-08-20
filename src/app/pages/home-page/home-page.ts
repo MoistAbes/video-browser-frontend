@@ -13,7 +13,6 @@ import {UtilService} from '../../services/local/util-service';
 @Component({
   selector: 'app-search-page',
   imports: [
-    MainIconPathPipe,
     VideoCardComponent,
     NgOptimizedImage,
     MatProgressBar
@@ -186,6 +185,11 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy{
   ngOnDestroy() {
     // zatrzymanie timera przy opuszczeniu komponentu
     this.stopTimer();
+  }
+
+  onImageLoad(event: Event) {
+    const img = event.target as HTMLImageElement;
+    img.classList.add('loaded');
   }
 
 }
