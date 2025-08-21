@@ -455,6 +455,11 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
   }
 
 
+  onSliderChange() {
+    // Wymusza zaktualizowanie stanu suwaka i ukrycie labela
+    // Jeśli używasz zmiennej 'volume', to przypisz ją do suwaka
+    // albo możesz wymusić odświeżenie (Angular Material sam ukryje label)
+  }
 
 
   ngOnDestroy() {

@@ -1,8 +1,46 @@
 <div class="layout-container">
   @if (jwtService.isLoggedIn()) {
-    <app-topbar-component></app-topbar-component>
+    <app-topbar-component (openSidebar)="handleOpenSidebar($event)"></app-topbar-component>
   }
+
   <main class="main-content" [@routeAnimations]="prepareRoute(o)">
     <router-outlet #o="outlet"></router-outlet>
   </main>
+
+  <!-- Sidebar (nad całością) -->
+<!--  <div class="sidebar" [class.open]="isSidebarOpen">-->
+<!--    <button class="close-btn" (click)="closeSidebar()">✖</button>-->
+<!--    <h2>Friends</h2>-->
+<!--    <div class="menu">-->
+<!--      <div class="menu-item">👤 Jan Kowalski</div>-->
+<!--      <div class="menu-item">👤 Anna Nowak</div>-->
+<!--      <div class="menu-item">👤 Piotr Wiśniewski</div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+
+  <div class="sidebar" [class.open]="isSidebarOpen">
+    <button class="close-btn" (click)="closeSidebar()">✖</button>
+    <h2>Friends</h2>
+    <div class="menu">
+      @for  (friend of friendList; track friend.id) {
+        <div class="friend-item">
+          <i class="fa-solid fa-face-flushed friend-icon"
+             [style.color]="friend.iconColor || '#ecb784'"></i>
+          <div class="friend-info">
+            <div class="friend-header">
+              <span class="username">{{ friend.username }}</span>
+              <span class="status" [ngClass]="friend.online ? 'online' : 'offline'"></span>
+            </div>
+            <div class="activity">
+              {{ friend.watching ? ('Watching: ' + friend.watching) : 'Idle' }}
+            </div>
+          </div>
+        </div>
+      }
+
+    </div>
+  </div>
+
+
 </div>

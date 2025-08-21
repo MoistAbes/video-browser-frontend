@@ -1,3 +1,26 @@
-<div class="login-container d-flex align-items-center justify-content-center">
-<h1>Account</h1>
-</div>
+@if (user) {
+  <div class="login-container">
+    <div class="account-card">
+      <h1 class="account-title">Account</h1>
+
+      <div class="account-field">
+        <label>Username</label>
+        <input disabled [value]="jwtService.getUsername()">
+      </div>
+
+      <div class="account-field">
+        <label>Password</label>
+        <input disabled value="*********">
+      </div>
+
+      <div class="account-field">
+        <label>Icon color</label>
+        <!-- tutaj możesz wstawić np. ngx-color-picker -->
+        <input type="color" [(ngModel)]="user.iconColor">
+      </div>
+
+      <button (click)="updateUser()" class="btn btn-success">Save</button>
+    </div>
+  </div>
+}
+

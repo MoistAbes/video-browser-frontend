@@ -3,10 +3,12 @@ import {RouterOutlet} from '@angular/router';
 import {TopbarComponent} from '../../components/topbar-component/topbar-component';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {JwtService} from '../../services/local/jwt-service';
+import {NgClass} from '@angular/common';
+import {UserInfoModel} from '../../models/user-info-model';
 
 @Component({
   selector: 'app-main-layout-component',
-  imports: [RouterOutlet, TopbarComponent],
+  imports: [RouterOutlet, TopbarComponent, NgClass],
   templateUrl: './main-layout-component.html',
   standalone: true,
   styleUrl: './main-layout-component.scss',
@@ -21,10 +23,22 @@ import {JwtService} from '../../services/local/jwt-service';
 })
 export class MainLayoutComponent {
 
+  isSidebarOpen: boolean = false;
+  friendList: UserInfoModel[] = [];
+
   constructor(public jwtService: JwtService) {
   }
 
   prepareRoute(outlet: RouterOutlet) {
     return outlet?.activatedRouteData?.['animation'] || '';
+  }
+
+  handleOpenSidebar(friends: UserInfoModel[]) {
+    this.friendList = friends;
+    this.isSidebarOpen = true;
+  }
+
+  closeSidebar() {
+    this.isSidebarOpen = false;
   }
 }

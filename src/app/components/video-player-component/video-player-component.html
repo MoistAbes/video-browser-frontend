@@ -92,9 +92,16 @@
           @if (volume == 0) {
             <i class="fas fa-volume-mute"></i>
           }
-          <mat-slider min="0" max="1" step="0.01" showTickMarks discrete [displayWith]="formatLabel">
-            <input matSliderThumb [value]="volume" (input)="onVolumeChange($event)" />
+
+          <mat-slider min="0" max="1" step="0.01">
+            <input  matSliderThumb [value]="volume" (input)="onVolumeChange($event)" />
           </mat-slider>
+
+
+
+<!--          <mat-slider min="0" max="1" step="0.01" showTickMarks discrete [displayWith]="formatLabel">-->
+<!--            <input (mouseup)="" matSliderThumb [value]="volume" (input)="onVolumeChange($event)" />-->
+<!--          </mat-slider>-->
           <span>{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</span>
         </div>
       </div>

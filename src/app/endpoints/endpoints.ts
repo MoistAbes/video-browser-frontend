@@ -26,6 +26,8 @@ export const Endpoints = {
   },
   user: {
     friends: `${BASE_URL}/users/friends`,
+    userInfo: `${BASE_URL}/users/userInfo`,
+    updateColor: `${BASE_URL}/users/icon/color`,
   }
 
 };

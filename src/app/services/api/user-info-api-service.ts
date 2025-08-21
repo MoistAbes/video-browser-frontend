@@ -12,8 +12,18 @@ export class UserInfoApiService {
   constructor(private http: HttpClient) {
   }
 
+  public findUserInfo(): Observable<UserInfoModel> {
+    return this.http.get<UserInfoModel>(Endpoints.user.userInfo)
+  }
+
   public findAllFriends(): Observable<UserInfoModel[]> {
     return this.http.get<UserInfoModel[]>(Endpoints.user.friends)
+  }
+
+  public updateIconColor(iconColor: string): Observable<any> {
+    return this.http.put<any>(Endpoints.user.updateColor, null, {
+      params: { iconColor }
+    });
   }
 
 }
