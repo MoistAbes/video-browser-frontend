@@ -14,12 +14,6 @@ export const Endpoints = {
     scan: `${BASE_URL}/videos/scan`,
     thumbnails: `${BASE_URL}/videos/thumbnails`,
   },
-  videoInfo: {
-    findAll: `${BASE_URL}/video-info/find-all`,
-    findAllSmall: `${BASE_URL}/video-info/find-all-small`,
-    findAllParentTitle: `${BASE_URL}/video-info/find-all/parent-title`,
-    findAllByParentTitle: `${BASE_URL}/video-info/find-all-by/parent-title`,
-  },
   show: {
     findAll: `${BASE_URL}/show/find/all`,
     findRandom: `${BASE_URL}/show/find/random`,
@@ -30,8 +24,8 @@ export const Endpoints = {
     normal: `${BASE_URL}/stream/normal`,
     convert: `${BASE_URL}/stream/convert`,
   },
-  category: {
-    findAll: `${BASE_URL}/category/find/all`,
+  user: {
+    friends: `${BASE_URL}/users/friends`,
   }
 
 };

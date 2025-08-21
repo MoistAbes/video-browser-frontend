@@ -14,17 +14,4 @@ export class VideoApi {
     return this.http.get<any>(Endpoints.videos.scan)
   }
 
-  public getThumbnails(rootFolderPath: string): Observable<string[]> {
-    const params = new HttpParams().set('rootFolderPath', rootFolderPath);
-    return this.http.get<string[]>(Endpoints.videos.thumbnails, { params });
-  }
-
-
-  getSubtitles(rootFolderPath: string, subtitleTitle: string): Observable<any> {
-    const params = new HttpParams().set('path', rootFolderPath);
-    return this.http.get<any>(Endpoints.videos.subtitles + '/' + subtitleTitle, { params });
-  }
-
-
-
 }

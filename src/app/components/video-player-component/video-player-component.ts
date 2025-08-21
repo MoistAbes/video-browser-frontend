@@ -14,6 +14,7 @@ import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 import {VideoSelectorComponent} from './video-selector-component/video-selector-component';
 import {ShowModel} from '../../models/show-model';
 import {MediaItemModel} from '../../models/media-item-model';
+import {ShowUtilService} from '../../services/local/show-util-service';
 
 
 type VideoJSPlayer = ReturnType<typeof videojs>;
@@ -66,7 +67,8 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
   nextEpisodeTimerCounter: number = 16;
   isNextEpisodeNoticeVisible: boolean = false;
 
-  constructor(private cdr: ChangeDetectorRef) {
+  constructor(private cdr: ChangeDetectorRef,
+              private showUtilService: ShowUtilService) {
   }
 
   ngOnInit() {
@@ -209,81 +211,90 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
   onVideoEnd() {
     console.log("on video end")
 
-    if (this.isSeason()) {
-      this.handlePlayNextEpisode();
-    }else if (this.isSeries()) {
-      this.handlePlayNextMovie();
-    }
-  }
+    const nextMediaItem: MediaItemModel | undefined = this.showUtilService.findNextMediaItemAutoplay(this.show, this.currentMediaItem)
 
-  isSeason(): boolean {
-    return this.show?.seasons.length !== 0;
-  }
+    if (nextMediaItem) {
+      this.playNextMedia(nextMediaItem);
 
-  isSeries(): boolean {
-    return this.show!.movies.length > 1
-  }
-
-  handlePlayNextMovie(): void {
-    if (!this.show || !this.currentMediaItem) return;
-
-    // Znajdź aktualny sezon
-    const currentMovieIndex = this.show.movies.findIndex(
-      movie => movie.mediaItem.id === this.currentMediaItem?.id
-    );
-
-    if (currentMovieIndex === -1) return;
-
-
-    const nextMovie: MediaItemModel = this.show.movies[currentMovieIndex + 1].mediaItem;
-
-    if (nextMovie) {
-      this.playNextMedia(nextMovie);
-      return;
     }
 
 
+    // if (this.isSeason()) {
+    //   this.handlePlayNextEpisode();
+    // }else if (this.isSeries()) {
+    //   this.handlePlayNextMovie();
+    // }
   }
 
+//   isSeason(): boolean {
+//     return this.show?.seasons.length !== 0;
+//   }
+//
+//   isSeries(): boolean {
+//     return this.show!.movies.length > 1
+//   }
+//
+//   handlePlayNextMovie(): void {
+//     if (!this.show || !this.currentMediaItem) return;
+//
+//     // Znajdź aktualny sezon
+//     const currentMovieIndex = this.show.movies.findIndex(
+//       movie => movie.mediaItem.id === this.currentMediaItem?.id
+//     );
+//
+//     if (currentMovieIndex === -1) return;
+//
+//
+//     const nextMovie: MediaItemModel = this.show.movies[currentMovieIndex + 1].mediaItem;
+//
+//     if (nextMovie) {
+//       this.playNextMedia(nextMovie);
+//       return;
+//     }
+//
+//
+//   }
+//
+//
+//   handlePlayNextEpisode(): void {
+//     if (!this.show || !this.currentMediaItem) return;
+//
+//     const currentSeasonNumber = this.currentMediaItem.seasonNumber ?? 1;
+//     const currentEpisodeNumber = this.currentMediaItem.episodeNumber ?? 1;
+//
+//     // Znajdź aktualny sezon
+//     const currentSeasonIndex = this.show.seasons.findIndex(
+//       season => season.number === currentSeasonNumber
+//     );
+//     if (currentSeasonIndex === -1) return;
+//
+//     const currentSeason = this.show.seasons[currentSeasonIndex];
+//
+//     // Znajdź indeks obecnego odcinka w sezonie
+//     const currentEpisodeIndex = currentSeason.episodes.findIndex(
+//       ep => ep.mediaItem.episodeNumber === currentEpisodeNumber
+//     );
+//
+//     // 1. Próba pobrania następnego odcinka w tym samym sezonie
+//     const nextEpisode = currentSeason.episodes[currentEpisodeIndex + 1];
+//     if (nextEpisode) {
+//       this.playNextMedia(nextEpisode.mediaItem);
+//       return;
+//     }
+//
+//     // 2. Próba pobrania pierwszego odcinka następnego sezonu
+//     const nextSeason = this.show.seasons[currentSeasonIndex + 1];
+//     if (nextSeason && nextSeason.episodes.length > 0) {
+//       this.playNextMedia(nextSeason.episodes[0].mediaItem);
+//       return;
+//     }
+//
+//     // 3. Koniec listy
+//     console.log('Brak następnego odcinka ani sezonu – autoplay zakończony');
+//   }
 
-  handlePlayNextEpisode(): void {
-    if (!this.show || !this.currentMediaItem) return;
 
-    const currentSeasonNumber = this.currentMediaItem.seasonNumber ?? 1;
-    const currentEpisodeNumber = this.currentMediaItem.episodeNumber ?? 1;
-
-    // Znajdź aktualny sezon
-    const currentSeasonIndex = this.show.seasons.findIndex(
-      season => season.number === currentSeasonNumber
-    );
-    if (currentSeasonIndex === -1) return;
-
-    const currentSeason = this.show.seasons[currentSeasonIndex];
-
-    // Znajdź indeks obecnego odcinka w sezonie
-    const currentEpisodeIndex = currentSeason.episodes.findIndex(
-      ep => ep.mediaItem.episodeNumber === currentEpisodeNumber
-    );
-
-    // 1. Próba pobrania następnego odcinka w tym samym sezonie
-    const nextEpisode = currentSeason.episodes[currentEpisodeIndex + 1];
-    if (nextEpisode) {
-      this.playNextMedia(nextEpisode.mediaItem);
-      return;
-    }
-
-    // 2. Próba pobrania pierwszego odcinka następnego sezonu
-    const nextSeason = this.show.seasons[currentSeasonIndex + 1];
-    if (nextSeason && nextSeason.episodes.length > 0) {
-      this.playNextMedia(nextSeason.episodes[0].mediaItem);
-      return;
-    }
-
-    // 3. Koniec listy
-    console.log('Brak następnego odcinka ani sezonu – autoplay zakończony');
-  }
-
-// wydzielona metoda, aby uniknąć duplikacji
+// // wydzielona metoda, aby uniknąć duplikacji
   private playNextMedia(mediaItem: MediaItemModel): void {
     this.currentMediaItem = mediaItem;
     this.updateMediaItem.emit(mediaItem);

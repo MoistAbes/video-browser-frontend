@@ -26,7 +26,8 @@ import {StructureTypeEnum} from '../../enums/structure-type-enum';
 })
 export class MovieDetailPage implements OnInit {
 
-  contentType: 'single' | 'series' | 'seasons' | 'seasons-and-movies' | undefined;
+  protected readonly StructureTypeEnum = StructureTypeEnum;
+
   show: ShowModel | undefined;
   currentMediaItem: MediaItemModel | undefined;
   selectedVideoUrl: string = '';
@@ -99,8 +100,8 @@ export class MovieDetailPage implements OnInit {
     this.updateVideoUrl()
 
     // Ustawienie napisów
-    const subtitleName = this.currentMediaItem.title;
-    const rootPath = encodeURIComponent(this.currentMediaItem.rootPath);
+    const subtitleName: string = this.currentMediaItem.title;
+    const rootPath: string = encodeURIComponent(this.currentMediaItem.rootPath);
     this.subtitlesUrl = `${Endpoints.videos.subtitles}/${encodeURIComponent(subtitleName)}?path=${rootPath}`;
 
   }
@@ -111,18 +112,36 @@ export class MovieDetailPage implements OnInit {
 
   }
 
+  //stara wersja
+  // determineVideoCategory() {
+  //   if (this.show?.structure == StructureTypeEnum.SINGLE_MOVIE) {
+  //     this.contentType = 'single';
+  //     this.currentMediaItem = this.show!.movies[0].mediaItem!;
+  //   } else if (this.show?.structure == StructureTypeEnum.SEASONAL_SERIES) {
+  //     this.contentType = 'seasons';
+  //     this.currentMediaItem = this.show!.seasons[0].episodes[0].mediaItem!;
+  //   } else if (this.show?.structure == StructureTypeEnum.MOVIE_COLLECTION) {
+  //     this.contentType = 'series';
+  //   } else if (this.show?.structure == StructureTypeEnum.HYBRID) {
+  //     this.contentType = 'seasons-and-movies';
+  //   }else {
+  //     console.warn('Nieznany typ struktury show:', this.show?.structure);
+  //   }
+  //
+  // }
+
 
   determineVideoCategory() {
     if (this.show?.structure == StructureTypeEnum.SINGLE_MOVIE) {
-      this.contentType = 'single';
       this.currentMediaItem = this.show!.movies[0].mediaItem!;
+
     } else if (this.show?.structure == StructureTypeEnum.SEASONAL_SERIES) {
-      this.contentType = 'seasons';
       this.currentMediaItem = this.show!.seasons[0].episodes[0].mediaItem!;
+
     } else if (this.show?.structure == StructureTypeEnum.MOVIE_COLLECTION) {
-      this.contentType = 'series';
+
     } else if (this.show?.structure == StructureTypeEnum.HYBRID) {
-      this.contentType = 'seasons-and-movies';
+
     }else {
       console.warn('Nieznany typ struktury show:', this.show?.structure);
     }

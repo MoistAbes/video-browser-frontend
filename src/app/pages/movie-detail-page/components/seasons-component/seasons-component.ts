@@ -5,6 +5,7 @@ import {FormsModule} from '@angular/forms';
 import {ShowModel} from '../../../../models/show-model';
 import {MediaItemModel} from '../../../../models/media-item-model';
 import {UtilService} from '../../../../services/local/util-service';
+import {ShowUtilService} from '../../../../services/local/show-util-service';
 
 @Component({
   selector: 'app-seasons-component',
@@ -34,7 +35,8 @@ export class SeasonsComponent implements OnInit {
   selectedEpisode: MediaItemModel | undefined
 
 
-  constructor(public utilService: UtilService) {
+  constructor(public utilService: UtilService,
+              private showUtilService: ShowUtilService) {
   }
 
   ngOnInit(): void {
@@ -45,11 +47,12 @@ export class SeasonsComponent implements OnInit {
   setUpEpisodes() {
     console.log("Setup episodes");
 
+    this.episodes = this.showUtilService.getEpisodesForSeason(this.show, this.selectedSeason)
 
-    this.episodes = this.show?.seasons
-      .filter(season => season.number == this.selectedSeason)
-      .flatMap(season => season.episodes)
-      .flatMap(episode => episode.mediaItem) || [];
+    // this.episodes = this.show?.seasons
+    //   .filter(season => season.number == this.selectedSeason)
+    //   .flatMap(season => season.episodes)
+    //   .flatMap(episode => episode.mediaItem) || [];
 
     if (this.episodes.length > 0) {
       this.selectedEpisode = this.episodes[0];

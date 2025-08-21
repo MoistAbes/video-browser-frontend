@@ -1,14 +1,13 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ShowApiService} from '../../services/api/show-api-service';
 import {ShowModel} from '../../models/show-model';
-import {MainIconPathPipe} from '../../pipes/main-icon-path-pipe';
 import {VideoCardComponent} from '../../components/video-card-component/video-card-component';
 import {Router} from '@angular/router';
 import {NgOptimizedImage} from '@angular/common';
-import {Endpoints} from '../../endpoints/endpoints';
 import {interval, Subscription} from 'rxjs';
 import {MatProgressBar} from '@angular/material/progress-bar';
 import {UtilService} from '../../services/local/util-service';
+import {ShowUtilService} from '../../services/local/show-util-service';
 
 @Component({
   selector: 'app-search-page',
@@ -38,7 +37,8 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy{
 
   constructor(private showApiService: ShowApiService,
               private router: Router,
-              public utilService: UtilService,) {
+              public utilService: UtilService,
+              private showUtilService: ShowUtilService,) {
   }
 
   ngOnInit(): void {
@@ -124,9 +124,6 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy{
     // put your delayed hover action here
   }
 
-  // getBackdropUrl(): string {
-  //   return `${Endpoints.videos.icon}?path=${encodeURIComponent(this.selectedShow!.rootPath + '/backdrop/backdrop.jpg')}`;
-  // }
 
   private startTimer() {
     this.stopTimer();
@@ -149,11 +146,17 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy{
   }
 
   nextShow() {
-    if (this.randomShows.length > 0) {
-      this.showIndex = (this.showIndex + 1) % this.randomShows.length;
-      this.selectedShow = this.randomShows[this.showIndex];
-      this.progressValue = 0; // reset progress bara
-    }
+    // if (this.randomShows.length > 0) {
+    //   this.showIndex = (this.showIndex + 1) % this.randomShows.length;
+    //   this.selectedShow = this.randomShows[this.showIndex];
+    //   this.progressValue = 0; // reset progress bara
+    // }
+
+
+    const result: {nextShow: ShowModel | undefined, nextIndex: number} = this.showUtilService.getNextShow(this.randomShows, this.showIndex);
+    this.selectedShow = result.nextShow;
+    this.showIndex = result.nextIndex;
+
   }
 
   onNextButtonClick() {

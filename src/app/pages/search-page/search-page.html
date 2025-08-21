@@ -15,17 +15,7 @@
     </div>
 
     <div class="ng-select-container">
-      <select
-        [(ngModel)]="filterTypeValue"
-        (change)="onFilterChange()"
-        class="video-type-select"
-      >
-        @for (type of videoTypes; track type.label) {
-          <option [ngValue]="type.value">
-            {{ type.label }}
-          </option>
-        }
-      </select>
+
     </div>
   </div>
 

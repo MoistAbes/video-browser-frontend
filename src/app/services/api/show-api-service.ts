@@ -19,7 +19,6 @@ export class ShowApiService {
     return this.http.get<ShowModel[]>(Endpoints.show.findRandom)
   }
 
-
   findShowByParentTitle(parentTitle: string): Observable<ShowModel> {
     return this.http.get<ShowModel>(Endpoints.show.findByParentTitle + '/' + parentTitle)
   }

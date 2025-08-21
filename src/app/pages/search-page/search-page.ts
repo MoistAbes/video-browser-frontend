@@ -1,15 +1,11 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {VideoInfoTypeEnum} from '../../enums/video-info-type-enum';
 import {VideoCardComponent} from '../../components/video-card-component/video-card-component';
 import {Router} from '@angular/router';
-import {MainIconPathPipe} from '../../pipes/main-icon-path-pipe';
 import {ShowApiService} from '../../services/api/show-api-service';
 import {ShowModel} from '../../models/show-model';
 import {UtilService} from '../../services/local/util-service';
-
-type VideoTypeOption = { label: string; value: VideoInfoTypeEnum };
 
 @Component({
   standalone: true,
@@ -26,9 +22,7 @@ export class SearchPage implements OnInit  {
   @ViewChild('target', { static: false }) target!: ElementRef;
 
   filterTitleValue: string = '';
-  filterTypeValue: VideoInfoTypeEnum = VideoInfoTypeEnum.ALL;
 
-  videoTypes: VideoTypeOption[] = [];
   hoverTimer: number | null = null;
 
   showList: ShowModel[] = []
@@ -52,10 +46,6 @@ export class SearchPage implements OnInit  {
       complete: () => {}
     })
 
-    this.videoTypes = Object.entries(VideoInfoTypeEnum).map(([key, value]) => ({
-      label: value,
-      value: value as VideoInfoTypeEnum
-    }));
   }
 
 
