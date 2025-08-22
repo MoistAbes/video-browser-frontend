@@ -3,8 +3,8 @@ import {inject} from '@angular/core';
 import {JwtService} from '../services/local/jwt-service';
 
 export const adminGuard: CanActivateFn = (route, state) => {
-  const jwtService = inject(JwtService);
-  const router = inject(Router);
+  const jwtService: JwtService = inject(JwtService);
+  const router: Router = inject(Router);
 
   if (jwtService.hasAdminRole()) {
     return true;

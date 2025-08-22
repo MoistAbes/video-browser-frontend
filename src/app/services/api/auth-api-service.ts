@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {JwtToken} from '../../models/jwt-token';
+import {JwtToken} from '../../models/security/jwt-token';
 import {Endpoints} from '../../endpoints/endpoints';
-import {AuthRequest} from '../../models/auth-request';
+import {AuthRequest} from '../../models/security/auth-request';
 
 @Injectable({
   providedIn: 'root'

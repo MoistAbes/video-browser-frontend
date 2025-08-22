@@ -31,15 +31,3 @@ export const appConfig: ApplicationConfig = {
     ),
   ],
 };
-
-// export const appConfig: ApplicationConfig = {
-//   providers: [
-//     provideBrowserGlobalErrorListeners(),
-//     provideZoneChangeDetection({ eventCoalescing: true }),
-//     provideRouter(routes),
-//     provideHttpClient(
-//       withInterceptors([authInterceptor]) // ← tutaj dodajesz interceptor
-//     ),
-//     importProvidersFrom(BrowserAnimationsModule),
-//   ],
-// };

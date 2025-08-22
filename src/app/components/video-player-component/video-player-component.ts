@@ -12,8 +12,8 @@ import {
 import videojs from 'video.js';
 import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 import {VideoSelectorComponent} from './video-selector-component/video-selector-component';
-import {ShowModel} from '../../models/show-model';
-import {MediaItemModel} from '../../models/media-item-model';
+import {ShowModel} from '../../models/show/show-model';
+import {MediaItemModel} from '../../models/show/media-item-model';
 import {ShowUtilService} from '../../services/local/show-util-service';
 
 

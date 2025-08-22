@@ -7,18 +7,6 @@
     <router-outlet #o="outlet"></router-outlet>
   </main>
 
-  <!-- Sidebar (nad całością) -->
-<!--  <div class="sidebar" [class.open]="isSidebarOpen">-->
-<!--    <button class="close-btn" (click)="closeSidebar()">✖</button>-->
-<!--    <h2>Friends</h2>-->
-<!--    <div class="menu">-->
-<!--      <div class="menu-item">👤 Jan Kowalski</div>-->
-<!--      <div class="menu-item">👤 Anna Nowak</div>-->
-<!--      <div class="menu-item">👤 Piotr Wiśniewski</div>-->
-<!--    </div>-->
-<!--  </div>-->
-
-
   <div class="sidebar" [class.open]="isSidebarOpen">
     <button class="close-btn" (click)="closeSidebar()">✖</button>
     <h2>Friends</h2>
@@ -30,11 +18,13 @@
           <div class="friend-info">
             <div class="friend-header">
               <span class="username">{{ friend.username }}</span>
-              <span class="status" [ngClass]="friend.online ? 'online' : 'offline'"></span>
+              <span class="status" [ngClass]="friend.status?.online ? 'online' : 'offline'"></span>
             </div>
-            <div class="activity">
-              {{ friend.watching ? ('Watching: ' + friend.watching) : 'Idle' }}
-            </div>
+            @if (friend.status) {
+              <div class="activity">
+                {{ friend.status.watching ? ('Watching: ' + friend.status.watching) : 'Idle' }}
+              </div>
+            }
           </div>
         </div>
       }

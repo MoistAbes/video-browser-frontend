@@ -3,8 +3,8 @@ import {inject} from '@angular/core';
 import {JwtService} from '../services/local/jwt-service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const jwtService = inject(JwtService);
-  const token = jwtService.getToken();
+  const jwtService: JwtService = inject(JwtService);
+  const token: string | null = jwtService.getToken();
 
   // pomiń dodawanie tokena dla logowania / rejestracji
   if (token && !req.url.includes('/auth/')) {

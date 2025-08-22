@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {ShowModel} from '../../models/show-model';
-import {MediaItemModel} from '../../models/media-item-model';
+import {ShowModel} from '../../models/show/show-model';
+import {MediaItemModel} from '../../models/show/media-item-model';
 import {StructureTypeEnum} from '../../enums/structure-type-enum';
-import {SeasonModel} from '../../models/season-model';
-import {ContentModel} from '../../models/content-model';
+import {SeasonModel} from '../../models/show/season-model';
+import {ContentModel} from '../../models/show/content-model';
 
 @Injectable({
   providedIn: 'root'

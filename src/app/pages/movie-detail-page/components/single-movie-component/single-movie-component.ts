@@ -2,8 +2,8 @@ import {Component, Input, CUSTOM_ELEMENTS_SCHEMA, Output, EventEmitter} from '@a
 import {FormsModule} from '@angular/forms';
 import {NgOptimizedImage} from '@angular/common';
 import {VideoPlayerComponent} from '../../../../components/video-player-component/video-player-component';
-import {ShowModel} from '../../../../models/show-model';
-import {MediaItemModel} from '../../../../models/media-item-model';
+import {ShowModel} from '../../../../models/show/show-model';
+import {MediaItemModel} from '../../../../models/show/media-item-model';
 import {UtilService} from '../../../../services/local/util-service';
 
 @Component({

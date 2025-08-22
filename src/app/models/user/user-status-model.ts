@@ -1,7 +1,6 @@
-export class UserInfoModel {
+export class UserStatusModel {
   id: number | undefined
-  username: string = ''
-  iconColor: string = ''
+  videoTitle: string | null = null
   online: boolean = false
   watching: boolean = false
 }

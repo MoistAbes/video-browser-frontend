@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {VideoApi} from '../../services/api/video-api';
 import {FormsModule} from '@angular/forms';
 import {ShowApiService} from '../../services/api/show-api-service';
-import {ShowModel} from '../../models/show-model';
+import {ShowModel} from '../../models/show/show-model';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {NgSelectComponent} from '@ng-select/ng-select';
 

@@ -1,4 +1,4 @@
-import {MediaTypeEnum} from '../enums/media-type-enum';
+import {MediaTypeEnum} from '../../enums/media-type-enum';
 
 export class MediaItemModel {
 

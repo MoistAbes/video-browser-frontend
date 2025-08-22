@@ -4,7 +4,7 @@ import {TopbarComponent} from '../../components/topbar-component/topbar-componen
 import {animate, style, transition, trigger} from '@angular/animations';
 import {JwtService} from '../../services/local/jwt-service';
 import {NgClass} from '@angular/common';
-import {UserInfoModel} from '../../models/user-info-model';
+import {UserInfoModel} from '../../models/user/user-info-model';
 
 @Component({
   selector: 'app-main-layout-component',

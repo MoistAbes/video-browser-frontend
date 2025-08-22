@@ -4,11 +4,12 @@ import {MatIcon} from '@angular/material/icon';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {NgClass} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {AuthRequest} from '../../models/auth-request';
+import {AuthRequest} from '../../models/security/auth-request';
 import {AuthApiService} from '../../services/api/auth-api-service';
 import {JwtService} from '../../services/local/jwt-service';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
+import {UserService} from '../../services/local/user-service';
 
 @Component({
   selector: 'app-login-page',
@@ -43,7 +44,8 @@ export class LoginPage {
   constructor(private authApiService: AuthApiService,
               private jwtService: JwtService,
               private router: Router,
-              private toastr: ToastrService) {
+              private toastr: ToastrService,
+              private userService: UserService,) {
   }
 
   togglePassword(event: MouseEvent) {
@@ -131,7 +133,6 @@ export class LoginPage {
       error: err => {
         this.toastr.warning(err.error.message)
         console.log("Error: ", err)
-        // Tutaj wywołujesz API do logowania
       },
       complete: () => {
         this.toastr.success("Successfully registered account")
@@ -146,6 +147,7 @@ export class LoginPage {
       next: token => {
         console.log("Login Token: ", token.token)
         this.jwtService.saveToken(token.token)
+        this.userService.loadUser();
       },
       error: err => {
         console.log("Error: ", err)

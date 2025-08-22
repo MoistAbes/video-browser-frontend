@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {UserInfoModel} from '../../models/user-info-model';
+import {UserInfoModel} from '../../models/user/user-info-model';
 import {Endpoints} from '../../endpoints/endpoints';
 
 @Injectable({
@@ -24,6 +24,10 @@ export class UserInfoApiService {
     return this.http.put<any>(Endpoints.user.updateColor, null, {
       params: { iconColor }
     });
+  }
+
+  public updateIcon(iconId: number): Observable<any> {
+    return this.http.put<any>(Endpoints.user.updateIcon + iconId, null, {})
   }
 
 }

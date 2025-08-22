@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatNavList} from '@angular/material/list';
-import {ShowModel} from '../../../models/show-model';
+import {ShowModel} from '../../../models/show/show-model';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
-import {MediaItemModel} from '../../../models/media-item-model';
+import {MediaItemModel} from '../../../models/show/media-item-model';
 
 @Component({
   selector: 'app-video-selector-component',

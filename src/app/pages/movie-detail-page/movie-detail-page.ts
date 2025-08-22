@@ -7,8 +7,8 @@ import {SeasonsComponent} from './components/seasons-component/seasons-component
 import {SeriesComponent} from './components/series-component/series-component';
 import {SeasonsAndMoviesComponent} from './components/seasons-and-movies-component/seasons-and-movies-component';
 import {ShowApiService} from '../../services/api/show-api-service';
-import {ShowModel} from '../../models/show-model';
-import {MediaItemModel} from '../../models/media-item-model';
+import {ShowModel} from '../../models/show/show-model';
+import {MediaItemModel} from '../../models/show/media-item-model';
 import {StructureTypeEnum} from '../../enums/structure-type-enum';
 
 @Component({

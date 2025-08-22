@@ -8,8 +8,8 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import {MediaItemModel} from '../../../models/media-item-model';
-import {ShowModel} from '../../../models/show-model';
+import {MediaItemModel} from '../../../models/show/media-item-model';
+import {ShowModel} from '../../../models/show/show-model';
 import videojs from 'video.js';
 import {VideoSelectorComponent} from '../video-selector-component/video-selector-component';
 import {MatSlider, MatSliderThumb} from '@angular/material/slider';

@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ShowApiService} from '../../services/api/show-api-service';
-import {ShowModel} from '../../models/show-model';
+import {ShowModel} from '../../models/show/show-model';
 import {VideoCardComponent} from '../../components/video-card-component/video-card-component';
 import {Router} from '@angular/router';
 import {NgOptimizedImage} from '@angular/common';

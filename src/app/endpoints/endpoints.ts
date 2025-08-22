@@ -12,7 +12,6 @@ export const Endpoints = {
     subtitles: `${BASE_URL}/videos/subtitles`,
     image: `${BASE_URL}/videos/image`,
     scan: `${BASE_URL}/videos/scan`,
-    thumbnails: `${BASE_URL}/videos/thumbnails`,
   },
   show: {
     findAll: `${BASE_URL}/show/find/all`,
@@ -27,7 +26,11 @@ export const Endpoints = {
   user: {
     friends: `${BASE_URL}/users/friends`,
     userInfo: `${BASE_URL}/users/userInfo`,
-    updateColor: `${BASE_URL}/users/icon/color`,
+    updateColor: `${BASE_URL}/users/update/icon/color`,
+    updateIcon: `${BASE_URL}/users/update/icon/`,
+  },
+  userIcon: {
+    findAll: `${BASE_URL}/user-icon/find-all`,
   }
 
 };

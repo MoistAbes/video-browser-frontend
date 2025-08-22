@@ -2,7 +2,8 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {JwtService} from '../../services/local/jwt-service';
 import {UserInfoApiService} from '../../services/api/user-info-api-service';
-import {UserInfoModel} from '../../models/user-info-model';
+import {UserInfoModel} from '../../models/user/user-info-model';
+import {UserService} from '../../services/local/user-service';
 
 @Component({
   selector: 'app-topbar-component',
@@ -16,17 +17,18 @@ import {UserInfoModel} from '../../models/user-info-model';
 })
 export class TopbarComponent implements OnInit{
 
-  user: UserInfoModel | undefined;
+  user: UserInfoModel | null = null;
   friendList: UserInfoModel[] = []
   @Output() openSidebar = new EventEmitter<UserInfoModel[]>();
 
   constructor(public jwtService: JwtService,
               private router: Router,
-              private userInfoApiService: UserInfoApiService,) {
+              private userInfoApiService: UserInfoApiService,
+              private userService: UserService,) {
   }
 
   ngOnInit(): void {
-    this.loadCurrentUser();
+    this.user = this.userService.getCurrentUser();
   }
 
   logout() {
@@ -44,7 +46,6 @@ export class TopbarComponent implements OnInit{
   loadFriends() {
 
     //open sidebar
-
     this.userInfoApiService.findAllFriends().subscribe({
       next: (result) => {
         this.friendList = result
@@ -58,16 +59,5 @@ export class TopbarComponent implements OnInit{
       complete: () => {}
     })
   }
-
-  loadCurrentUser() {
-    this.userInfoApiService.findUserInfo().subscribe({
-      next: (result) => {
-        this.user = result
-      },
-      error: err => {},
-      complete: () => {}
-    })
-  }
-
 
 }

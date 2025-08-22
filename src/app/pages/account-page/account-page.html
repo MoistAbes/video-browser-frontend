@@ -19,6 +19,17 @@
         <input type="color" [(ngModel)]="user.iconColor">
       </div>
 
+      <div class="account-field">
+        <label>Icon</label>
+        <ng-select
+        [items]="icons"
+        bindLabel="name"
+        [(ngModel)]="selectedIcon"
+        >
+
+        </ng-select>
+      </div>
+
       <button (click)="updateUser()" class="btn btn-success">Save</button>
     </div>
   </div>
