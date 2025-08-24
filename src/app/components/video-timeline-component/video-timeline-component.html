@@ -1,4 +1,17 @@
-<div style="z-index: 10000;" class="custom-slider">
+<!--<div style="z-index: 10000;" class="custom-slider">-->
+<!--  <ngx-slider-->
+<!--    [(value)]="currentTime"-->
+<!--    [options]="options"-->
+<!--    (valueChange)="onValueChange($event)"-->
+<!--    (userChangeStart)="onSeekStart()"-->
+<!--    (userChangeEnd)="onUserSeek($event)">-->
+<!--  </ngx-slider>-->
+<!--</div>-->
+
+
+<div class="custom-slider"
+     (mousemove)="onSliderHover($event)"
+     (mouseleave)="hoverTime = null">
   <ngx-slider
     [(value)]="currentTime"
     [options]="options"
@@ -6,4 +19,12 @@
     (userChangeStart)="onSeekStart()"
     (userChangeEnd)="onUserSeek($event)">
   </ngx-slider>
+
+  @if (hoverTime) {
+    <div class="hover-tooltip"
+         [ngStyle]="{ left: hoverX + 'px' }">
+      {{ formatTime(hoverTime) }}
+    </div>
+  }
+
 </div>

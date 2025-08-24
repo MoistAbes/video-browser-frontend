@@ -1,10 +1,12 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {ChangeContext, NgxSliderModule, Options} from '@angular-slider/ngx-slider';
+import {NgStyle} from '@angular/common';
 
 @Component({
   selector: 'app-video-timeline-component',
   imports: [
-    NgxSliderModule
+    NgxSliderModule,
+    NgStyle
   ],
   templateUrl: './video-timeline-component.html',
   standalone: true,
@@ -19,6 +21,8 @@ export class VideoTimelineComponent implements OnChanges{
   @Output() seekEnd = new EventEmitter<number>();
 
   isUserSeeking = false;
+  hoverTime: number | null = null;
+  hoverX: number = 0;
 
   options: Options = {
     floor: 0,
@@ -38,52 +42,42 @@ export class VideoTimelineComponent implements OnChanges{
   }
 
   onSeekStart(): void {
-    console.log("on seek start")
     this.isUserSeeking = true;
     this.seekStart.emit();
   }
 
   // tylko emitujemy event, nie ustawiamy playera
-  onUserSeek(changeContext: ChangeContext): void {
-    console.log("onUserSeek")
-
-    const newValue = changeContext.value ?? 0;
+  onUserSeek({ value }: ChangeContext): void {
     this.isUserSeeking = false;
-    this.seekEnd.emit(newValue); // 🔹 tylko tutaj zmieniamy czas playera
+    this.seekEnd.emit(value ?? 0);
   }
 
+  // valueChange może służyć do podglądu slidera, ale nie ruszamy playera
+  onValueChange(value: number): void {
+    if (this.isUserSeeking) {
+      this.currentTime = value;
+      this.timeChange.emit(this.currentTime);
+    }
+  }
 
-  // onUserSeek(changeContext: ChangeContext): void {
-  //   const newValue = changeContext.value ?? 0;
-  //   console.log("onUserSeek timeline: ", newValue);
-  //   console.log("onUserSeek timeline change context: ", changeContext);
-  //   this.seekEnd.emit(newValue);  // 🔹 emitujemy do rodzica
-  // }
-
-  private formatTime(seconds: number): string {
+  formatTime(seconds: number): string {
     const minutes = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
     return `${minutes}:${secs}`;
   }
 
 
+  onSliderHover(event: MouseEvent) {
+    const sliderWrapper = event.currentTarget as HTMLElement;
+    const sliderEl = sliderWrapper.querySelector('.ngx-slider') as HTMLElement;
+    if (!sliderEl) return;
 
-  // 🔹 dokładny emit wartości przy każdej zmianie suwaka
-  // onValueChange(event: number): void {
-  //   const newValue: number = Number(event);
-  //   this.currentTime = newValue;         // lokalna aktualizacja suwaka
-  //   this.timeChange.emit(newValue);      // emit do rodzica
-  // }
+    const rect = sliderEl.getBoundingClientRect();
+    const percent = (event.clientX - rect.left) / rect.width;
+    this.hoverTime = Math.min(Math.max(0, percent * this.duration), this.duration);
 
-  // valueChange może służyć do podglądu slidera, ale nie ruszamy playera
-  onValueChange(value: number): void {
-    console.log("onValueChange: ", this.isUserSeeking);
-    if (this.isUserSeeking) {
-      this.currentTime = value; // aktualizacja podglądu slidera
-      console.log("onValueChange: ", this.currentTime);
-      this.timeChange.emit(this.currentTime);      // emit do rodzica
-
-    }
-    // 🔹 jeśli nie szukamy, ignorujemy valueChange, żeby nie nadpisywało czasu
+    // pozycja tooltipu względem wrappera
+    this.hoverX = event.clientX - sliderWrapper.getBoundingClientRect().left;
+    console.log("hover x: ", this.hoverX)
   }
 }

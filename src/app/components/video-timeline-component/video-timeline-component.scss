@@ -1,3 +1,7 @@
+.custom-slider {
+  position: relative;
+}
+
 ::ng-deep {
   .custom-slider .ngx-slider .ngx-slider-bar {
     background: #444; /* ciemne tło jak Netflix */
@@ -49,31 +53,6 @@
 
   }
 
-
-
-  //.custom-slider .ngx-slider .ngx-slider-pointer {
-  //  width: 12px;
-  //  height: 20px;
-  //  bottom: 0;
-  //  background-color: #fff;      /* biały środek */
-  //  border: 1px solid #e50914;   /* czerwony obrys */
-  //  border-radius: 2px;
-  //  transition: transform 0.2s ease;
-  //  padding: 0 !important;
-  //  margin: 0 !important;
-  //  cursor: pointer;
-  //
-  //}
-  //
-  //.custom-slider .ngx-slider .ngx-slider-pointer:hover {
-  //  background-color: #e50914;  /* na hover wypełnia się czerwienią */
-  //  border-color: #fff;
-  //  padding: 0 !important;
-  //  margin: 0 !important;
-  //  cursor: pointer;
-  //}
-
-
   .custom-slider .ngx-slider .ngx-slider-pointer:after {
     display: none;
     z-index: 10000;
@@ -99,4 +78,17 @@
   .custom-slider .ngx-slider .ngx-slider-tick {
     display: none; /* bez ticków */
   }
+}
+
+.hover-tooltip {
+  position: absolute;
+  top: -25px;   /* nad trackiem */
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  padding: 2px 6px;
+  font-size: 12px;
+  border-radius: 3px;
+  pointer-events: none;
+  white-space: nowrap;
+  transform: translateX(-50%);
 }

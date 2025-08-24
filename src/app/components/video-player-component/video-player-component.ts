@@ -101,7 +101,6 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
 
         if (!this.isSeeking) {
 
-
           this.currentTime = this.player.currentTime()!;
           this.duration = this.player.duration()!;
 
@@ -115,10 +114,6 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
             this.isNextEpisodeNoticeVisible = false;
           }
         }
-
-
-
-
       });
 
 
@@ -189,7 +184,6 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
     this.currentMediaItem = { ...this.currentMediaItem, ...videoInfo } as MediaItemModel;
     this.updateMediaItem.emit(videoInfo)
 
-    // tu możesz też uruchomić odtwarzanie itp.
   }
 
   onTimeUpdate(): void {
@@ -218,7 +212,6 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
 
   }
 
-// // wydzielona metoda, aby uniknąć duplikacji
   private playNextMedia(mediaItem: MediaItemModel): void {
     this.currentMediaItem = mediaItem;
     this.updateMediaItem.emit(mediaItem);
