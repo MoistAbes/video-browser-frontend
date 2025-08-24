@@ -13,16 +13,16 @@
     <div class="menu">
       @for  (friend of friendList; track friend.id) {
         <div class="friend-item">
-          <i class="fa-solid fa-face-flushed friend-icon"
+          <i class="friend-icon" [ngClass]="friend.icon"
              [style.color]="friend.iconColor || '#ecb784'"></i>
           <div class="friend-info">
             <div class="friend-header">
               <span class="username">{{ friend.username }}</span>
-              <span class="status" [ngClass]="friend.status?.online ? 'online' : 'offline'"></span>
+              <span class="status" [ngClass]="friend.status?.isOnline ? 'online' : 'offline'"></span>
             </div>
             @if (friend.status) {
               <div class="activity">
-                {{ friend.status.watching ? ('Watching: ' + friend.status.watching) : 'Idle' }}
+                {{ friend.status.isWatching ? ('Watching: ' + friend.status.isWatching) : 'Idle' }}
               </div>
             }
           </div>

@@ -35,37 +35,35 @@
   @if (overlayText) {
     <div class="overlay-message" >{{ overlayText }}</div>
   }
-  <div class="custom-control-bar" [class.visible]="showControls">
-
+  <div class="timeline-box">
     <div class="row">
       <div class="col-12">
-        <div class="center-controls" style="position: relative;">
-          <input
-            type="range"
-            min="0"
-            [max]="duration"
-            [value]="currentTime"
-            step="0.1"
-            (input)="onSeekChangeFromSlider($event)"
-            (mousemove)="onSliderHover($event)"
-            (mouseleave)="hideTooltip()"
-            #progressSlider
-          />
+        <app-video-timeline-component
+          [duration]="duration"
+          [currentTime]="currentTime"
+          (seekStart)="onSeekStart()"
+          (seekEnd)="onSeekEnd($event)"
+          (timeChange)="onTimeUpdateFromPlayer($event)"
+        >
+        </app-video-timeline-component>
 
-          <!-- Tooltip -->
-          @if (tooltipVisible) {
-            <div
-              class="slider-tooltip"
-              [style.left.px]="tooltipPosition"
-            >
-              {{ tooltipTime }}
-            </div>
-          }
-
-
-        </div>
       </div>
     </div>
+  </div>
+
+  <div class="custom-control-bar" [class.visible]="showControls">
+
+<!--    <div class="row">-->
+<!--      <div class="col-12">-->
+<!--          <app-video-timeline-component-->
+<!--          [duration]="duration"-->
+<!--          [currentTime]="currentTime"-->
+<!--          (timeChange)="onSeekChangeFromSlider($event)">-->
+<!--          >-->
+<!--          </app-video-timeline-component>-->
+
+<!--      </div>-->
+<!--    </div>-->
 
     <div class="row">
 
@@ -97,11 +95,6 @@
             <input  matSliderThumb [value]="volume" (input)="onVolumeChange($event)" />
           </mat-slider>
 
-
-
-<!--          <mat-slider min="0" max="1" step="0.01" showTickMarks discrete [displayWith]="formatLabel">-->
-<!--            <input (mouseup)="" matSliderThumb [value]="volume" (input)="onVolumeChange($event)" />-->
-<!--          </mat-slider>-->
           <span>{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</span>
         </div>
       </div>

@@ -27,6 +27,7 @@ export class UserInfoApiService {
   }
 
   public updateIcon(iconId: number): Observable<any> {
+    console.log("update icon id: ", iconId)
     return this.http.put<any>(Endpoints.user.updateIcon + iconId, null, {})
   }
 

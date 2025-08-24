@@ -1,0 +1,102 @@
+::ng-deep {
+  .custom-slider .ngx-slider .ngx-slider-bar {
+    background: #444; /* ciemne tło jak Netflix */
+    height: 4px;
+    border-radius: 2px;
+    padding: 0 !important;
+    margin: 0 !important;
+    cursor: pointer;
+    z-index: 10000;
+
+    user-select: none;      /* standard */
+    -webkit-user-select: none; /* Safari/Chrome */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE/Edge */
+
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-selection {
+    background: #e50914; /* Netflix red */
+    padding: 0 !important;
+    margin: 0 !important;
+    cursor: pointer;
+    z-index: 10000;
+
+
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-pointer {
+    width: 14px;
+    height: 14px;
+    background-color: #e50914;   /* Netflixowa czerwień */
+    border: 2px solid #fff;      /* biały obrys */
+    border-radius: 50%;          /* okrąg */
+    box-shadow: 0 0 6px rgba(0,0,0,0.4);
+    transition: transform 0.15s ease, background-color 0.2s ease;
+    cursor: pointer;
+    z-index: 10000;
+
+
+    top: 50% !important;           /* ustawiamy na środek tracka */
+    margin-top: -7px !important;   /* połowa wysokości (14px/2) */
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-pointer:hover {
+    transform: scale(1.2);
+    background-color: #fff;
+    border-color: #e50914;
+    z-index: 10000;
+
+  }
+
+
+
+  //.custom-slider .ngx-slider .ngx-slider-pointer {
+  //  width: 12px;
+  //  height: 20px;
+  //  bottom: 0;
+  //  background-color: #fff;      /* biały środek */
+  //  border: 1px solid #e50914;   /* czerwony obrys */
+  //  border-radius: 2px;
+  //  transition: transform 0.2s ease;
+  //  padding: 0 !important;
+  //  margin: 0 !important;
+  //  cursor: pointer;
+  //
+  //}
+  //
+  //.custom-slider .ngx-slider .ngx-slider-pointer:hover {
+  //  background-color: #e50914;  /* na hover wypełnia się czerwienią */
+  //  border-color: #fff;
+  //  padding: 0 !important;
+  //  margin: 0 !important;
+  //  cursor: pointer;
+  //}
+
+
+  .custom-slider .ngx-slider .ngx-slider-pointer:after {
+    display: none;
+    z-index: 10000;
+
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-bubble {
+    bottom: 22px;
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    border-radius: 3px;
+    font-size: 12px;
+    padding: 0 !important;
+    margin: 0 !important;
+    z-index: 10000;
+
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-limit {
+    display: none; /* chowamy etykiety min/max */
+  }
+
+  .custom-slider .ngx-slider .ngx-slider-tick {
+    display: none; /* bez ticków */
+  }
+}

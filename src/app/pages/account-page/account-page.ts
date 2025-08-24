@@ -7,6 +7,7 @@ import {UserService} from '../../services/local/user-service';
 import {NgSelectComponent} from '@ng-select/ng-select';
 import {UserIconApiService} from '../../services/api/user-icon-api-service';
 import {UserIconModel} from '../../models/user/user-icon-model';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-account-page',
@@ -22,25 +23,32 @@ export class AccountPage implements OnInit {
 
   user: UserInfoModel | null = null;
   icons: UserIconModel[] = []
-  selectedIcon: UserIconModel | undefined;
 
   constructor(public jwtService: JwtService,
               private userInfoApiService: UserInfoApiService,
               private userService: UserService,
-              private userIconApiService: UserIconApiService,) {
+              private userIconApiService: UserIconApiService,
+              private toastrService: ToastrService) {
   }
 
   ngOnInit(): void {
-    this.user = this.userService.getCurrentUser();
+    this.userService.getCurrentUser(); // tutaj faktycznie odpalasz pobranie usera
+
+
+    this.userService.user$.subscribe(user => {
+      this.user = user;
+      console.log("user accoutn page: ", this.user)
+    });
+
+
+
     this.findAllIcons();
   }
 
   updateUser() {
     this.updateIconColor();
 
-    if (this.selectedIcon?.name != this.user?.icon) {
-      this.updateIcon();
-    }
+    this.updateIcon();
   }
 
   updateIconColor() {
@@ -51,19 +59,24 @@ export class AccountPage implements OnInit {
       },
       error: err => {
         console.log("Error while updating icon color: ", err);
+      },
+      complete: () => {
+        this.toastrService.success("Successfully updated icon color")
+
       }
     });
   }
 
   updateIcon() {
-    this.userInfoApiService.updateIcon(this.selectedIcon!.id).subscribe({
+    this.userInfoApiService.updateIcon(this.user!.icon!.id).subscribe({
       next: value => {
-        this.user!.icon = this.selectedIcon!.name
         this.userService.updateUser({ ...this.user! });
 
       },
       error: err => {},
-      complete: () => {}
+      complete: () => {
+        this.toastrService.success("Successfully updated icon")
+      }
     })
   }
 
@@ -71,11 +84,10 @@ export class AccountPage implements OnInit {
     this.userIconApiService.findAllUserIcons().subscribe({
       next: data => {
         this.icons = data
-
-        this.selectedIcon = this.icons.find(icon => this.user?.icon === icon.name)
       },
       error: err => {},
-      complete: () => {}
+      complete: () => {
+      }
     })
   }
 

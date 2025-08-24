@@ -4,12 +4,14 @@ import {JwtService} from '../../services/local/jwt-service';
 import {UserInfoApiService} from '../../services/api/user-info-api-service';
 import {UserInfoModel} from '../../models/user/user-info-model';
 import {UserService} from '../../services/local/user-service';
+import {NgClass} from '@angular/common';
 
 @Component({
   selector: 'app-topbar-component',
   imports: [
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    NgClass
   ],
   templateUrl: './topbar-component.html',
   standalone: true,
@@ -28,7 +30,14 @@ export class TopbarComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.user = this.userService.getCurrentUser();
+    this.userService.getCurrentUser(); // tutaj faktycznie odpalasz pobranie usera
+
+
+    this.userService.user$.subscribe(user => {
+      this.user = user;
+      console.log("topbar component user: ", this.user)
+    });
+
   }
 
   logout() {

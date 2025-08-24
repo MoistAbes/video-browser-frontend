@@ -2,7 +2,7 @@
   position: fixed;
   bottom: 0;
   width: 100%;
-  z-index: 99999;
+  z-index: 200;
 }
 
 .vjs-default-skin {
@@ -31,7 +31,7 @@
     pointer-events: none;
     opacity: 0;
     transform: translateY(100%); // na starcie schowana poza ekranem
-    z-index: 9999;
+    z-index: 200;
     transition: opacity 0.3s ease, transform 0.3s ease; // animacje
 
     &.visible {
@@ -39,6 +39,15 @@
       pointer-events: auto;
       transform: translateY(0); // wjeżdża na dół ekranu
     }
+  }
+
+  .timeline-box{
+    position: absolute;
+    width: 100%;
+    bottom: 33px;
+    left: 0;
+    right: 0;
+    z-index: 1000;
   }
 
 
@@ -53,82 +62,82 @@
   ///* Center controls container takes full width but centers content */
   .center-controls {
 
-    display: flex;
-    justify-content: center; // wyśrodkowanie w poziomie
-    position: relative;
+    //display: flex;
+    //justify-content: center; // wyśrodkowanie w poziomie
+    //position: relative;
     padding: 0;
     margin: 0;
 
-    input[type="range"] {
-      -webkit-appearance: none;
-      width: 99%;
-      height: 4px;
-      background: transparent;
-      cursor: pointer;
-      margin: 0;
-      padding: 0;
-    }
-
-    /* Track */
-    input[type="range"]::-webkit-slider-runnable-track {
-      height: 4px;
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 2px;
-    }
-
-    input[type="range"]::-moz-range-track {
-      height: 4px;
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 2px;
-    }
-
-    /* Thumb (the circle you drag) */
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 12px;
-      height: 12px;
-      background: white;
-      border-radius: 50%;
-      box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
-      margin-top: -4px; /* centers thumb on track */
-      transition: background 0.2s;
-    }
-
-    input[type="range"]::-moz-range-thumb {
-      width: 12px;
-      height: 12px;
-      background: white;
-      border: none;
-      border-radius: 50%;
-      box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
-      transition: background 0.2s;
-    }
-
-    /* On hover/focus */
-    input[type="range"]:hover::-webkit-slider-thumb {
-      background: #ff0000; /* Netflix red highlight */
-    }
-    input[type="range"]:focus {
-      outline: none;
-    }
-
-    .slider-tooltip {
-      user-select: none;      /* standard */
-      -webkit-user-select: none; /* Safari/Chrome */
-      -moz-user-select: none;    /* Firefox */
-      -ms-user-select: none;     /* IE/Edge */
-
-      position: absolute;
-      top: -30px;
-      transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.8);
-      color: white;
-      font-size: 12px;
-      padding: 3px 6px;
-      border-radius: 4px;
-      white-space: nowrap;
-      pointer-events: none;
-    }
+    //input[type="range"] {
+    //  -webkit-appearance: none;
+    //  width: 99%;
+    //  height: 4px;
+    //  background: transparent;
+    //  cursor: pointer;
+    //  margin: 0;
+    //  padding: 0;
+    //}
+    //
+    ///* Track */
+    //input[type="range"]::-webkit-slider-runnable-track {
+    //  height: 4px;
+    //  background: rgba(255, 255, 255, 0.3);
+    //  border-radius: 2px;
+    //}
+    //
+    //input[type="range"]::-moz-range-track {
+    //  height: 4px;
+    //  background: rgba(255, 255, 255, 0.3);
+    //  border-radius: 2px;
+    //}
+    //
+    ///* Thumb (the circle you drag) */
+    //input[type="range"]::-webkit-slider-thumb {
+    //  -webkit-appearance: none;
+    //  width: 12px;
+    //  height: 12px;
+    //  background: white;
+    //  border-radius: 50%;
+    //  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    //  margin-top: -4px; /* centers thumb on track */
+    //  transition: background 0.2s;
+    //}
+    //
+    //input[type="range"]::-moz-range-thumb {
+    //  width: 12px;
+    //  height: 12px;
+    //  background: white;
+    //  border: none;
+    //  border-radius: 50%;
+    //  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    //  transition: background 0.2s;
+    //}
+    //
+    ///* On hover/focus */
+    //input[type="range"]:hover::-webkit-slider-thumb {
+    //  background: #ff0000; /* Netflix red highlight */
+    //}
+    //input[type="range"]:focus {
+    //  outline: none;
+    //}
+    //
+    //.slider-tooltip {
+    //  user-select: none;      /* standard */
+    //  -webkit-user-select: none; /* Safari/Chrome */
+    //  -moz-user-select: none;    /* Firefox */
+    //  -ms-user-select: none;     /* IE/Edge */
+    //
+    //  position: absolute;
+    //  top: -30px;
+    //  transform: translateX(-50%);
+    //  background: rgba(0, 0, 0, 0.8);
+    //  color: white;
+    //  font-size: 12px;
+    //  padding: 3px 6px;
+    //  border-radius: 4px;
+    //  white-space: nowrap;
+    //  pointer-events: none;
+    //}
 
   }
 
@@ -168,7 +177,7 @@
     border-radius: 8px;
     font-size: 18px;
     pointer-events: none;
-    z-index: 9999;
+    z-index: 200;
     opacity: 1;
     transition: opacity 0.5s ease-out;
   }

@@ -11,6 +11,7 @@ import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {authInterceptor} from './interceptors/auth-interceptor';
 import {ToastrModule} from 'ngx-toastr';
+import {NgxSliderModule} from '@angular-slider/ngx-slider';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,6 +22,7 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([authInterceptor])
     ),
     importProvidersFrom(
+      NgxSliderModule,  // 👈 tutaj przenosimy
       BrowserAnimationsModule,
       ToastrModule.forRoot({
         positionClass: 'toast-top-right',

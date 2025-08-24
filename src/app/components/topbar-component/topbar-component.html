@@ -21,7 +21,7 @@
       <div class="user-info">
         <p class="username">{{ jwtService.getUsername() }}</p>
         <div class="user-icon">
-          <i [style.color]="user.iconColor" class="fa-solid fa-face-flushed" style="font-size: 1.5rem;"></i>
+          <i [style.color]="user.iconColor" [ngClass]="user.icon!.name" style="font-size: 1.5rem;"></i>
         </div>
       </div>
 

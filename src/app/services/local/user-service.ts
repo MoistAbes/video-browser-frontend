@@ -30,7 +30,8 @@ export class UserService {
 
   loadUser(): void {
     this.userInfoApiService.findUserInfo().subscribe({
-      next: (user) => this.userSubject.next(user),
+      next: (user) => {
+        this.userSubject.next(user)},
       error: (err) => console.error('Failed to load user', err)
     });
   }
