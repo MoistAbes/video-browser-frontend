@@ -49,7 +49,7 @@ export class SeasonsAndMoviesComponent implements OnInit, OnChanges {
   ngOnChanges() {
     if (!this.initialized && this.show?.seasons?.length) {
       this.initialized = true;
-      this.selectedSeason = this.show.seasons[0].episodes[0].mediaItem.seasonNumber;
+      this.selectedSeason = this.show.seasons[0].episodes[0].seasonNumber;
       this.setUpEpisodes();
     }
   }
@@ -72,7 +72,7 @@ export class SeasonsAndMoviesComponent implements OnInit, OnChanges {
   selectSeasonContentType() {
     this.selectedContentType = 'seasons';
     if (this.show) {
-      this.selectedSeason = this.show.seasons[0].episodes[0].mediaItem.seasonNumber;
+      this.selectedSeason = this.show.seasons[0].episodes[0].seasonNumber;
       this.setUpEpisodes();
     }
 
@@ -80,7 +80,7 @@ export class SeasonsAndMoviesComponent implements OnInit, OnChanges {
 
   selectMoviesContentType() {
     this.selectedContentType = 'movies';
-    this.currentMediaItem = this.show!.movies[0].mediaItem;
+    this.currentMediaItem = this.show!.movies[0];
     this.updateMediaItem.emit(this.currentMediaItem)
     this.resetPlayingVideo()
 

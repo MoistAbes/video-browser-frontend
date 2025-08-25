@@ -40,7 +40,7 @@ export class SeasonsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.selectedSeason = this.show!.seasons[0].episodes[0].mediaItem.seasonNumber;
+    this.selectedSeason = this.show!.seasons[0].episodes[0].seasonNumber;
     this.setUpEpisodes();
   }
 

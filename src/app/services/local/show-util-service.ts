@@ -3,7 +3,6 @@ import {ShowModel} from '../../models/show/show-model';
 import {MediaItemModel} from '../../models/show/media-item-model';
 import {StructureTypeEnum} from '../../enums/structure-type-enum';
 import {SeasonModel} from '../../models/show/season-model';
-import {ContentModel} from '../../models/show/content-model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +18,7 @@ export class ShowUtilService {
     return show.seasons
       .filter(season => season.number === seasonNumber)
       .flatMap(season => season.episodes)
-      .flatMap(episode => episode.mediaItem);
+      .flatMap(episode => episode);
   }
 
   getNextShow(shows: ShowModel[], currentIndex: number): { nextShow: ShowModel | undefined, nextIndex: number } {
@@ -65,19 +64,19 @@ export class ShowUtilService {
 
     // Znajdź indeks obecnego odcinka w sezonie
     const currentEpisodeIndex: number = currentSeason.episodes.findIndex(
-      ep => ep.mediaItem.episodeNumber === currentEpisodeNumber
+      ep => ep.episodeNumber === currentEpisodeNumber
     );
 
     // 1. Próba pobrania następnego odcinka w tym samym sezonie
-    const nextEpisode: ContentModel = currentSeason.episodes[currentEpisodeIndex + 1];
+    const nextEpisode: MediaItemModel = currentSeason.episodes[currentEpisodeIndex + 1];
     if (nextEpisode) {
-      return nextEpisode.mediaItem;
+      return nextEpisode;
     }
 
     // 2. Próba pobrania pierwszego odcinka następnego sezonu
     const nextSeason: SeasonModel = show.seasons[currentSeasonIndex + 1];
     if (nextSeason && nextSeason.episodes.length > 0) {
-      return nextSeason.episodes[0].mediaItem;
+      return nextSeason.episodes[0];
     }
 
     // 3. Koniec listy
@@ -91,13 +90,13 @@ export class ShowUtilService {
 
     // Znajdź aktualny sezon
     const currentMovieIndex = show.movies.findIndex(
-      movie => movie.mediaItem.id === currentMediaItem?.id
+      movie => movie.id === currentMediaItem?.id
     );
 
     if (currentMovieIndex === -1) return;
 
 
-    const nextMovie: MediaItemModel = show.movies[currentMovieIndex + 1].mediaItem;
+    const nextMovie: MediaItemModel = show.movies[currentMovieIndex + 1];
 
     if (nextMovie) {
       return nextMovie;

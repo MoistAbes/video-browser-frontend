@@ -20,15 +20,11 @@ export class UserInfoApiService {
     return this.http.get<UserInfoModel[]>(Endpoints.user.friends)
   }
 
-  public updateIconColor(iconColor: string): Observable<any> {
-    return this.http.put<any>(Endpoints.user.updateColor, null, {
-      params: { iconColor }
-    });
-  }
 
-  public updateIcon(iconId: number): Observable<any> {
-    console.log("update icon id: ", iconId)
-    return this.http.put<any>(Endpoints.user.updateIcon + iconId, null, {})
+  public updateIcon(iconId: number, iconColor: string): Observable<any> {
+    return this.http.put<any>(Endpoints.user.updateIcon + iconId, null, {
+      params: { iconColor }
+    })
   }
 
 }

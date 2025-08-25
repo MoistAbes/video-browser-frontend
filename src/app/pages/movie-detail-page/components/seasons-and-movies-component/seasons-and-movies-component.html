@@ -92,9 +92,9 @@
           <div class="video-grid">
             @for (movie of show.movies; track movie.id) {
               <app-video-card-component
-                [title]="movie.mediaItem!.title"
-                (cardClick)="watchMovie(movie.mediaItem!)"
-                [iconFilePath]=utilService.getIconUrl(movie.mediaItem.rootPath)
+                [title]="movie!.title"
+                (cardClick)="watchMovie(movie!)"
+                [iconFilePath]=utilService.getIconUrl(movie.rootPath)
               ></app-video-card-component>
             }
           </div>

@@ -47,32 +47,32 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy{
 
   //ToDO to nie dziala chyba trzeba bedzie ogarnac
   ngAfterViewInit() {
-    const el = this.carousel.nativeElement;
-
-    el.addEventListener('mousedown', (e: MouseEvent) => {
-      this.isDragging = true;
-      el.classList.add('dragging'); // opcjonalnie do stylowania
-      this.startX = e.pageX - el.offsetLeft;
-      this.scrollLeft = el.scrollLeft;
-    });
-
-    el.addEventListener('mouseleave', () => {
-      this.isDragging = false;
-      el.classList.remove('dragging');
-    });
-
-    el.addEventListener('mouseup', () => {
-      this.isDragging = false;
-      el.classList.remove('dragging');
-    });
-
-    el.addEventListener('mousemove', (e: MouseEvent) => {
-      if (!this.isDragging) return;
-      e.preventDefault();
-      const x = e.pageX - el.offsetLeft;
-      const walk = (x - this.startX) * 2; // *2 = szybkość scrollowania
-      el.scrollLeft = this.scrollLeft - walk;
-    });
+    // const el = this.carousel.nativeElement;
+    //
+    // el.addEventListener('mousedown', (e: MouseEvent) => {
+    //   this.isDragging = true;
+    //   el.classList.add('dragging'); // opcjonalnie do stylowania
+    //   this.startX = e.pageX - el.offsetLeft;
+    //   this.scrollLeft = el.scrollLeft;
+    // });
+    //
+    // el.addEventListener('mouseleave', () => {
+    //   this.isDragging = false;
+    //   el.classList.remove('dragging');
+    // });
+    //
+    // el.addEventListener('mouseup', () => {
+    //   this.isDragging = false;
+    //   el.classList.remove('dragging');
+    // });
+    //
+    // el.addEventListener('mousemove', (e: MouseEvent) => {
+    //   if (!this.isDragging) return;
+    //   e.preventDefault();
+    //   const x = e.pageX - el.offsetLeft;
+    //   const walk = (x - this.startX) * 2; // *2 = szybkość scrollowania
+    //   el.scrollLeft = this.scrollLeft - walk;
+    // });
   }
 
 
@@ -146,12 +146,6 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy{
   }
 
   nextShow() {
-    // if (this.randomShows.length > 0) {
-    //   this.showIndex = (this.showIndex + 1) % this.randomShows.length;
-    //   this.selectedShow = this.randomShows[this.showIndex];
-    //   this.progressValue = 0; // reset progress bara
-    // }
-
 
     const result: {nextShow: ShowModel | undefined, nextIndex: number} = this.showUtilService.getNextShow(this.randomShows, this.showIndex);
     this.selectedShow = result.nextShow;

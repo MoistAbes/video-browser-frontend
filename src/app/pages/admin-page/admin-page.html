@@ -100,11 +100,11 @@
                           <tr>
                             <td>{{ movie.id }}</td>
                             <td>{{ movie.type }}</td>
-                            <td>{{ movie.mediaItem.id }}</td>
-                            <td>{{ movie.mediaItem.audio }}</td>
-                            <td>{{ movie.mediaItem.codec }}</td>
-                            <td>{{ movie.mediaItem.duration / 60 }}</td>
-                            <td>{{ movie.mediaItem.fileName}}</td>
+                            <td>{{ movie.id }}</td>
+                            <td>{{ movie.audio }}</td>
+                            <td>{{ movie.codec }}</td>
+                            <td>{{ movie.duration / 60 }}</td>
+                            <td>{{ movie.fileName}}</td>
                           </tr>
                         }
                       </tbody>
@@ -149,11 +149,11 @@
                                   @for (episode of season.episodes; track episode.id) {
                                     <tr>
                                       <td>{{ episode.id }}</td>
-                                      <td>{{ episode.mediaItem.episodeNumber }}</td>
-                                      <td>{{ episode.mediaItem.fileName}}</td>
-                                      <td>{{ episode.mediaItem.duration / 60 }}</td>
-                                      <td>{{ episode.mediaItem.audio }}</td>
-                                      <td>{{ episode.mediaItem.codec }}</td>
+                                      <td>{{ episode.episodeNumber }}</td>
+                                      <td>{{ episode.fileName}}</td>
+                                      <td>{{ episode.duration / 60 }}</td>
+                                      <td>{{ episode.audio }}</td>
+                                      <td>{{ episode.codec }}</td>
                                     </tr>
                                   }
                                 </tbody>

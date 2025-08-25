@@ -26,4 +26,15 @@ export class ShowApiService {
   findWithRootPath(): Observable<ShowModel[]> {
     return this.http.get<ShowModel[]>(Endpoints.show.findWithRootPath);
   }
+
+  addGenreToShow(showId: number, genreId: number): Observable<void> {
+    return this.http.put<any>(Endpoints.show.addGenre + showId + "/" + genreId, {})
+  }
+
+  removeGenreFromShow(showId: number, genreId: number): Observable<void> {
+    return this.http.put<any>(Endpoints.show.removeGenre + showId + "/" + genreId, {})
+  }
+
+
+
 }

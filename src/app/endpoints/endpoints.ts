@@ -16,8 +16,11 @@ export const Endpoints = {
   show: {
     findAll: `${BASE_URL}/show/find/all`,
     findRandom: `${BASE_URL}/show/find/random`,
+    findRandomByStructure: `${BASE_URL}/show/find/random/`,
     findByParentTitle: `${BASE_URL}/show/find`,
     findWithRootPath: `${BASE_URL}/show/find/with-root-path`,
+    addGenre: `${BASE_URL}/add/genre/`,
+    removeGenre: `${BASE_URL}/remove/genre/`,
   },
   stream: {
     normal: `${BASE_URL}/stream/normal`,
@@ -26,7 +29,6 @@ export const Endpoints = {
   user: {
     friends: `${BASE_URL}/users/friends`,
     userInfo: `${BASE_URL}/users/userInfo`,
-    updateColor: `${BASE_URL}/users/update/icon/color`,
     updateIcon: `${BASE_URL}/users/update/icon/`,
   },
   userIcon: {

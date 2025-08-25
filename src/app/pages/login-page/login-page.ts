@@ -10,6 +10,7 @@ import {JwtService} from '../../services/local/jwt-service';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {UserService} from '../../services/local/user-service';
+import {WebSocketService} from '../../services/websocket/websocket-service';
 
 @Component({
   selector: 'app-login-page',
@@ -45,7 +46,8 @@ export class LoginPage {
               private jwtService: JwtService,
               private router: Router,
               private toastr: ToastrService,
-              private userService: UserService,) {
+              private userService: UserService,
+              private websocketService: WebSocketService) {
   }
 
   togglePassword(event: MouseEvent) {
@@ -148,6 +150,10 @@ export class LoginPage {
         console.log("Login Token: ", token.token)
         this.jwtService.saveToken(token.token)
         this.userService.loadUser();
+
+        // 🔗 Połącz się z WebSocketem
+        this.websocketService.connect();
+
       },
       error: err => {
         console.log("Error: ", err)

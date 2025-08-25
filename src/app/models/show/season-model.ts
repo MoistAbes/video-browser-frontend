@@ -1,8 +1,9 @@
-import {ContentModel} from './content-model';
+import {MediaItemModel} from './media-item-model';
 
 export class SeasonModel {
   id: number | undefined;
   number: number | undefined;
-  episodes: ContentModel[] = [];
+  // episodes: ContentModel[] = [];
+  episodes: MediaItemModel[] = [];
 
 }

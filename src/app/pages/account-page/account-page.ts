@@ -34,46 +34,27 @@ export class AccountPage implements OnInit {
   ngOnInit(): void {
     this.userService.getCurrentUser(); // tutaj faktycznie odpalasz pobranie usera
 
-
     this.userService.user$.subscribe(user => {
       this.user = user;
-      console.log("user accoutn page: ", this.user)
     });
-
-
 
     this.findAllIcons();
   }
 
   updateUser() {
-    this.updateIconColor();
-
     this.updateIcon();
   }
 
-  updateIconColor() {
-    this.userInfoApiService.updateIconColor(this.user!.iconColor).subscribe({
-      next: () => {
-        // Aktualizujemy usera w serwisie
-        this.userService.updateUser({ ...this.user! });
-      },
-      error: err => {
-        console.log("Error while updating icon color: ", err);
-      },
-      complete: () => {
-        this.toastrService.success("Successfully updated icon color")
-
-      }
-    });
-  }
 
   updateIcon() {
-    this.userInfoApiService.updateIcon(this.user!.icon!.id).subscribe({
-      next: value => {
+    this.userInfoApiService.updateIcon(this.user!.icon!.id, this.user!.iconColor).subscribe({
+      next: () => {
         this.userService.updateUser({ ...this.user! });
 
       },
-      error: err => {},
+      error: err => {
+        console.log("Error while updating icon: ", err)
+      },
       complete: () => {
         this.toastrService.success("Successfully updated icon")
       }

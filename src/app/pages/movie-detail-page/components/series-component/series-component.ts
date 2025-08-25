@@ -33,7 +33,7 @@ export class SeriesComponent implements OnInit {
   constructor(public utilService: UtilService) {}
 
   ngOnInit(): void {
-    this.currentMediaItem = this.show?.movies[0].mediaItem;
+    this.currentMediaItem = this.show?.movies[0];
     this.updateVideoData.emit(this.currentMediaItem);
   }
 

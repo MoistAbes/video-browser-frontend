@@ -10,15 +10,15 @@
               <div class="episode-list">
                 @for (episode of season.episodes; track episode.id) {
                   <div class="episode-card"
-                       (click)="selectEpisode(episode.mediaItem)"
-                       [class.playing]="isCurrentlyPlaying(episode.mediaItem)">
+                       (click)="selectEpisode(episode)"
+                       [class.playing]="isCurrentlyPlaying(episode)">
                     <div class="thumbnail"></div>
                     <div class="episode-info">
                 <span class="episode-title">
-                  @if (isCurrentlyPlaying(episode.mediaItem)) {
+                  @if (isCurrentlyPlaying(episode)) {
                     <ng-container>▶</ng-container>
                   }
-                  {{ episode.mediaItem.title }}
+                  {{ episode.title }}
                 </span>
                     </div>
                   </div>
@@ -38,15 +38,15 @@
             <div class="season-block">
               <div class="episode-list">
                 <div class="episode-card"
-                     (click)="selectEpisode(movie.mediaItem)"
-                     [class.playing]="isCurrentlyPlaying(movie.mediaItem)">
+                     (click)="selectEpisode(movie)"
+                     [class.playing]="isCurrentlyPlaying(movie)">
                   <div class="thumbnail"></div>
                   <div class="episode-info">
                   <span class="episode-title">
-                    @if (isCurrentlyPlaying(movie.mediaItem)) {
+                    @if (isCurrentlyPlaying(movie)) {
                       <ng-container>▶</ng-container>
                     }
-                    {{ movie.mediaItem.title }}
+                    {{ movie.title }}
                   </span>
                   </div>
                 </div>
