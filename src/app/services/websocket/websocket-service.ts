@@ -1,49 +1,62 @@
 import { Injectable } from '@angular/core';
 import {Client} from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
+import {JwtService} from '../local/jwt-service';
 
-@Injectable({
-  providedIn: 'root'
-})
-
+@Injectable({ providedIn: 'root' })
 export class WebSocketService {
 
+  private stompClient: Client | null = null;
 
-  private readonly stompClient: Client;
-
-  constructor() {
-    this.stompClient = this.createClient();
-  }
+  constructor(private jwtService: JwtService) {}
 
   private createClient(): Client {
+    const token = this.jwtService.getToken();
+    console.log("token in createClient:", token);
+
     return new Client({
-      webSocketFactory: () => new SockJS('http://localhost:8080/ws'),
+      webSocketFactory: () => new SockJS('/ws'),
       connectHeaders: {
-        Authorization: 'Bearer ' + localStorage.getItem('token')
+        Authorization: `Bearer ${token}`
       },
       debug: str => console.log(str),
       reconnectDelay: 5000,
       onConnect: frame => {
-        console.log('Połączono z WebSocketem:', frame);
+        console.log('✅ Połączono z WebSocketem:', frame);
       },
       onStompError: frame => {
-        console.error('Błąd STOMP:', frame);
+        console.error('❌ Błąd STOMP:', frame);
       }
     });
   }
 
   connect(): void {
+    const token = this.jwtService.getToken();
+    console.log("token in connect:", token);
+
+    if (!token) {
+      console.error("Brak tokena JWT → nie łączę się z WebSocket!");
+      return;
+    }
+
+    if (!this.stompClient) {
+      this.stompClient = this.createClient();
+    }
+
     if (!this.stompClient.active) {
       this.stompClient.activate();
     }
   }
 
   disconnect(): void {
-    this.stompClient.deactivate();
+    if (this.stompClient) {
+      this.stompClient.deactivate();
+      this.stompClient = null; // 👈 żeby przy kolejnym logowaniu stworzył się nowy klient z nowym tokenem
+    }
   }
 
   send(destination: string, body: any): void {
-    if (this.stompClient && this.stompClient.connected) {
+    if (this.stompClient?.connected) {
       this.stompClient.publish({
         destination,
         body: JSON.stringify(body)
@@ -52,13 +65,12 @@ export class WebSocketService {
   }
 
   subscribe(topic: string, callback: (message: any) => void): void {
-    if (this.stompClient && this.stompClient.connected) {
+    if (this.stompClient?.connected) {
       this.stompClient.subscribe(topic, message => {
         callback(JSON.parse(message.body));
       });
     }
   }
-
-
 }
+
 

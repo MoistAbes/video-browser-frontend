@@ -28,5 +28,11 @@
     "target": "http://192.168.155.13:8080",
     "secure": false,
     "changeOrigin": true
+  },
+  "/ws": {
+    "target": "http://192.168.155.13:8080",
+    "secure": false,
+    "changeOrigin": true,
+    "ws": true
   }
 }

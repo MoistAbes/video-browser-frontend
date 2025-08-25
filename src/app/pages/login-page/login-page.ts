@@ -147,9 +147,10 @@ export class LoginPage {
   login(authRequest: AuthRequest) {
     this.authApiService.login(authRequest).subscribe({
       next: token => {
-        console.log("Login Token: ", token.token)
         this.jwtService.saveToken(token.token)
         this.userService.loadUser();
+        console.log("Login Token: ", this.jwtService.getToken())
+
 
         // 🔗 Połącz się z WebSocketem
         this.websocketService.connect();

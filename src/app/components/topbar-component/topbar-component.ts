@@ -5,6 +5,7 @@ import {UserInfoApiService} from '../../services/api/user-info-api-service';
 import {UserInfoModel} from '../../models/user/user-info-model';
 import {UserService} from '../../services/local/user-service';
 import {NgClass} from '@angular/common';
+import {WebSocketService} from '../../services/websocket/websocket-service';
 
 @Component({
   selector: 'app-topbar-component',
@@ -26,7 +27,8 @@ export class TopbarComponent implements OnInit{
   constructor(public jwtService: JwtService,
               private router: Router,
               private userInfoApiService: UserInfoApiService,
-              private userService: UserService,) {
+              private userService: UserService,
+              private websocketService: WebSocketService) {
   }
 
   ngOnInit(): void {
@@ -45,6 +47,7 @@ export class TopbarComponent implements OnInit{
     console.log('Wylogowano!');
 
     this.jwtService.clearToken()
+    this.websocketService.disconnect()
     this.router.navigateByUrl('/login');
   }
 
