@@ -34,10 +34,8 @@ export class TopbarComponent implements OnInit{
   ngOnInit(): void {
     this.userService.getCurrentUser(); // tutaj faktycznie odpalasz pobranie usera
 
-
     this.userService.user$.subscribe(user => {
       this.user = user;
-      console.log("topbar component user: ", this.user)
     });
 
   }
@@ -61,7 +59,6 @@ export class TopbarComponent implements OnInit{
     this.userInfoApiService.findAllFriends().subscribe({
       next: (result) => {
         this.friendList = result
-        console.log("FRIENDS: ", this.friendList);
         // wysyłamy listę do layoutu razem z sygnałem otwarcia sidebaru
         this.openSidebar.emit(this.friendList);
       },

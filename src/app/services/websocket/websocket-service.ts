@@ -12,7 +12,6 @@ export class WebSocketService {
 
   private createClient(): Client {
     const token = this.jwtService.getToken();
-    console.log("token in createClient:", token);
 
     return new Client({
       webSocketFactory: () => new SockJS('/ws'),
@@ -32,7 +31,6 @@ export class WebSocketService {
 
   connect(): void {
     const token = this.jwtService.getToken();
-    console.log("token in connect:", token);
 
     if (!token) {
       console.error("Brak tokena JWT → nie łączę się z WebSocket!");

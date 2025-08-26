@@ -17,9 +17,7 @@ import {MediaItemModel} from '../../models/show/media-item-model';
 import {ShowUtilService} from '../../services/local/show-util-service';
 import {VideoTimelineComponent} from '../video-timeline-component/video-timeline-component';
 
-
 type VideoJSPlayer = ReturnType<typeof videojs>;
-
 
 @Component({
   selector: 'app-video-player-component',
@@ -35,7 +33,7 @@ type VideoJSPlayer = ReturnType<typeof videojs>;
 })
 export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
   @ViewChild('target', { static: true }) target!: ElementRef<HTMLVideoElement>;
-  @ViewChild('progressSlider') progressSlider!: ElementRef<HTMLInputElement>;
+  // @ViewChild('progressSlider') progressSlider!: ElementRef<HTMLInputElement>;
 
   @Input() currentMediaItem: MediaItemModel | undefined;
   @Input() show: ShowModel | undefined;
@@ -147,8 +145,6 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
 
 // Aktualizacja slidera tylko wtedy, gdy player wysyła timeupdate
   onTimeUpdateFromPlayer(time: number) {
-    console.log("onTimeUpdateFromPlayer ", time);
-    console.log("onTimeUpdateFromPlayer is seeking: ", this.isSeeking);
     if (this.isSeeking) {
       this.currentTime = time;
       this.player.currentTime(this.currentTime)
@@ -191,18 +187,16 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
 
     this.currentTime = this.player.currentTime()!;
 
-    const input = this.progressSlider?.nativeElement;
-    if (input) {
-      const value = (this.currentTime / Number(input.max)) * 100;
-      input.style.background = `linear-gradient(to right, #e50914 ${value}%, rgba(255,255,255,0.3) ${value}%)`;
-    }
+    // const input = this.progressSlider?.nativeElement;
+    // if (input) {
+    //   const value = (this.currentTime / Number(input.max)) * 100;
+    //   input.style.background = `linear-gradient(to right, #e50914 ${value}%, rgba(255,255,255,0.3) ${value}%)`;
+    // }
   }
 
 
 
   onVideoEnd() {
-    console.log("on video end")
-
     const nextMediaItem: MediaItemModel | undefined = this.showUtilService.findNextMediaItemAutoplay(this.show, this.currentMediaItem)
 
     if (nextMediaItem) {
@@ -235,7 +229,6 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
         this.player.removeRemoteTextTrack(track);
       }
 
-
       // Dodaj nowe napisy
       this.player.addRemoteTextTrack({
         kind: 'captions',
@@ -247,13 +240,7 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
   }
 
-  togglePlay() {
-    if (this.player.paused()) {
-      this.player.play();
-    } else {
-      this.player.pause();
-    }
-  }
+
 
   onVolumeChange(event: Event) {
     const target = event.target as HTMLInputElement;
@@ -299,7 +286,6 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
     this.overlayTimeout = setTimeout(() => {
       this.overlayText = '';
       this.cdr.detectChanges();
-    // }, 1500);
     }, 1500);
   }
 
@@ -308,13 +294,13 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
     const player = this.player;
     if (!player) return;
 
-
     switch (event.key) {
 
       case 'ArrowLeft':
       case 'a': // alternatywnie klawisz 'A'
       case 'A':
         player.currentTime(Math.max(0, player.currentTime()! - 5));
+        this.currentTime = player.currentTime()!;
         // this.showOverlay(`⏪ -5s`);
         break;
 
@@ -322,12 +308,14 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
       case 'd': // alternatywnie klawisz 'D'
       case 'D':
         player.currentTime(Math.min(player.duration()!, player.currentTime()! + 5));
+        this.currentTime = player.currentTime()!;
+
         // this.showOverlay(`⏩ +5s`);
         break;
 
       case ' ':
       case 'Spacebar': // starsze przeglądarki
-        this.onVideoClick()
+        this.togglePlay()
         break;
 
       case 'ArrowUp':
@@ -348,13 +336,21 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
   };
 
   // Toggle play/pause when clicking on the video area
-  onVideoClick() {
+  // onVideoClick() {
+  //   if (this.player.paused()) {
+  //     this.player.play();
+  //     this.isPlaying = true;
+  //   } else {
+  //     this.player.pause();
+  //     this.isPlaying = false;
+  //   }
+  // }
+
+  togglePlay() {
     if (this.player.paused()) {
       this.player.play();
-      this.isPlaying = true;
     } else {
       this.player.pause();
-      this.isPlaying = false;
     }
   }
 

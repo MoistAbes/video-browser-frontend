@@ -66,7 +66,6 @@ export class MovieDetailPage implements OnInit {
 
 
   onUpdateVideoData(update: Partial<MediaItemModel>) {
-    console.log("onUpdateVideoData: ", update);
     this.currentMediaItem = { ...this.currentMediaItem, ...update } as MediaItemModel;
 
     //reset video data
@@ -94,7 +93,6 @@ export class MovieDetailPage implements OnInit {
 
     if (!this.currentMediaItem) return;
 
-    console.log("playVideo: ", this.currentMediaItem);
     this.isVideoPlaying = true;
 
     this.updateVideoUrl()

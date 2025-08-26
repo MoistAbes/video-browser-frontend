@@ -1,4 +1,4 @@
-import {CanActivateFn, Router} from '@angular/router';
+import {CanActivateChildFn, CanActivateFn, Router} from '@angular/router';
 import {inject} from '@angular/core';
 import {JwtService} from '../services/local/jwt-service';
 

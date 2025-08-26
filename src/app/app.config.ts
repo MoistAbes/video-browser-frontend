@@ -12,6 +12,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {authInterceptor} from './interceptors/auth-interceptor';
 import {ToastrModule} from 'ngx-toastr';
 import {NgxSliderModule} from '@angular-slider/ngx-slider';
+import {errorInterceptor} from './interceptors/error-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,7 +20,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(
-      withInterceptors([authInterceptor])
+      withInterceptors([authInterceptor, errorInterceptor])
     ),
     importProvidersFrom(
       NgxSliderModule,  // 👈 tutaj przenosimy

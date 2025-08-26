@@ -2,7 +2,7 @@
 <div class="video-player-container" (mousemove)="onMouseMove()">
   <video #target
          (timeupdate)="onTimeUpdate()"
-         (click)="onVideoClick()"
+         (click)="togglePlay()"
          (dblclick)="onVideoDoubleClick()"
          class="video-js vjs-default-skin"
          controls
@@ -52,18 +52,6 @@
   </div>
 
   <div class="custom-control-bar" [class.visible]="showControls">
-
-<!--    <div class="row">-->
-<!--      <div class="col-12">-->
-<!--          <app-video-timeline-component-->
-<!--          [duration]="duration"-->
-<!--          [currentTime]="currentTime"-->
-<!--          (timeChange)="onSeekChangeFromSlider($event)">-->
-<!--          >-->
-<!--          </app-video-timeline-component>-->
-
-<!--      </div>-->
-<!--    </div>-->
 
     <div class="row">
 

@@ -14,7 +14,7 @@
       @for  (friend of friendList; track friend.id) {
         <div class="friend-item">
           <i class="friend-icon" [ngClass]="friend.icon"
-             [style.color]="friend.iconColor || '#ecb784'"></i>
+             [style.color]="friend.iconColor"></i>
           <div class="friend-info">
             <div class="friend-header">
               <span class="username">{{ friend.username }}</span>

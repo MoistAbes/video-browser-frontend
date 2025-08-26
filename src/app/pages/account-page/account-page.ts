@@ -4,7 +4,7 @@ import {UserInfoApiService} from '../../services/api/user-info-api-service';
 import {UserInfoModel} from '../../models/user/user-info-model';
 import {FormsModule} from '@angular/forms';
 import {UserService} from '../../services/local/user-service';
-import {NgSelectComponent} from '@ng-select/ng-select';
+import {NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent} from '@ng-select/ng-select';
 import {UserIconApiService} from '../../services/api/user-icon-api-service';
 import {UserIconModel} from '../../models/user/user-icon-model';
 import {ToastrService} from 'ngx-toastr';
@@ -13,7 +13,9 @@ import {ToastrService} from 'ngx-toastr';
   selector: 'app-account-page',
   imports: [
     FormsModule,
-    NgSelectComponent
+    NgSelectComponent,
+    NgOptionTemplateDirective,
+    NgLabelTemplateDirective
   ],
   templateUrl: './account-page.html',
   standalone: true,

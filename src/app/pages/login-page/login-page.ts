@@ -1,4 +1,4 @@
-import {Component, HostListener, signal} from '@angular/core';
+import {Component, signal, ViewChild} from '@angular/core';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatIcon} from '@angular/material/icon';
 import {MatButton, MatIconButton} from '@angular/material/button';
@@ -11,6 +11,7 @@ import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {UserService} from '../../services/local/user-service';
 import {WebSocketService} from '../../services/websocket/websocket-service';
+import {MatRipple} from '@angular/material/core';
 
 @Component({
   selector: 'app-login-page',
@@ -24,7 +25,8 @@ import {WebSocketService} from '../../services/websocket/websocket-service';
     MatButton,
     MatIconButton,
     NgClass,
-    FormsModule
+    FormsModule,
+    MatRipple
   ],
   templateUrl: './login-page.html',
   standalone: true,
@@ -36,11 +38,14 @@ export class LoginPage {
   repeatPassword: string = '';
 
   isLogin: boolean = true;
+  isLoading: boolean = false;
   hide = signal(true);
 
   usernameError: boolean = false;
   passwordError: boolean = false;
   repeatPasswordError: boolean = false;
+
+  @ViewChild(MatRipple) ripple!: MatRipple;
 
   constructor(private authApiService: AuthApiService,
               private jwtService: JwtService,
@@ -58,10 +63,7 @@ export class LoginPage {
   registerUser() {
 
     if (this.validateRegisterValues()) {
-      const authRequest: AuthRequest = new AuthRequest()
-      authRequest.username = this.username.trim();
-      authRequest.password = this.password.trim();
-
+      const authRequest: AuthRequest = new AuthRequest(this.username.trim(), this.password.trim())
       this.register(authRequest);
     }
   }
@@ -69,10 +71,7 @@ export class LoginPage {
   loginUser() {
 
     if (this.validateLoginValues()) {
-      const authRequest: AuthRequest = new AuthRequest()
-      authRequest.username = this.username.trim();
-      authRequest.password = this.password.trim();
-
+      const authRequest: AuthRequest = new AuthRequest(this.username.trim(), this.password.trim())
       this.login(authRequest);
     }else {
       console.log("validation failed")
@@ -103,8 +102,6 @@ export class LoginPage {
     return !(this.usernameError || this.passwordError || this.repeatPasswordError);
   }
 
-
-
   validateRegisterValues(): boolean {
 
     const formattedUsername: string = this.username.trim();
@@ -130,53 +127,76 @@ export class LoginPage {
   }
 
   register(authRequest: AuthRequest) {
+
+    this.isLoading = true
+
     this.authApiService.register(authRequest).subscribe({
       next: () => {},
       error: err => {
         this.toastr.warning(err.error.message)
         console.log("Error: ", err)
+        this.isLoading = false
       },
       complete: () => {
         this.toastr.success("Successfully registered account")
         this.clearForm()
+        this.isLoading = false
         this.isLogin = true;
       }
     })
   }
 
   login(authRequest: AuthRequest) {
+
+    this.isLoading = true
+
     this.authApiService.login(authRequest).subscribe({
       next: token => {
         this.jwtService.saveToken(token.token)
         this.userService.loadUser();
         console.log("Login Token: ", this.jwtService.getToken())
-
-
         // 🔗 Połącz się z WebSocketem
         this.websocketService.connect();
 
       },
       error: err => {
-        console.log("Error: ", err)
-        this.toastr.warning(err.error.message, err.statusText);
+        console.log("Login Error: ", err)
+        this.isLoading = false
 
       },
       complete: () => {
-        this.router.navigateByUrl('/home');      }
+        this.isLoading = false
+        this.router.navigateByUrl('/home');
+
+      }
     })
   }
 
-  @HostListener('document:keydown.enter', ['$event'])
-  handleEnter(event: Event) {
-    const keyboardEvent = event as KeyboardEvent; // <-- wymuszenie typu
+
+  onSubmit() {
+
+    if (this.isLoading){
+      return
+    }
+
+    console.log("on Submit")
+
+    // Wywołaj animację ripple ręcznie
+    setTimeout(() => {
+      this.ripple?.launch(0, 0); // (x, y) — środek przycisku
+    });
+
+    // Logika
     if (this.isLogin) {
-      console.log("login")
       this.loginUser();
     } else {
-      console.log("register")
       this.registerUser();
     }
   }
+
+
+
+
 
 
   clearForm () {
@@ -184,6 +204,5 @@ export class LoginPage {
     this.password = '';
     this.repeatPassword = ''
   }
-
 
 }

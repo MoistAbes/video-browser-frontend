@@ -20,7 +20,7 @@ export class VideoTimelineComponent implements OnChanges{
   @Output() seekStart = new EventEmitter<void>();
   @Output() seekEnd = new EventEmitter<number>();
 
-  isUserSeeking = false;
+  isUserSeeking: boolean = false;
   hoverTime: number | null = null;
   hoverX: number = 0;
 
@@ -67,6 +67,7 @@ export class VideoTimelineComponent implements OnChanges{
   }
 
 
+  //ToDO do naprawy czas hoverowany nie zgadza sie z faktycznym czasem po kliknieciu
   onSliderHover(event: MouseEvent) {
     const sliderWrapper = event.currentTarget as HTMLElement;
     const sliderEl = sliderWrapper.querySelector('.ngx-slider') as HTMLElement;

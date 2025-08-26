@@ -11,7 +11,7 @@ import {WebSocketService} from './services/websocket/websocket-service';
   styleUrl: './app.css',
 })
 export class App implements OnInit, OnDestroy{
-  protected title = 'video-browser-app-frontend';
+  protected title: string = 'video-browser-app-frontend';
 
   constructor(
     private jwtService: JwtService,
@@ -19,7 +19,7 @@ export class App implements OnInit, OnDestroy{
   ) {}
 
   ngOnInit(): void {
-    const token = this.jwtService.getToken();
+    const token: string | null = this.jwtService.getToken();
     if (token && !this.jwtService.isTokenExpired()) {
       console.log("🔗 Auto-connect WebSocket przy starcie aplikacji");
       this.websocketService.connect();
