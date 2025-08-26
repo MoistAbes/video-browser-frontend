@@ -15,10 +15,12 @@ export class ShowUtilService {
 
     if (!show || !seasonNumber) return [];
 
+    console.log("seasons: ", show.seasons)
+
     return show.seasons
-      .filter(season => season.number === seasonNumber)
-      .flatMap(season => season.episodes)
-      .flatMap(episode => episode);
+      .filter(season => season.number == seasonNumber)
+      .flatMap(season => season.episodes);
+
   }
 
   getNextShow(shows: ShowModel[], currentIndex: number): { nextShow: ShowModel | undefined, nextIndex: number } {

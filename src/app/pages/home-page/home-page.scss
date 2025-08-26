@@ -19,43 +19,11 @@
   object-position: center;
 }
 
-.image-wrapper {
-  //position: relative;
-  //width: 100%;
-  //height: 100%;
-  //overflow: hidden;
-}
-
-/* Rozmyte tło Netflix-style */
-.image-placeholder {
-  position: absolute;
-  inset: 0;
-  background: #111; /* ciemne tło jako baza */
-  filter: blur(20px);
-  transform: scale(1.1); /* trochę powiększamy, żeby blur nie odsłaniał krawędzi */
-  animation: pulse 1.5s infinite; /* opcjonalne migotanie */
-}
-
-.content {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;                  /* startowo ukryty */
-  transition: opacity 0.8s;    /* płynne pojawienie */
-  position: relative;          /* nad placeholderem */
-  z-index: 1;
-}
-
-.content.loaded {
-  opacity: 1;
-}
-
 @keyframes pulse {
   0%   { background-color: #111; }
   50%  { background-color: #222; }
   100% { background-color: #111; }
 }
-
 
 
 .carousel-container {

@@ -26,7 +26,6 @@ import {MatRipple} from '@angular/material/core';
     MatIconButton,
     NgClass,
     FormsModule,
-    MatRipple
   ],
   templateUrl: './login-page.html',
   standalone: true,
@@ -44,8 +43,6 @@ export class LoginPage {
   usernameError: boolean = false;
   passwordError: boolean = false;
   repeatPasswordError: boolean = false;
-
-  @ViewChild(MatRipple) ripple!: MatRipple;
 
   constructor(private authApiService: AuthApiService,
               private jwtService: JwtService,
@@ -134,7 +131,6 @@ export class LoginPage {
       next: () => {},
       error: err => {
         this.toastr.warning(err.error.message)
-        console.log("Error: ", err)
         this.isLoading = false
       },
       complete: () => {
@@ -160,7 +156,6 @@ export class LoginPage {
 
       },
       error: err => {
-        console.log("Login Error: ", err)
         this.isLoading = false
 
       },
@@ -174,18 +169,10 @@ export class LoginPage {
 
 
   onSubmit() {
-
     if (this.isLoading){
       return
     }
-
     console.log("on Submit")
-
-    // Wywołaj animację ripple ręcznie
-    setTimeout(() => {
-      this.ripple?.launch(0, 0); // (x, y) — środek przycisku
-    });
-
     // Logika
     if (this.isLogin) {
       this.loginUser();
@@ -194,15 +181,13 @@ export class LoginPage {
     }
   }
 
-
-
-
-
-
   clearForm () {
     this.username = ''
     this.password = '';
     this.repeatPassword = ''
+    this.usernameError = false
+    this.passwordError = false
+    this.repeatPasswordError = false
   }
 
 }

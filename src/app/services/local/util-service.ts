@@ -48,4 +48,10 @@ export class UtilService {
 
 
 
+  onImageLoad(event: Event) {
+    const img = event.target as HTMLImageElement;
+    img.classList.add('loaded');
+  }
+
+
 }

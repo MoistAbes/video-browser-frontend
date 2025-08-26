@@ -35,7 +35,7 @@
   @if (overlayText) {
     <div class="overlay-message" >{{ overlayText }}</div>
   }
-  <div class="timeline-box">
+  <div class="timeline-box" [class.visible]="showControls">
     <div class="row">
       <div class="col-12">
         <app-video-timeline-component

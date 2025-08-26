@@ -3,17 +3,18 @@
 
   @if (!isVideoPlaying) {
     <div class="preview-wrapper">
-      <swiper-container
-        loop="true"
-        autoplay-delay="5000"
-        class="preview-swiper"
-      >
-        <swiper-slide>
-          <img priority [ngSrc]="utilService.getBackdropUrl(currentMediaItem?.rootPath)" fill alt="backdrop"
-               style="width: 100%; height: 100%; object-fit: cover;" />
-        </swiper-slide>
 
-      </swiper-container>
+      <div class="image-wrapper">
+        <div class="image-placeholder"></div>
+        <img
+          class="content"
+          priority
+          [ngSrc]="utilService.getBackdropUrl(currentMediaItem?.rootPath)"
+          fill
+          alt="backdrop"
+          (load)="utilService.onImageLoad($event)"
+        />
+      </div>
 
         <div class="movie-details-overlay">
           <div class="movie-header">

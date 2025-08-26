@@ -29,6 +29,7 @@
           <img
             class="content"
             [ngSrc]="utilService.getBackdropUrl(selectedShow.rootPath)"
+            priority
             fill
             (load)="onImageLoad($event)"
             alt="backdrop"
