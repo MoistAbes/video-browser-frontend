@@ -44,6 +44,9 @@ body::-webkit-scrollbar {
     -2px 2px 0 #000,
     2px 2px 0 #000;
 }
+//--
+
+//Loading na button
 
 .loading-button {
   position: relative;
@@ -83,6 +86,7 @@ body::-webkit-scrollbar {
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+//--
 
 .image-wrapper {
 
@@ -111,6 +115,8 @@ body::-webkit-scrollbar {
 .content.loaded {
   opacity: 1;
 }
+
+
 
 
 

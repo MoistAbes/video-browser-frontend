@@ -1,3 +1,6 @@
+
+<!--<app-star-field-component></app-star-field-component>-->
+
 <div class="login-container d-flex align-items-center justify-content-center">
   <div class="login-box shadow-lg rounded p-4">
     <h1 class="text-center mb-4">Zymflix</h1>
@@ -11,7 +14,7 @@
         <mat-label>
           <i class="fa-solid fa-user"></i> Username
         </mat-label>
-        <input [(ngModel)]="username" name="username" matInput type="text" placeholder="Enter username" required>
+        <input [(ngModel)]="username" name="username" matInput type="text" placeholder="Enter username" autocomplete="off">
         <mat-icon matSuffix>person</mat-icon>
       </mat-form-field>
 
@@ -19,7 +22,7 @@
         <mat-label>
           <i class="fa-solid fa-key me-2"></i> Password
         </mat-label>
-        <input [(ngModel)]="password" name="password" matInput [type]="hide() ? 'password' : 'text'" placeholder="Enter password" required>
+        <input [(ngModel)]="password" name="password" matInput [type]="hide() ? 'password' : 'text'" placeholder="Enter password" autocomplete="off">
         <button mat-icon-button matSuffix (click)="togglePassword($event)">
           <i class="fa-solid" [ngClass]="hide() ? 'fa-eye-slash' : 'fa-eye'"></i>
         </button>
@@ -30,7 +33,7 @@
           <mat-label>
             <i class="fa-solid fa-key"></i> Repeat Password
           </mat-label>
-          <input [(ngModel)]="repeatPassword" name="repeatPassword" matInput type="password" placeholder="Repeat password" required>
+          <input [(ngModel)]="repeatPassword" name="repeatPassword" matInput type="password" placeholder="Repeat password" autocomplete="off">
           <mat-icon matSuffix>lock</mat-icon>
         </mat-form-field>
       }

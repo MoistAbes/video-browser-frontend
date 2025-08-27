@@ -5,7 +5,7 @@ import {ShowApiService} from '../../services/api/show-api-service';
 import {ShowModel} from '../../models/show/show-model';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {NgSelectComponent} from '@ng-select/ng-select';
-
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-admin-page',
@@ -26,7 +26,8 @@ export class AdminPage implements OnInit {
 
 
   constructor(private videoApiService: VideoApi,
-              private showApiService: ShowApiService) {}
+              private showApiService: ShowApiService,
+              private toastService: ToastrService,) {}
 
   ngOnInit(): void {
     this.testFindAllShows()
@@ -44,19 +45,14 @@ export class AdminPage implements OnInit {
       },
       error: (err) => {
         console.log(err);
+        this.toastService.error(err.message);
       },
       complete: () => {
         console.log('ScanAllMovies complete');
+        this.toastService.success("Successfully scanAllMovies");
       }
     })
   }
-
-  filterVideoInfo() {
-
-
-  }
-
-
 
 
   testFindAllShows() {

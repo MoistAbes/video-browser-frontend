@@ -12,6 +12,7 @@ import {ToastrService} from 'ngx-toastr';
 import {UserService} from '../../services/local/user-service';
 import {WebSocketService} from '../../services/websocket/websocket-service';
 import {MatRipple} from '@angular/material/core';
+import {StarFieldComponent} from '../../components/star-field-component/star-field-component';
 
 @Component({
   selector: 'app-login-page',

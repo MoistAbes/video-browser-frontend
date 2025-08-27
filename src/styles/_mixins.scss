@@ -1,0 +1,8 @@
+
+@mixin frosted-glass($radius: 10px) {
+  background-color: rgba(20, 20, 20, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: $radius;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}

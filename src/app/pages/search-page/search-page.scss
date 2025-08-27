@@ -1,3 +1,6 @@
+@use 'styles/colors' as *;
+
+
 .video-player-container{
   width: 100%;
   min-height: 60vh;
@@ -25,7 +28,7 @@
   border: 1px solid #444;
   border-radius: 999px;
   background-color: #1c1c1c;
-  color: #fff;
+  color: $normal-white;
   outline: none;
   transition: border 0.2s ease, box-shadow 0.2s ease;
 }
@@ -59,7 +62,7 @@
 }
 
 .clear-btn:hover {
-  color: #e50914;
+  color: $netflix-red;
 }
 
 .video-type-select {
@@ -87,7 +90,7 @@
 /* Dla <option>, jeśli chcesz spójność kolorystyczną */
 .video-type-select option {
   background-color: #1c1c1c;
-  color: #fff;
+  color: $normal-white;
 }
 
 

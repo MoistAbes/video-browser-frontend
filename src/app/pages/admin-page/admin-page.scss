@@ -1,31 +1,110 @@
-.form-row {
-  margin-bottom: 10px;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr); // 5 kolumn po równo
-  gap: 1.5rem; // odstęp między kolumnami
-  align-items: start; // równa góra
+@use '../../../../src/styles/colors' as *;
+
+//.form-row {
+//  margin-bottom: 10px;
+//  display: grid;
+//  grid-template-columns: repeat(5, 1fr); // 5 kolumn po równo
+//  gap: 1.5rem; // odstęp między kolumnami
+//  align-items: start; // równa góra
+//}
+//
+//.form-field {
+//  display: flex;
+//  flex-direction: column; // label nad selectem
+//}
+//
+//.form-field label {
+//  margin-bottom: 0.5rem;
+//  font-weight: 500;
+//  color: #ccc; // np. szare labele
+//}
+//
+//tr:hover {
+//  background-color: #c9c9c9;
+//}
+//td:hover {
+//  background-color: #c9c9c9;
+//}
+//
+//
+//.extra-td {
+//  background-color: #a7fde2 !important;
+//}
+//
+
+.table {
+  font-size: 0.95rem;
+  color: $normal-white;
+
+  th {
+    background-color: #1c1c1c;
+    color: $netflix-red;
+    font-weight: 600;
+  }
+
+  td {
+    background-color: #141414;
+    border-color: #333;
+  }
+
+  tr:hover {
+    background-color: #2a2a2a;
+  }
 }
 
-.form-field {
-  display: flex;
-  flex-direction: column; // label nad selectem
+.extra-row {
+  td {
+    background-color: #1f1f1f;
+    padding: 1rem;
+  }
+
+  table {
+    margin-top: 1rem;
+    border: 1px solid #333;
+  }
+
+  caption {
+    caption-side: top;
+    font-weight: bold;
+    color: $netflix-red;
+    padding-bottom: 0.5rem;
+  }
 }
 
-.form-field label {
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: #ccc; // np. szare labele
+.table thead {
+  background-color: #1c1c1c;
+  color: $netflix-red;
 }
 
-tr:hover {
-  background-color: #c9c9c9;
-}
-td:hover {
-  background-color: #c9c9c9;
+.table tbody tr {
+  background-color: #141414;
+  color: $normal-white;
 }
 
-
-.extra-td {
-  background-color: #a7fde2 !important;
+.table tbody tr:hover {
+  background-color: #2a2a2a;
 }
 
+.extra-row td {
+  background-color: #1f1f1f;
+  border-top: 2px solid #333;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+.table thead th {
+  position: sticky;
+  top: 0;
+  background-color: #1c1c1c;
+  z-index: 2;
+}
+.table td, .table th {
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+}
+.extra-row + .extra-row {
+  border-top: 1px solid #444;
+  margin-top: 1rem;
+}
+.extra-row {
+  transition: all 0.3s ease;
+  opacity: 1;
+}

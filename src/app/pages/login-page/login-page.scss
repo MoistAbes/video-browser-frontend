@@ -4,13 +4,61 @@
   align-items: center;
   justify-content: center;
 
-  // żywszy animowany gradient
-  background: linear-gradient(-45deg, #802626, #805c26, #266680, #4b2666);
-  background-size: 400% 400%;
-  animation: gradientMove 15s ease infinite;
+  background: linear-gradient(-45deg,
+    #0D1B2A,     /* głęboka noc */
+    #1A1A2E,     /* granat */
+    #2C2C54,     /* nocny fiolet */
+    #4B0082,     /* indygo */
+    #C71585,     /* ciemny róż / magenta */
+    #FF6347,     /* zachód słońca */
+    #C71585,     /* ciemny róż / magenta */
+    #4B0082,     /* indygo */
+    #2C2C54,     /* nocny fiolet */
+    #1A1A2E,     /* granat */
+    #0D1B2A      /* głęboka noc */
+  );
 
+
+  //background: linear-gradient(-45deg,
+  //  #0D1B2A,     /* głęboka noc */
+  //  #1A1A2E,     /* granat */
+  //  #2C2C54,     /* nocny fiolet */
+  //  #4B0082,     /* indygo */
+  //  #FF6347,     /* zachód słońca */
+  //  #4B0082,     /* indygo */
+  //  #2C2C54,     /* nocny fiolet */
+  //  #1A1A2E,     /* granat */
+  //  #0D1B2A      /* głęboka noc */
+  //);
+
+
+
+
+  //background: linear-gradient(-45deg,
+  //  #0D1B2A, // głęboka noc
+  //  #1A1A2E, // ciemny granat
+  //  #4B0082, // indygo
+  //  #FF6347, // zachód słońca
+  //  #4B0082, // indygo
+  //  #1A1A2E, // ciemny granat
+  //  #0D1B2A  // głęboka noc
+  //);
+
+  background-size: 600% 600%;
+  animation: gradientMove 45s ease-in-out infinite;
   color: #fff;
 }
+
+.login-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  filter: blur(20px);
+  z-index: -1;
+}
+
+
 
 @keyframes gradientMove {
   0% {
@@ -24,14 +72,12 @@
   }
 }
 
+
 .login-box {
   background-color: rgba(37, 37, 37, 0.42);
   max-width: 400px;
   width: 100%;
 }
-
-
-
 
 h1 {
   font-family: 'Bebas Neue', sans-serif;
