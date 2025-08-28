@@ -1,18 +1,10 @@
 <div class="video-card" (click)="onClick()">
-<!--  ToDO to sprawdzenie bedzie mozna wywalic jak zrobimy zeby wszedzie ikonki byly zeby niepotrzenie nie sprawdzac-->
-  @if (iconFilePath && iconFilePath.trim() !== '' && !iconFilePath.endsWith('/')) {
-    <img
-      [ngSrc]="iconFilePath"
-      alt="thumbnail"
+    <app-lazy-image-component
+      [src]="iconFilePath"
+      [alt]="'thumbnail'"
+      [placeholder]="'assets/placeholder.jpg'"
       class="video-icon"
-      loading="lazy"
-      fill/>
-  } @else {
-    <div class="no-icon-placeholder">
-      <p>No thumbnail</p>
-    </div>
-  }
-
+    />
   <p class="video-title">{{ title }}</p>
 </div>
 

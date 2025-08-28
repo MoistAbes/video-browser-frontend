@@ -3,18 +3,15 @@
     <h1 routerLink="/home" class="home-title">Zymflix
     </h1>
     <nav class="nav-links">
-      <a routerLink="/home" routerLinkActive="active-link">Strona główna</a>
-      <a routerLink="/search" routerLinkActive="active-link">Wyszukiwarka</a>
-      <a routerLink="/movies" routerLinkActive="active-link">Filmy</a>
-      <a routerLink="/shows" routerLinkActive="active-link">Seriale</a>
-      <a routerLink="/anime" routerLinkActive="active-link">Anime</a>
+      <a routerLink="/home" routerLinkActive="active-link">Home</a>
+      <a routerLink="/search" routerLinkActive="active-link">Search</a>
+      <a routerLink="/movies" routerLinkActive="active-link">Movies</a>
+      <a routerLink="/shows" routerLinkActive="active-link">Series</a>
       @if (jwtService.hasAdminRole()) {
-        <a routerLink="/admin" routerLinkActive="active-link">Panel admina</a>
+        <a routerLink="/admin" routerLinkActive="active-link">Admin</a>
       }
     </nav>
   </div>
-  <p style="font-size: 14px; color: #d7d7d7; margin: 0" class="float-end">1.0.1</p>
-
 
   @if (jwtService.isLoggedIn() && user) {
     <div class="user-icon-wrapper">
@@ -28,15 +25,15 @@
       <ul class="user-dropdown">
         <li (click)="routeToAccountPage()">
           <i class="fa-solid fa-user pe-1"></i>
-          Konto
+          Account
         </li>
         <li (click)="loadFriends()">
           <i class="fa-solid fa-user-group pe-1"></i>
-          Znajomi
+          Friends
         </li>
         <li (click)="logout()">
           <i class="fa fa-sign-out pe-1" aria-hidden="true"></i>
-          Wyloguj
+          Log out
         </li>
       </ul>
     </div>

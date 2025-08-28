@@ -58,3 +58,14 @@
   padding: 0;
   cursor: pointer;
 }
+
+
+.icon-large {
+  font-size: 2rem; /* lub więcej, np. 3rem */
+  vertical-align: middle;
+}
+
+.icon-select .ng-select-container {
+  min-height: 3rem; /* zwiększa wysokość pola wyboru */
+}
+

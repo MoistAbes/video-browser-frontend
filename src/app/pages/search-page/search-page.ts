@@ -6,6 +6,8 @@ import {Router} from '@angular/router';
 import {ShowApiService} from '../../services/api/show-api-service';
 import {ShowModel} from '../../models/show/show-model';
 import {UtilService} from '../../services/local/util-service';
+import {GenreApiService} from '../../services/api/genre-api-service';
+import {GenreModel} from '../../models/show/genre-model';
 
 @Component({
   standalone: true,
@@ -28,9 +30,12 @@ export class SearchPage implements OnInit  {
   showList: ShowModel[] = []
   showListFiltered: ShowModel[] = []
 
+  genreList: GenreModel[] = []
+
   constructor(private router: Router,
               private showApiService: ShowApiService,
-              public utilService: UtilService,) { }
+              public utilService: UtilService,
+              private genreApiService: GenreApiService) { }
 
   ngOnInit(): void {
 
@@ -46,6 +51,20 @@ export class SearchPage implements OnInit  {
       complete: () => {}
     })
 
+    this.findAllGenres();
+
+  }
+
+  findAllGenres() {
+    this.genreApiService.findAll().subscribe({
+      next: (result) => {
+        this.genreList = result
+      },
+      error: err => {
+        console.log("error: ", err)
+      },
+      complete: () => {}
+    })
   }
 
 

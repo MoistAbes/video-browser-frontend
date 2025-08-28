@@ -5,7 +5,6 @@ import {MainLayoutComponent} from './layout/main-layout-component/main-layout-co
 import {MoviePage} from './pages/movie-page/movie-page';
 import {ShowPage} from './pages/show-page/show-page';
 import {SearchPage} from './pages/search-page/search-page';
-import {AnimePage} from './pages/anime-page/anime-page';
 import {HomePage} from './pages/home-page/home-page';
 import {LoginPage} from './pages/login-page/login-page';
 import {authGuard} from './guards/auth-guard';
@@ -29,7 +28,6 @@ export const routes: Routes = [
       { path: 'search', component: SearchPage, canActivate: [authGuard], data: { animation: 'Search' } },
       { path: 'movies', component: MoviePage, canActivate: [authGuard], data: { animation: 'Movies' } },
       { path: 'shows', component: ShowPage, canActivate: [authGuard], data: { animation: 'Shows' } },
-      { path: 'anime', component: AnimePage, canActivate: [authGuard], data: { animation: 'Anime' } },
       { path: 'account', component: AccountPage, canActivate: [authGuard], data: { animation: 'Account' } },
       { path: 'movie-details/:parentTitle', component: MovieDetailPage, canActivate: [authGuard], data: { animation: 'MovieDetails' } },
       { path: 'admin', component: AdminPage, canActivate: [authGuard ,adminGuard], data: { animation: 'Admin' } },

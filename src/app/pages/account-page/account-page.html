@@ -21,30 +21,43 @@
 
       <div class="account-field">
         <label>Icon</label>
-<!--        <ng-select-->
-<!--        [items]="icons"-->
-<!--        bindLabel="name"-->
-<!--        [(ngModel)]="user.icon"-->
-<!--        [clearable]="false"-->
-<!--        >-->
-<!--        </ng-select>-->
+
 
         <ng-select
           [items]="icons"
           bindLabel="name"
-        [(ngModel)]="user.icon"
-        [clearable]="false"
+          [(ngModel)]="user.icon"
+          [clearable]="false"
+          class="icon-select"
         >
           <!-- Szablon opcji w dropdownie -->
           <ng-template ng-option-tmp let-item="item">
-            <i [class]="item.name" class="me-2"></i>
+            <i [class]="item.name" class="me-2 icon-large"></i>
           </ng-template>
 
           <!-- Szablon wybranej opcji -->
           <ng-template ng-label-tmp let-item="item">
-            <i [class]="item.name" class="me-2"></i>
+            <i [class]="item.name" class="me-2 icon-large"></i>
           </ng-template>
         </ng-select>
+
+
+        <!--        <ng-select-->
+<!--          [items]="icons"-->
+<!--          bindLabel="name"-->
+<!--        [(ngModel)]="user.icon"-->
+<!--        [clearable]="false"-->
+<!--        >-->
+<!--          &lt;!&ndash; Szablon opcji w dropdownie &ndash;&gt;-->
+<!--          <ng-template ng-option-tmp let-item="item">-->
+<!--            <i [class]="item.name" class="me-2"></i>-->
+<!--          </ng-template>-->
+
+<!--          &lt;!&ndash; Szablon wybranej opcji &ndash;&gt;-->
+<!--          <ng-template ng-label-tmp let-item="item">-->
+<!--            <i [class]="item.name" class="me-2"></i>-->
+<!--          </ng-template>-->
+<!--        </ng-select>-->
 
       </div>
 

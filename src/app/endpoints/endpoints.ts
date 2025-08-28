@@ -33,6 +33,10 @@ export const Endpoints = {
   },
   userIcon: {
     findAll: `${BASE_URL}/user-icon/find-all`,
+  },
+  genre: {
+    findAllNames: `${BASE_URL}/genre/find/all/names`,
+    findAll: `${BASE_URL}/genre/find/all`,
   }
 
 };
