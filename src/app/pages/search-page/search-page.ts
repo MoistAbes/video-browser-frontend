@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {VideoCardComponent} from '../../components/video-card-component/video-card-component';
@@ -21,8 +21,6 @@ import {GenreModel} from '../../models/show/genre-model';
   styleUrl: './search-page.scss'
 })
 export class SearchPage implements OnInit  {
-  @ViewChild('target', { static: false }) target!: ElementRef;
-
   filterTitleValue: string = '';
 
   hoverTimer: number | null = null;
@@ -39,6 +37,13 @@ export class SearchPage implements OnInit  {
 
   ngOnInit(): void {
 
+
+    this.findShowsProjections();
+    this.findAllGenres();
+
+  }
+
+  findShowsProjections() {
     this.showApiService.findWithRootPath().subscribe({
       next: (result) => {
         this.showList = result
@@ -50,9 +55,6 @@ export class SearchPage implements OnInit  {
       },
       complete: () => {}
     })
-
-    this.findAllGenres();
-
   }
 
   findAllGenres() {
@@ -78,8 +80,8 @@ export class SearchPage implements OnInit  {
   onFilterChange() {
     this.showListFiltered = this.showList;
 
-    //ToDO to jest do zrobienia jak bede mial ogarniete kategorie show
-    // this.showListFiltered = this.showListFiltered.filter(show => show.category == this.filterTypeValue);
+
+    //ToDO zrobic filtrowanie po genre
 
     const filterText: string = this.utilService.normalizeText(this.filterTitleValue);
 
