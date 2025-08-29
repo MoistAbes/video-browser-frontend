@@ -6,6 +6,7 @@ import {ShowModel} from '../../models/show/show-model';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {NgSelectComponent} from '@ng-select/ng-select';
 import {ToastrService} from 'ngx-toastr';
+import {GenreApiService} from '../../services/api/genre-api-service';
 
 @Component({
   selector: 'app-admin-page',
@@ -27,15 +28,13 @@ export class AdminPage implements OnInit {
 
   constructor(private videoApiService: VideoApi,
               private showApiService: ShowApiService,
-              private toastService: ToastrService,) {}
+              private toastService: ToastrService,
+              private genreApiService: GenreApiService,) {}
 
   ngOnInit(): void {
     this.testFindAllShows()
 
   }
-
-
-
 
   scanAllMovies() {
     console.log('ScanAllMovies');
@@ -52,6 +51,19 @@ export class AdminPage implements OnInit {
         this.toastService.success("Successfully scanAllMovies");
       }
     })
+  }
+
+  updateGenres() {
+
+
+    this.genreApiService.updateGenresFromTmdb().subscribe({
+      next: () => {},
+      error: (err) => {
+        console.log("Error while updating genres: ", err)
+      },
+      complete: () => {}
+    })
+
   }
 
 

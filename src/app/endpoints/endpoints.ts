@@ -37,6 +37,7 @@ export const Endpoints = {
   genre: {
     findAllNames: `${BASE_URL}/genre/find/all/names`,
     findAll: `${BASE_URL}/genre/find/all`,
+    update: `${BASE_URL}/genre/update`,
   }
 
 };

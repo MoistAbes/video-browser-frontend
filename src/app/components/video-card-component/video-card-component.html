@@ -1,10 +1,12 @@
-<div class="video-card" (click)="onClick()">
-    <app-lazy-image-component
-      [src]="iconFilePath"
-      [alt]="'thumbnail'"
-      [placeholder]="'assets/placeholder.jpg'"
-      class="video-icon"
-    />
+<div
+  class="video-card"
+  (click)="onClick()"
+>
+  <img
+    [ngSrc]="iconFilePath"
+    alt="thumbnail"
+    class="video-icon"
+    fill/>
   <p class="video-title">{{ title }}</p>
 </div>
 

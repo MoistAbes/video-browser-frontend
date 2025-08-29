@@ -19,4 +19,8 @@ export class GenreApiService {
     return this.http.get<string[]>(Endpoints.genre.findAllNames)
   }
 
+  updateGenresFromTmdb():Observable<any> {
+    return this.http.post<any>(Endpoints.genre.update, {})
+  }
+
 }

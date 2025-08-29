@@ -22,12 +22,9 @@ import {GenreModel} from '../../models/show/genre-model';
 })
 export class SearchPage implements OnInit  {
   filterTitleValue: string = '';
-
   hoverTimer: number | null = null;
-
   showList: ShowModel[] = []
   showListFiltered: ShowModel[] = []
-
   genreList: GenreModel[] = []
 
   constructor(private router: Router,
@@ -36,8 +33,6 @@ export class SearchPage implements OnInit  {
               private genreApiService: GenreApiService) { }
 
   ngOnInit(): void {
-
-
     this.findShowsProjections();
     this.findAllGenres();
 
@@ -69,7 +64,6 @@ export class SearchPage implements OnInit  {
     })
   }
 
-
   moveToMovieDetails(title: string) {
     this.router.navigate(['/movie-details', title])
       .catch(error => {
@@ -79,7 +73,6 @@ export class SearchPage implements OnInit  {
 
   onFilterChange() {
     this.showListFiltered = this.showList;
-
 
     //ToDO zrobic filtrowanie po genre
 
