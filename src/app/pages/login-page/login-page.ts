@@ -1,4 +1,4 @@
-import {Component, signal, ViewChild} from '@angular/core';
+import {Component, signal} from '@angular/core';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatIcon} from '@angular/material/icon';
 import {MatButton, MatIconButton} from '@angular/material/button';
@@ -11,8 +11,8 @@ import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {UserService} from '../../services/local/user-service';
 import {WebSocketService} from '../../services/websocket/websocket-service';
-import {MatRipple} from '@angular/material/core';
-import {StarFieldComponent} from '../../components/star-field-component/star-field-component';
+import {ScreenOverlayComponent} from '../../components/screen-overlay-component/screen-overlay-component';
+import {CustomModalComponent} from '../../components/custom-modal-component/custom-modal-component';
 
 @Component({
   selector: 'app-login-page',
@@ -44,6 +44,8 @@ export class LoginPage {
   usernameError: boolean = false;
   passwordError: boolean = false;
   repeatPasswordError: boolean = false;
+
+  isOverlayVisible: boolean = false;
 
   constructor(private authApiService: AuthApiService,
               private jwtService: JwtService,
@@ -190,5 +192,17 @@ export class LoginPage {
     this.passwordError = false
     this.repeatPasswordError = false
   }
+
+
+  onConfirmed() {
+    this.isOverlayVisible = false;
+    console.log('Potwierdzono!');
+  }
+
+  onCancelled() {
+    this.isOverlayVisible = false;
+    console.log('Anulowano!');
+  }
+
 
 }

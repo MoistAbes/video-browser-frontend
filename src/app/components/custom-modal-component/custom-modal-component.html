@@ -1,0 +1,16 @@
+<app-screen-overlay-component
+  [isOverlayVisible]="true"
+  (overlayClicked)="onCancel()"
+>
+  <div class="modal-container">
+    <h2>{{ title }}</h2>
+    <p>{{ content }}</p>
+
+    <div class="modal-actions">
+      @if (showCancel) {
+        <button class="btn btn-warning" (click)="onCancel()">{{ cancelText }}</button>
+      }
+      <button class="btn btn-success" (click)="onConfirm()">{{ confirmText }}</button>
+    </div>
+  </div>
+</app-screen-overlay-component>

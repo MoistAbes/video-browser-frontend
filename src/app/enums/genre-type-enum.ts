@@ -12,5 +12,17 @@ export enum GenreTypeEnum {
   THRILLER = 'THRILLER',
   ANIME = 'ANIME',
   CARTOON = 'CARTOON',
+  MUSIC = 'MUSIC',
+  HISTORY = 'HISTORY',
+  WESTERN = 'WESTERN',
+  FAMILY = 'FAMILY',
+  WAR = 'WAR',
+  CRIME = 'CRIME',
+  SOAP = 'SOAP',
+  REALITY = 'REALITY',
+  NEWS = 'NEWS',
+  TALK = 'TALK',
+  TV_MOVIE = 'TV_MOVIE',
   UNKNOWN = 'UNKNOWN'
+
 }

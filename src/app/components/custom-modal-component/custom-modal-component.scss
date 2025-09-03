@@ -1,0 +1,58 @@
+.modal-container {
+  background: linear-gradient(145deg, #2c2c2c, #3a3a3a);
+  padding: 2rem;
+  border-radius: 12px;
+  min-width: 300px;
+  max-width: 90vw;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  transition: all 0.3s ease-in-out;
+}
+
+.modal-container h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #e50914; /* Netflix czerwony */
+}
+
+.modal-container p {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #ccc;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.modal-actions .btn {
+  padding: 0.6rem 1.2rem;
+  font-weight: bold;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.modal-actions .btn-warning {
+  background-color: #555;
+  color: #fff;
+}
+
+.modal-actions .btn-warning:hover {
+  background-color: #777;
+}
+
+.modal-actions .btn-success {
+  background-color: #e50914;
+  color: #fff;
+}
+
+.modal-actions .btn-success:hover {
+  background-color: #f6121d;
+}

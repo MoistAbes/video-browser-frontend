@@ -1,0 +1,7 @@
+@if (isOverlayVisible) {
+  <div class="screen-overlay" (click)="onOverlayClick()">
+    <div class="overlay-content" (click)="$event.stopPropagation()">
+      <ng-content></ng-content>
+    </div>
+  </div>
+}

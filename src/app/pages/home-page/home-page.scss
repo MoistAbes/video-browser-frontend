@@ -1,7 +1,6 @@
 @use '../../../styles/colors' as *;
 @use '../../../styles/mixins' as *;
-
-
+@use '../../../styles/components/buttons' as *;
 
 .main-box {
   width: 100vw;
@@ -105,42 +104,10 @@
   z-index: 10;
   padding: 20px 20px 20px 120px;
 
-  /* Frosted glass effect */
-  //background-color: rgba(20, 20, 20, 0.5); /* semi-transparent dark */
-  //backdrop-filter: blur(10px); /* main blur */
-  //-webkit-backdrop-filter: blur(10px); /* Safari support */
-  //border-radius: 20px; /* rounded edges */
-  //box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* depth */
-
   @include frosted-glass(10px);
 
 }
 
-//.netflix-button {
-//
-//  width: 48px;       // Fixed width
-//  height: 48px;      // Fixed height (optional)
-//  font-size: 24px;
-//  text-align: center;
-//
-//  margin-left: 5px;
-//  background: transparent;
-//  border: none;
-//  outline: none;
-//  cursor: pointer;
-//  padding: 8px;
-//  border-radius: 50%;
-//  color: $normal-white;
-//
-//
-//  &:hover {
-//    transform: scale(1.1);
-//  }
-//
-//  &:active {
-//    transform: scale(0.95);
-//  }
-//}
 
 .progress-bar-next {
   position: absolute;
@@ -186,12 +153,6 @@
   max-width: 500px;
   padding: 1rem;
 
-  /* Frosted glass effect */
-  //background-color: rgba(20, 20, 20, 0.5); /* semi-transparent dark */
-  //backdrop-filter: blur(10px); /* main blur */
-  //-webkit-backdrop-filter: blur(10px); /* Safari support */
-  //border-radius: 10px; /* rounded edges */
-  //box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* depth */
   @include frosted-glass(10px);
 
 }
