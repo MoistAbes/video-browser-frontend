@@ -1,0 +1,34 @@
+<div>
+
+  <div class="searchbar-container">
+    <div class="searchbar-wrapper">
+      <input
+        type="text"
+        [(ngModel)]="filterTitleValue"
+        (input)="onFilterChange()"
+        placeholder="Search title..."
+        class="searchbar-input"
+      />
+      <button (click)="onFilterClearClick()" class="clear-btn" aria-label="Clear filter">
+        <i class="fa-solid fa-x" ></i>
+      </button>
+    </div>
+
+    <div class="ng-select-container">
+
+    </div>
+  </div>
+
+  <div class="video-grid">
+    @for (show of showListFiltered; track show.id) {
+      <app-video-card-component
+        [title]="show.name"
+        (mouseenter)="startHoverTimer(show)"
+        (mouseleave)="cancelHoverTimer()"
+        (cardClick)="moveToMovieDetails(show.name)"
+        [iconFilePath]="utilService.getIconUrl(show.rootPath)"
+      ></app-video-card-component>
+    }
+  </div>
+
+</div>

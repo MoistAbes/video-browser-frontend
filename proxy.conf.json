@@ -1,41 +1,41 @@
 {
   "/auth": {
-    "target": "http://192.168.155.13:8080",
+    "target": "http://172.16.96.92:8080",
     "secure": false,
     "changeOrigin": true
   },
   "/videos": {
-    "target": "http://192.168.155.13:8080",
+    "target": "http://172.16.96.92:8080",
     "secure": false,
     "changeOrigin": true
   },
   "/show": {
-    "target": "http://192.168.155.13:8080",
+    "target": "http://172.16.96.92:8080",
     "secure": false,
     "changeOrigin": true
   },
   "/stream": {
-    "target": "http://192.168.155.13:8080",
+    "target": "http://172.16.96.92:8080",
     "secure": false,
     "changeOrigin": true
   },
   "/users": {
-    "target": "http://192.168.155.13:8080",
+    "target": "http://172.16.96.92:8080",
     "secure": false,
     "changeOrigin": true
   },
   "/user-icon": {
-    "target": "http://192.168.155.13:8080",
+    "target": "http://172.16.96.92:8080",
     "secure": false,
     "changeOrigin": true
   },
   "/genre": {
-    "target": "http://192.168.155.13:8080",
+    "target": "http://172.16.96.92:8080",
     "secure": false,
     "changeOrigin": true
   },
   "/ws": {
-    "target": "http://192.168.155.13:8080",
+    "target": "http://172.16.96.92:8080",
     "secure": false,
     "changeOrigin": true,
     "ws": true

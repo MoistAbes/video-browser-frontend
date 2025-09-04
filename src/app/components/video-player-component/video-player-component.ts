@@ -33,7 +33,6 @@ type VideoJSPlayer = ReturnType<typeof videojs>;
 })
 export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
   @ViewChild('target', { static: true }) target!: ElementRef<HTMLVideoElement>;
-  // @ViewChild('progressSlider') progressSlider!: ElementRef<HTMLInputElement>;
 
   @Input() currentMediaItem: MediaItemModel | undefined;
   @Input() show: ShowModel | undefined;

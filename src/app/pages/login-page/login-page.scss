@@ -5,7 +5,7 @@
   justify-content: center;
 
   background: linear-gradient(-45deg,
-    #0D1B2A,     /* głęboka noc */
+    //#0D1B2A,     /* głęboka noc */
     #1A1A2E,     /* granat */
     #2C2C54,     /* nocny fiolet */
     #4B0082,     /* indygo */
@@ -15,51 +15,50 @@
     #4B0082,     /* indygo */
     #2C2C54,     /* nocny fiolet */
     #1A1A2E,     /* granat */
-    #0D1B2A      /* głęboka noc */
+    //#0D1B2A      /* głęboka noc */
   );
 
 
-  //background: linear-gradient(-45deg,
-  //  #0D1B2A,     /* głęboka noc */
-  //  #1A1A2E,     /* granat */
-  //  #2C2C54,     /* nocny fiolet */
-  //  #4B0082,     /* indygo */
-  //  #FF6347,     /* zachód słońca */
-  //  #4B0082,     /* indygo */
-  //  #2C2C54,     /* nocny fiolet */
-  //  #1A1A2E,     /* granat */
-  //  #0D1B2A      /* głęboka noc */
-  //);
-
-
-
-
-  //background: linear-gradient(-45deg,
-  //  #0D1B2A, // głęboka noc
-  //  #1A1A2E, // ciemny granat
-  //  #4B0082, // indygo
-  //  #FF6347, // zachód słońca
-  //  #4B0082, // indygo
-  //  #1A1A2E, // ciemny granat
-  //  #0D1B2A  // głęboka noc
-  //);
-
-  background-size: 600% 600%;
+  background-size: 400% 400%;
+  //ToDO to jest dobre
+  //animation: gradientMove 45s ease-in-out infinite;
   animation: gradientMove 45s ease-in-out infinite;
   color: #fff;
 }
 
-.login-container::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: inherit;
-  filter: blur(20px);
-  z-index: -1;
-}
+
+
+//@keyframes gradientChaos {
+//  0% {
+//    background-position: 0% 50%;
+//  }
+//  15% {
+//    background-position: 80% 20%;
+//  }
+//  30% {
+//    background-position: 20% 80%;
+//  }
+//  45% {
+//    background-position: 100% 50%;
+//  }
+//  60% {
+//    background-position: 50% 0%;
+//  }
+//  75% {
+//    background-position: 30% 70%;
+//  }
+//  90% {
+//    background-position: 70% 30%;
+//  }
+//  100% {
+//    background-position: 0% 50%;
+//  }
+//}
 
 
 
+
+//ToDO to jest dobre
 @keyframes gradientMove {
   0% {
     background-position: 0% 50%;
@@ -71,6 +70,16 @@
     background-position: 0% 50%;
   }
 }
+
+.login-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  filter: blur(20px);
+  z-index: -1;
+}
+
 
 
 .login-box {

@@ -1,0 +1,222 @@
+@if (isModalVisible) {
+  <app-custom-modal-component
+    [title]="'Potwierdzenie'"
+    [content]="modalContent"
+    [confirmText]="'Tak'"
+    [cancelText]="'Nie'"
+    (confirmed)="onConfirmed()"
+    (cancelled)="onCancelled()"
+    [confirmAction]="confirmAction"
+    ></app-custom-modal-component>
+}
+
+
+<div>
+
+  <!--  <div>-->
+  <!--    aac	✅	Najlepszy wybór-->
+  <!--    mp3	✅	Też działa, ale rzadziej używany z wideo-->
+  <!--    ac3	❌	Nie działa – tylko w urządzeniach jak smart TV-->
+  <!--    dts	❌	Nie działa – wymaga transkodowania-->
+  <!--    eac3	❌	Tylko w Android TV, nie w desktopowych przeglądarkach-->
+  <!--    flac	⚠️ Eksperymentalnie	Działa tylko w niektórych warunkach, też niezalecane-->
+  <!--  </div>-->
+
+
+  <mat-tab-group>
+    <mat-tab label="Skanowanie video">
+      <div style="background-color: #4d4d4d; padding: 10px;">
+        <h1 style="display: inline-block; margin: 0">Aktualizacja filmów</h1>
+        <button style="margin-bottom: 15px; margin-left: 10px" (click)="setUpVideoScanModalValues()" class="btn btn-success">SKANUJ FILMY</button>
+        <button style="margin-bottom: 15px; margin-left: 10px" (click)="setUpGenreModalValues()" class="btn btn-success">AKTUALIZUJ GENRE</button>
+
+      </div>
+    </mat-tab>
+    <mat-tab label="Edycja video">
+
+      <div class="form-row">
+        <div class="form-field">
+          <label>Id</label>
+          <ng-select placeholder="Id"></ng-select>
+        </div>
+
+        <div class="form-field">
+          <label>Name</label>
+          <ng-select placeholder="Name"></ng-select>
+        </div>
+
+        <div class="form-field">
+          <label>Root path</label>
+          <ng-select placeholder="Root path"></ng-select>
+        </div>
+
+        <div class="form-field">
+          <label>Category</label>
+          <ng-select placeholder="Category"></ng-select>
+        </div>
+
+        <div class="form-field">
+          <label>Genres</label>
+          <ng-select placeholder="Genres"></ng-select>
+        </div>
+      </div>
+
+
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">root path</th>
+          <th scope="col">category</th>
+          <th scope="col">genres</th>
+          <th scope="col">edit</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (show of showList; track show.id) {
+            <ng-container>
+              <!-- główny wiersz -->
+              <tr (click)="onShowRowClick(show)">
+                <th scope="row">{{ show.id }}</th>
+                <td>{{ show.name }}</td>
+                <td>{{ show.rootPath }}</td>
+                <td>{{ show.structure }}</td>
+                <td>
+                  @for (genre of show.genres; track genre) {
+                    <p>{{ genre }}</p>
+                  }
+                </td>
+                <td><button class="btn btn-success">Edit</button></td>
+              </tr>
+
+              <!-- dodatkowy wiersz rozwijany -->
+              @if (selectedShow?.id === show.id) {
+
+                <tr class="extra-row">
+                  <td class="extra-td" colspan="6">
+                    <table class="table table-sm">
+                      <thead>
+                      <label>Movies</label>
+
+                      <tr>
+                        <th>content id</th>
+                        <th>content type</th>
+                        <th>media item id</th>
+                        <th>audio</th>
+                        <th>codec</th>
+                        <th>duration (min)</th>
+                        <th>filename</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+
+                        @for (movie of selectedShow?.movies; track movie.id) {
+                          <tr>
+                            <td>{{ movie.id }}</td>
+                            <td>{{ movie.type }}</td>
+                            <td>{{ movie.id }}</td>
+                            <td>{{ movie.audio }}</td>
+                            <td>{{ movie.codec }}</td>
+                            <td>{{ movie.duration / 60 }}</td>
+                            <td>{{ movie.fileName}}</td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+
+                <tr class="extra-row">
+                  <td class="extra-td" colspan="6">
+                    <table class="table table-sm">
+                      <caption>Seasons</caption>
+                      <thead>
+                      <tr>
+                        <th>season id</th>
+                        <th>season number</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                        @for (season of selectedShow?.seasons; track season.id) {
+                          <tr>
+                            <td>{{ season.id }}</td>
+                            <td>{{ season.number }}</td>
+                          </tr>
+
+                          <!-- epizody dla danego sezonu -->
+                          <tr>
+                            <td colspan="2">
+                              <table class="table table-bordered table-sm ms-3">
+                                <caption>Episodes</caption>
+                                <thead>
+                                <tr>
+                                  <th>episode id</th>
+                                  <th>episode number</th>
+                                  <th>episode name</th>
+                                  <th>episode duration</th>
+                                  <th>episode audio</th>
+                                  <th>episode codec</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                  @for (episode of season.episodes; track episode.id) {
+                                    <tr>
+                                      <td>{{ episode.id }}</td>
+                                      <td>{{ episode.episodeNumber }}</td>
+                                      <td>{{ episode.fileName}}</td>
+                                      <td>{{ episode.duration / 60 }}</td>
+                                      <td>{{ episode.audio }}</td>
+                                      <td>{{ episode.codec }}</td>
+                                    </tr>
+                                  }
+                                </tbody>
+                              </table>
+                            </td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+
+
+
+              }
+
+            </ng-container>
+          }
+        </tbody>
+      </table>
+
+    </mat-tab>
+    <mat-tab label="Genres">
+
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Name</th>
+        </tr>
+        </thead>
+        <tbody>
+
+          @for (genre of genreList; track genre.id) {
+
+            <tr>
+              <td>{{genre.id}}</td>
+              <td>{{genre.name}}</td>
+            </tr>
+          }
+
+        </tbody>
+      </table>
+
+    </mat-tab>
+    <mat-tab label="Users"></mat-tab>
+    <mat-tab label="Roles"></mat-tab>
+  </mat-tab-group>
+</div>
+
+

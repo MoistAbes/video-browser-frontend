@@ -3,6 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Endpoints} from '../../endpoints/endpoints';
 import {ShowModel} from '../../models/show/show-model';
+import {StructureTypeEnum} from '../../enums/structure-type-enum';
+import {GenreTypeEnum} from '../../enums/genre-type-enum';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +19,10 @@ export class ShowApiService {
 
   findRandomShows(): Observable<ShowModel[]> {
     return this.http.get<ShowModel[]>(Endpoints.show.findRandom)
+  }
+
+  findRandomShowsByStructure(showStructureId: number): Observable<ShowModel[]> {
+    return this.http.get<ShowModel[]>(Endpoints.show.findRandomByStructure + showStructureId)
   }
 
   findShowByParentTitle(parentTitle: string): Observable<ShowModel> {
@@ -36,5 +42,7 @@ export class ShowApiService {
   }
 
 
-
+  findRandomShowsByStructureAndGroupedByGenre(showStructure: StructureTypeEnum): Observable<Map<GenreTypeEnum, ShowModel[]>> {
+    return this.http.get<Map<GenreTypeEnum, ShowModel[]>>(Endpoints.show.findRandomShowsByStructureAndGroupedByGenre + '?structureType=' + showStructure)
+  }
 }

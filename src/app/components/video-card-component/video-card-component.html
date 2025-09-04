@@ -1,5 +1,8 @@
 <div
   class="video-card"
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()"
+  #cardRef
   (click)="onClick()"
 >
   <img
@@ -8,5 +11,6 @@
     class="video-icon"
     fill/>
   <p class="video-title">{{ title }}</p>
+
 </div>
 

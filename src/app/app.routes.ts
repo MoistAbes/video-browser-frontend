@@ -1,17 +1,19 @@
 import { Routes } from '@angular/router';
 import {MovieDetailPage} from './pages/movie-detail-page/movie-detail-page';
-import {AdminPage} from './pages/admin-page/admin-page';
+import {AdminPage} from './pages/admin/admin-page/admin-page';
 import {MainLayoutComponent} from './layout/main-layout-component/main-layout-component';
-import {MoviePage} from './pages/movie-page/movie-page';
-import {ShowPage} from './pages/show-page/show-page';
-import {SearchPage} from './pages/search-page/search-page';
-import {HomePage} from './pages/home-page/home-page';
 import {LoginPage} from './pages/login-page/login-page';
 import {authGuard} from './guards/auth-guard';
 import {redirectGuard} from './guards/redirect-guard';
 import {adminGuard} from './guards/admin-guard';
-import {AccountPage} from './pages/account-page/account-page';
+import {AccountPage} from './pages/user/account-page/account-page';
 import {loginGuard} from './guards/login-guard';
+import {MovieCollectionsPage} from './pages/content/movie-collections-page/movie-collections-page';
+import {HomePage} from './pages/content/home-page/home-page';
+import {SearchPage} from './pages/content/search-page/search-page';
+import {MoviesPage} from './pages/content/movies-page/movies-page';
+import {TvShowsPage} from './pages/content/tv-shows-page/tv-shows-page';
+import {UniversesPage} from './pages/content/universes-page/universes-page';
 export const routes: Routes = [
   {
     path: '',
@@ -22,12 +24,13 @@ export const routes: Routes = [
   {
     path: '',
     component: MainLayoutComponent,
-    // canActivateChild: [authGuard],
     children: [
       { path: 'home', component: HomePage, canActivate: [authGuard], data: { animation: 'Home' } },
       { path: 'search', component: SearchPage, canActivate: [authGuard], data: { animation: 'Search' } },
-      { path: 'movies', component: MoviePage, canActivate: [authGuard], data: { animation: 'Movies' } },
-      { path: 'shows', component: ShowPage, canActivate: [authGuard], data: { animation: 'Shows' } },
+      { path: 'movies', component: MoviesPage, canActivate: [authGuard], data: { animation: 'Movies' } },
+      { path: 'tv-shows', component: TvShowsPage, canActivate: [authGuard], data: { animation: 'Tv-shows' } },
+      { path: 'movie-collections', component: MovieCollectionsPage, canActivate: [authGuard], data: { animation: 'Movie-collections' } },
+      { path: 'universes', component: UniversesPage, canActivate: [authGuard], data: { animation: 'Universes' } },
       { path: 'account', component: AccountPage, canActivate: [authGuard], data: { animation: 'Account' } },
       { path: 'movie-details/:parentTitle', component: MovieDetailPage, canActivate: [authGuard], data: { animation: 'MovieDetails' } },
       { path: 'admin', component: AdminPage, canActivate: [authGuard ,adminGuard], data: { animation: 'Admin' } },
