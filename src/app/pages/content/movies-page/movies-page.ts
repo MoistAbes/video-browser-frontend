@@ -55,4 +55,5 @@ export class MoviesPage implements OnInit {
       shows
     }));
   }
+
 }

@@ -1,10 +1,22 @@
-<div class="info-panel-fixed" [ngStyle]="{ top: top + 'px', left: left + 'px' }">
-
+<div class="info-panel-fixed"
+     [class.pos-top]="position === 'top'"
+     [class.pos-right]="position === 'right'"
+     [class.pos-left]="position === 'left'"
+     [class.pos-bottom]="position === 'bottom'"
+     (mouseenter)="mouseEntered.emit()"
+     (mouseleave)="mouseLeft.emit()"
+     role="dialog"
+     aria-live="polite">
+  <div class="caret" aria-hidden="true"></div>
 
   <div class="preview-container auto">
     <app-video-preview-player-component [videoSrc]="'sample.mp4'"></app-video-preview-player-component>
+
   </div>
 
-  <strong>{{ title }}</strong><br>
-  <p>{{ description }}</p>
+  <div class="meta">
+    <strong class="title">{{ title }}</strong>
+    <p class="desc">{{ description }}</p>
+  </div>
 </div>
+

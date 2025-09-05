@@ -1,16 +1,15 @@
 :host {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  //display: flex;
+  //flex-direction: column;
+  //justify-content: center;
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  background-color: rebeccapurple;
 }
 
 
 video {
-  margin: auto;
+  //margin: auto;
   display: block;
   max-width: 100%;
 }

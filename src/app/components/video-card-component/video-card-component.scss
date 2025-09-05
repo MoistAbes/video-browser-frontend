@@ -1,48 +1,85 @@
-@use '../../../styles/colors' as *;
+$c_0: #000000;
 
-
-.video-card {
+.b-game-card {
   position: relative;
-  background-color: #222;
-  border-radius: 8px;
-  overflow: hidden; // żeby tekst nie wychodził poza kartę
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  color: white;
-  text-align: center;
-  font-weight: 500;
+  z-index: 0;                  // ważne dla cienia
   width: 100%;
-  aspect-ratio: 2 / 3;
+  aspect-ratio: 2 / 3;         // zostaw to
+  perspective: 1000px;         // rodzic perspektywy
+  perspective-origin: 50% 30%; // delikatne wrażenie „wysuwki z góry”
+  overflow: visible;            // nie ucinaj 3D na kontenerze
+  isolation: isolate;           // własny stacking-context (pomaga z ::before)
 
-  &:hover {
-    transform: scale(1.03);
-    box-shadow: 0 0 12px rgba(239, 8, 8, 0.71);
-  }
-
-  .video-icon {
-    width: 300px;
-    height: 450px;
-    object-fit: cover; /* dopasuje i przytnie, bez rozciągania */
-    border-radius: 8px; /* opcjonalnie, zaokrąglone rogi */
-  }
-
-  .video-title {
+  &__plane {
     position: absolute;
-    bottom: 0;
-    width: 100%;
-    padding: 0.5rem 1rem;
-    //background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-    background: #141414;
-    color: $normal-white;
-    font-size: 1rem;
-    text-align: center;
-    word-break: break-word;
-    margin: 0;
+    inset: 0;
+    overflow: hidden;           // tu przycinamy gloss 120% do karty
+    transform-style: preserve-3d;
+    transform-origin: top center;
+    will-change: transform;
+    transition: transform 0.35s ease-in-out;
+    transform: translateZ(0) skewX(0.001deg); // GPU nudge
+    z-index: 1;                 // nad cieniem
   }
 
+  &__cover {
+    position: absolute;         // Angular fill też to doda, ale jawność pomaga
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+  }
+
+  &__gloss {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -20%;                  // 120% wysokości jak w oryginale
+    height: 120%;
+    pointer-events: none;
+    background: linear-gradient(
+        226deg,
+        rgba(255, 255, 255, 0.4) 0%,
+        rgba(255, 255, 255, 0.4) 35%,
+        rgba(255, 255, 255, 0.2) 42%,
+        rgba(255, 255, 255, 0) 60%
+    );
+    transform: translateY(-20%);
+    transition: transform 0.65s cubic-bezier(0.18, 0.9, 0.58, 1);
+    z-index: 2;                 // nad img
+    backface-visibility: hidden;
+  }
+
+  // Hover: obracamy CAŁY plane (img + gloss razem)
+  &:hover &__plane {
+    transform: rotateX(7deg) translateY(-6px);
+  }
+
+  &:hover &__gloss {
+    transform: translateY(0%);
+  }
+
+  // Cień pod kartą (jak w oryginale)
+  &::before {
+    content: '';
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    width: 90%;
+    height: 90%;
+    background: rgba($c_0, 0.5);
+    box-shadow: 0 6px 12px 12px rgba($c_0, 0.4);
+    transform-origin: top center;
+    transform: skewX(0.001deg);
+    transition: transform 0.35s ease-in-out, opacity 0.5s ease-in-out;
+    z-index: -1;                // pod plane
+  }
+
+  &:hover::before {
+    opacity: 0.6;
+    transform: rotateX(7deg) translateY(-6px) scale(1.05);
+  }
 }
-
-
-
-
-

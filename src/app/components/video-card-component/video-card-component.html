@@ -1,16 +1,19 @@
 <div
-  class="video-card"
-  (mouseenter)="onMouseEnter()"
-  (mouseleave)="onMouseLeave()"
-  #cardRef
+  class="b-game-card"
+  (mouseenter)="onEnter()"
+  (mouseleave)="onLeave()"
   (click)="onClick()"
+  #cardRef
 >
-  <img
-    [ngSrc]="iconFilePath"
-    alt="thumbnail"
-    class="video-icon"
-    fill/>
+  <div class="b-game-card__plane">
+    <img
+      ngSrc="cover.webp"
+      alt="cover"
+      class="b-game-card__cover"
+      fill
+    />
+    <div class="b-game-card__gloss"></div>
+  </div>
+
   <p class="video-title">{{ title }}</p>
-
 </div>
-
