@@ -1,4 +1,4 @@
-@use '../../../styles/colors' as *;
+@use "../../../styles/colors" as *;
 
 /* Layout: topbar + main content */
 .layout-container {
@@ -11,7 +11,7 @@
 /* Główna zawartość */
 .main-content {
   flex-grow: 1;
-  background-color: #1e1e1e;
+  background-color: $body-bg;
   color: $normal-white;
   overflow-y: auto;
   scrollbar-width: none;

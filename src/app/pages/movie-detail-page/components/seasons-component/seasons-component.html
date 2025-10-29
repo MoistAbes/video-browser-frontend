@@ -1,88 +1,85 @@
-
 <div class="top-container">
-
   @if (!isVideoPlaying) {
-    <div class="preview-wrapper">
+  <div class="preview-wrapper">
+    <div class="image-wrapper">
+      <div class="image-placeholder"></div>
+      <img
+        class="content"
+        priority
+        [ngSrc]="utilService.getBackdropUrl(currentMediaItem?.rootPath)"
+        fill
+        alt="backdrop"
+        (load)="utilService.onImageLoad($event)"
+      />
+    </div>
 
-      <div class="image-wrapper">
-        <div class="image-placeholder"></div>
-        <img
-          class="content"
-          priority
-          [ngSrc]="utilService.getBackdropUrl(currentMediaItem?.rootPath)"
-          fill
-          alt="backdrop"
-          (load)="utilService.onImageLoad($event)"
-        />
-      </div>
-
-        <div class="movie-details-overlay">
-          <div class="movie-header">
-            <div class="title-row">
-              <h1 class="movie-title">{{show?.name}}</h1>
-              <h1 class="seasons-count">{{show?.seasons?.length}} Seasons</h1>
-            </div>
-            @if (currentMediaItem) {
-              <div class="title-row">
-                <h5>{{ currentMediaItem.title }}</h5>
-                <h6 class="duration">{{ utilService.formatVideoDuration(currentMediaItem.duration) }}</h6>
-              </div>
-            }
-          </div>
-          <p class="movie-description">
-            To jest przykładowy opis filmu. Możesz go później podmienić na dane z backendu.
-          </p>
-          <button class="play-button" (click)="playVideoClicked.emit()">
-            <i class="fa-solid fa-play"></i> Play
-          </button>
+    <div class="movie-details-overlay">
+      <div class="movie-header">
+        <div class="title-row">
+          <h1 class="movie-title">{{ show?.name }}</h1>
+          <h1 class="seasons-count">{{ show?.seasons?.length }} Seasons</h1>
         </div>
+        @if (currentMediaItem) {
+        <div class="title-row">
+          <h5>{{ currentMediaItem.title }}</h5>
+          <h6 class="duration">
+            {{ utilService.formatVideoDuration(currentMediaItem.duration) }}
+          </h6>
+        </div>
+        }
+      </div>
+      <p class="movie-description">
+        {{ show?.description }}
+      </p>
+      <button class="play-button" (click)="playVideoClicked.emit()">
+        <i class="fa-solid fa-play"></i> Play
+      </button>
     </div>
+  </div>
+  } @if (selectedVideoUrl.length > 0) {
+
+  <div class="video-wrapper">
+    <app-video-player-component
+      [show]="show"
+      [currentMediaItem]="currentMediaItem"
+      [src]="selectedVideoUrl"
+      [subtitlesUrl]="subtitlesUrl"
+      (playVideoClicked)="playVideoClicked.emit()"
+      (updateMediaItem)="updateMediaItem.emit($event)"
+      (seekChange)="onSeekTimeSelected($event)"
+    ></app-video-player-component>
+  </div>
   }
-
-  @if (selectedVideoUrl.length > 0) {
-
-    <div class="video-wrapper">
-      <app-video-player-component
-        [show]="show"
-        [currentMediaItem]="currentMediaItem"
-        [src]="selectedVideoUrl"
-        (playVideoClicked)="playVideoClicked.emit()"
-        (updateMediaItem)="updateMediaItem.emit($event)"
-        (seekChange)="onSeekTimeSelected($event)"
-      ></app-video-player-component>
-    </div>
-  }
-
 </div>
 
 @if (show) {
-  <div class="movie-details-container">
-
-      <div class="content-container">
-
-        <div class="content-type-toggle">
-            <button
-              class="tab-button"
-              [class.active]="'seasons'">
-              Seasons
-            </button>
-
-        </div>
-          <div class="season-container">
-            <select [(ngModel)]="selectedSeason" (ngModelChange)="setUpEpisodes()" class="form-select">
-              @for (season of show.seasons; track season.id) {
-                <option [value]="season.number">Season {{season.number}}</option>
-              }
-            </select>
-          </div>
-          <div class="episode-container">
-            <select [(ngModel)]="selectedEpisode" (ngModelChange)="onEpisodeSelect()" class="form-select">
-              @for (episode of episodes; track episode.id) {
-                <option [ngValue]="episode">Episode {{ episode.episodeNumber }}</option>
-              }
-            </select>
-          </div>
-      </div>
-
+<div class="movie-details-container">
+  <div class="content-container">
+    <div class="content-type-toggle">
+      <button class="tab-button" [class.active]="'seasons'">Seasons</button>
+    </div>
+    <div class="season-container">
+      <select
+        [(ngModel)]="selectedSeason"
+        (ngModelChange)="setUpEpisodes()"
+        class="form-select"
+      >
+        @for (season of show.seasons; track season.id) {
+        <option [value]="season.number">Season {{ season.number }}</option>
+        }
+      </select>
+    </div>
+    <div class="episode-container">
+      <select
+        [(ngModel)]="selectedEpisode"
+        (ngModelChange)="onEpisodeSelect()"
+        class="form-select"
+      >
+        @for (episode of episodes; track episode.id) {
+        <option [ngValue]="episode">Episode {{ episode.episodeNumber }}</option>
+        }
+      </select>
+    </div>
   </div>
+</div>
 }

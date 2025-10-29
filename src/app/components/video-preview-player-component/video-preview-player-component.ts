@@ -1,4 +1,11 @@
-import {AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
 import videojs from 'video.js';
 
 type VideoJSPlayer = ReturnType<typeof videojs>;
@@ -8,12 +15,11 @@ type VideoJSPlayer = ReturnType<typeof videojs>;
   imports: [],
   templateUrl: './video-preview-player-component.html',
   standalone: true,
-  styleUrl: './video-preview-player-component.scss'
+  styleUrl: './video-preview-player-component.scss',
 })
 export class VideoPreviewPlayerComponent implements AfterViewInit, OnDestroy {
   @ViewChild('targetPlayer', { static: true }) targetPlayer!: ElementRef;
   player!: VideoJSPlayer;
-
 
   @Input() videoSrc!: string;
 
@@ -21,7 +27,7 @@ export class VideoPreviewPlayerComponent implements AfterViewInit, OnDestroy {
     this.player = videojs(this.targetPlayer.nativeElement, {
       controls: false,
       autoplay: true,
-      muted: true,
+      muted: false,
       loop: true,
       responsive: true,
       fluid: true,
@@ -34,4 +40,3 @@ export class VideoPreviewPlayerComponent implements AfterViewInit, OnDestroy {
     }
   }
 }
-

@@ -27,4 +27,8 @@ export class UserInfoApiService {
     })
   }
 
+  public findAll(): Observable<UserInfoModel[]> {
+    return this.http.get<UserInfoModel[]>(Endpoints.user.findAll)
+  }
+
 }

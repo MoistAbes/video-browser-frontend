@@ -1,20 +1,21 @@
-import {Component, EventEmitter, Input, OnDestroy, Output, ViewChild} from '@angular/core';
-import {NgStyle} from '@angular/common';
-import {VideoPreviewPlayerComponent} from '../../video-preview-player-component/video-preview-player-component';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import { VideoPreviewPlayerComponent } from '../../video-preview-player-component/video-preview-player-component';
 
 @Component({
   selector: 'app-video-card-info-panel-component',
-  imports: [
-    NgStyle,
-    VideoPreviewPlayerComponent
-  ],
+  imports: [VideoPreviewPlayerComponent],
   templateUrl: './video-card-info-panel-component.html',
   standalone: true,
-  styleUrl: './video-card-info-panel-component.scss'
+  styleUrl: './video-card-info-panel-component.scss',
 })
-export class VideoCardInfoPanelComponent implements OnDestroy{
-
-
+export class VideoCardInfoPanelComponent implements OnDestroy {
   @Input() title = '';
   @Input() description = '';
   @Input() videoSrc = '';
@@ -28,15 +29,18 @@ export class VideoCardInfoPanelComponent implements OnDestroy{
   @Output() mouseEntered = new EventEmitter<void>();
   @Output() mouseLeft = new EventEmitter<void>();
 
-  @ViewChild('preview', { static: false }) previewRef?: { nativeElement: HTMLVideoElement };
-
+  @ViewChild('preview', { static: false }) previewRef?: {
+    nativeElement: HTMLVideoElement;
+  };
 
   playPreview() {
     const v = this.previewRef?.nativeElement;
     if (!v) return;
     // jeśli src jest ustawiony, spróbuj odtworzyć; błędy ignorujemy (autoplay polityki)
     v.muted = true;
-    v.play().catch(() => {/* ignore */});
+    v.play().catch(() => {
+      /* ignore */
+    });
   }
 
   pauseAndUnload() {
@@ -54,6 +58,4 @@ export class VideoCardInfoPanelComponent implements OnDestroy{
   ngOnDestroy() {
     this.pauseAndUnload();
   }
-
-
 }

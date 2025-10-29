@@ -1,75 +1,70 @@
-import {Component, OnInit} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {Router} from '@angular/router';
-import {VideoCardComponent} from '../../../components/video-card-component/video-card-component';
-import {ShowModel} from '../../../models/show/show-model';
-import {GenreModel} from '../../../models/show/genre-model';
-import {ShowApiService} from '../../../services/api/show-api-service';
-import {UtilService} from '../../../services/local/util-service';
-import {GenreApiService} from '../../../services/api/genre-api-service';
-
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { Router } from '@angular/router';
+import { VideoCardComponent } from '../../../components/video-card-component/video-card-component';
+import { ShowModel } from '../../../models/show/show-model';
+import { GenreModel } from '../../../models/show/genre-model';
+import { ShowApiService } from '../../../services/api/show-api-service';
+import { UtilService } from '../../../services/local/util-service';
+import { GenreApiService } from '../../../services/api/genre-api-service';
 
 @Component({
   standalone: true,
   selector: 'app-search-page',
-  imports: [
-    FormsModule,
-    FontAwesomeModule,
-    VideoCardComponent,
-  ],
+  imports: [FormsModule, FontAwesomeModule, VideoCardComponent],
   templateUrl: './search-page.html',
-  styleUrl: './search-page.scss'
+  styleUrl: './search-page.scss',
 })
-export class SearchPage implements OnInit  {
+export class SearchPage implements OnInit {
   filterTitleValue: string = '';
   hoverTimer: number | null = null;
-  showList: ShowModel[] = []
-  showListFiltered: ShowModel[] = []
-  genreList: GenreModel[] = []
+  showList: ShowModel[] = [];
+  showListFiltered: ShowModel[] = [];
+  genreList: GenreModel[] = [];
 
-  constructor(private router: Router,
-              private showApiService: ShowApiService,
-              public utilService: UtilService,
-              private genreApiService: GenreApiService) { }
+  constructor(
+    private router: Router,
+    private showApiService: ShowApiService,
+    public utilService: UtilService,
+    private genreApiService: GenreApiService
+  ) {}
 
   ngOnInit(): void {
     this.findShowsProjections();
     this.findAllGenres();
-
   }
 
   findShowsProjections() {
     this.showApiService.findWithRootPath().subscribe({
       next: (result) => {
-        this.showList = result
-        this.showListFiltered = result
-        console.log("result: ", this.showList)
+        this.showList = result;
+        this.showListFiltered = result;
+        console.log('result: ', this.showList);
       },
-      error: err => {
-        console.log("error: ", err)
+      error: (err) => {
+        console.log('error: ', err);
       },
-      complete: () => {}
-    })
+      complete: () => {},
+    });
   }
 
   findAllGenres() {
     this.genreApiService.findAll().subscribe({
       next: (result) => {
-        this.genreList = result
+        this.genreList = result;
       },
-      error: err => {
-        console.log("error: ", err)
+      error: (err) => {
+        console.log('error: ', err);
       },
-      complete: () => {}
-    })
+      complete: () => {},
+    });
   }
 
   moveToMovieDetails(title: string) {
-    this.router.navigate(['/movie-details', title])
-      .catch(error => {
-        console.error('❌ Błąd podczas nawigacji:', error);
-      });
+    this.router.navigate(['/movie-details', title]).catch((error) => {
+      console.error('❌ Błąd podczas nawigacji:', error);
+    });
   }
 
   onFilterChange() {
@@ -77,10 +72,11 @@ export class SearchPage implements OnInit  {
 
     //ToDO zrobic filtrowanie po genre
 
-    const filterText: string = this.utilService.normalizeText(this.filterTitleValue);
+    const filterText: string = this.utilService.normalizeText(
+      this.filterTitleValue
+    );
 
-
-    this.showListFiltered = this.showListFiltered.filter(video =>
+    this.showListFiltered = this.showListFiltered.filter((video) =>
       this.utilService.normalizeText(video.name).includes(filterText)
     );
   }
@@ -89,24 +85,4 @@ export class SearchPage implements OnInit  {
     this.filterTitleValue = '';
     this.onFilterChange();
   }
-
-  //ToDO to jest na kiedys do dodatkowego info na hover
-  startHoverTimer(videoInfo: any) {
-    this.hoverTimer = setTimeout(() => {
-      this.onHoverOneSecond(videoInfo);
-    }, 1000); // 1000 ms = 1 second
-  }
-
-  cancelHoverTimer() {
-    if (this.hoverTimer) {
-      clearTimeout(this.hoverTimer);
-      this.hoverTimer = null;
-    }
-  }
-
-  onHoverOneSecond(videoInfo: any) {
-    console.log('Hovered for 1 second over:', videoInfo);
-    // put your delayed hover action here
-  }
-
 }

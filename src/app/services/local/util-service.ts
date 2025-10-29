@@ -1,19 +1,17 @@
 import { Injectable } from '@angular/core';
-import {Endpoints} from '../../endpoints/endpoints';
-
+import { Endpoints } from '../../endpoints/endpoints';
+import { MediaItemModel } from '../../models/show/media-item-model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UtilService {
-
-  constructor() { }
-
+  constructor() {}
 
   normalizeText(text: string): string {
     return text
-      .normalize("NFD") // rozdziela znaki diakrytyczne
-      .replace(/[\u0300-\u036f]/g, "") // usuwa diakrytyki
+      .normalize('NFD') // rozdziela znaki diakrytyczne
+      .replace(/[\u0300-\u036f]/g, '') // usuwa diakrytyki
       .toLowerCase()
       .trim();
   }
@@ -31,27 +29,46 @@ export class UtilService {
 
   getBackdropUrl(rootPath: string | undefined): string {
     if (!rootPath) {
-      return ""
+      return '';
     }
-    return `${Endpoints.videos.image}?path=${encodeURIComponent(rootPath + '/backdrop/backdrop.jpg')}`;
+    return `${Endpoints.videos.image}?path=${encodeURIComponent(
+      rootPath + '/backdrop/backdrop.jpg'
+    )}`;
   }
-
-
 
   getIconUrl(rootPath: string | undefined): string {
     if (!rootPath) {
-      return ""
+      return '';
     }
 
-    return `${Endpoints.videos.image}?path=${encodeURIComponent(rootPath + '/icon/icon.webp')}`;
+    return `${Endpoints.videos.image}?path=${encodeURIComponent(
+      rootPath + '/icon/icon.webp'
+    )}`;
   }
-
-
 
   onImageLoad(event: Event) {
     const img = event.target as HTMLImageElement;
     img.classList.add('loaded');
   }
 
+  getVideoUrlPreview(mediaItem: MediaItemModel): string {
+    const fullVideoPath: string = `${mediaItem.rootPath}/${mediaItem.fileName}`;
+    const needsConversion: boolean = !['aac', 'mp3'].includes(mediaItem.audio!);
 
+    let resultVideoUrl: string = '';
+
+    if (needsConversion) {
+      // resultVideoUrl = `${
+      //   Endpoints.stream.convert
+      // }?path=${encodeURIComponent(fullVideoPath)}&start=${this.seekStartTime}`;
+
+      return '';
+    } else {
+      resultVideoUrl = `${Endpoints.stream.normalPreview}?path=${encodeURIComponent(
+        fullVideoPath
+      )}`;
+
+      return resultVideoUrl;
+    }
+  }
 }

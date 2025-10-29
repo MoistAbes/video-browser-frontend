@@ -1,13 +1,11 @@
-<p>universes-page works!</p>
-@for (genre of genreShowList; track genre.genre) {
-  <div>
-    <h3>{{ genre.genre }}</h3>
-    <div class="show-row">
-      @for (show of genre.shows; track show.id) {
-        <div class="show-card">
-          {{ show.name }}
-        </div>
-      }
-    </div>
-  </div>
-}
+<div style="position: relative">
+  @if (featuredShows.length > 0) {
+  <app-main-show-carousel-component [shows]="featuredShows">
+  </app-main-show-carousel-component>
+  } @for (genreWithShows of genreShowList; track $index) {
+  <app-show-carousel-component
+    [shows]="genreWithShows.shows"
+    [carouselTitle]="genreWithShows.genre"
+  ></app-show-carousel-component>
+  }
+</div>

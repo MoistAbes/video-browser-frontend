@@ -1,18 +1,16 @@
 @if (isModalVisible) {
-  <app-custom-modal-component
-    [title]="'Potwierdzenie'"
-    [content]="modalContent"
-    [confirmText]="'Tak'"
-    [cancelText]="'Nie'"
-    (confirmed)="onConfirmed()"
-    (cancelled)="onCancelled()"
-    [confirmAction]="confirmAction"
-    ></app-custom-modal-component>
+<app-custom-modal-component
+  [title]="'Potwierdzenie'"
+  [content]="modalContent"
+  [confirmText]="'Tak'"
+  [cancelText]="'Nie'"
+  (confirmed)="onConfirmed()"
+  (cancelled)="onCancelled()"
+  [confirmAction]="confirmAction"
+></app-custom-modal-component>
 }
 
-
 <div>
-
   <!--  <div>-->
   <!--    aac	✅	Najlepszy wybór-->
   <!--    mp3	✅	Też działa, ale rzadziej używany z wideo-->
@@ -22,18 +20,27 @@
   <!--    flac	⚠️ Eksperymentalnie	Działa tylko w niektórych warunkach, też niezalecane-->
   <!--  </div>-->
 
-
   <mat-tab-group>
     <mat-tab label="Skanowanie video">
-      <div style="background-color: #4d4d4d; padding: 10px;">
+      <div style="background-color: #4d4d4d; padding: 10px">
         <h1 style="display: inline-block; margin: 0">Aktualizacja filmów</h1>
-        <button style="margin-bottom: 15px; margin-left: 10px" (click)="setUpVideoScanModalValues()" class="btn btn-success">SKANUJ FILMY</button>
-        <button style="margin-bottom: 15px; margin-left: 10px" (click)="setUpGenreModalValues()" class="btn btn-success">AKTUALIZUJ GENRE</button>
-
+        <button
+          style="margin-bottom: 15px; margin-left: 10px"
+          (click)="setUpVideoScanModalValues()"
+          class="btn btn-success"
+        >
+          SKANUJ FILMY
+        </button>
+        <button
+          style="margin-bottom: 15px; margin-left: 10px"
+          (click)="setUpGenreModalValues()"
+          class="btn btn-success"
+        >
+          AKTUALIZUJ GENRE
+        </button>
       </div>
     </mat-tab>
     <mat-tab label="Edycja video">
-
       <div class="form-row">
         <div class="form-field">
           <label>Id</label>
@@ -61,162 +68,253 @@
         </div>
       </div>
 
+      <h2
+        (click)="isShowTableVisible = !isShowTableVisible"
+        class="mb-3"
+        style="cursor: pointer"
+      >
+        Shows - Selected show: {{ selectedShow?.id }} {{ selectedShow?.name }} |
+        Selected season: {{ seletedSeason?.number }}
+      </h2>
 
-      <table class="table table-hover">
+      @if (isShowTableVisible) {
+      <table class="table">
         <thead>
-        <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Name</th>
-          <th scope="col">root path</th>
-          <th scope="col">category</th>
-          <th scope="col">genres</th>
-          <th scope="col">edit</th>
-        </tr>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Root path</th>
+            <th scope="col">Description</th>
+            <th scope="col">Show structure</th>
+            <th scope="col">Delete</th>
+          </tr>
         </thead>
         <tbody>
           @for (show of showList; track show.id) {
-            <ng-container>
-              <!-- główny wiersz -->
-              <tr (click)="onShowRowClick(show)">
-                <th scope="row">{{ show.id }}</th>
-                <td>{{ show.name }}</td>
-                <td>{{ show.rootPath }}</td>
-                <td>{{ show.structure }}</td>
-                <td>
-                  @for (genre of show.genres; track genre) {
-                    <p>{{ genre }}</p>
-                  }
-                </td>
-                <td><button class="btn btn-success">Edit</button></td>
-              </tr>
-
-              <!-- dodatkowy wiersz rozwijany -->
-              @if (selectedShow?.id === show.id) {
-
-                <tr class="extra-row">
-                  <td class="extra-td" colspan="6">
-                    <table class="table table-sm">
-                      <thead>
-                      <label>Movies</label>
-
-                      <tr>
-                        <th>content id</th>
-                        <th>content type</th>
-                        <th>media item id</th>
-                        <th>audio</th>
-                        <th>codec</th>
-                        <th>duration (min)</th>
-                        <th>filename</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-
-                        @for (movie of selectedShow?.movies; track movie.id) {
-                          <tr>
-                            <td>{{ movie.id }}</td>
-                            <td>{{ movie.type }}</td>
-                            <td>{{ movie.id }}</td>
-                            <td>{{ movie.audio }}</td>
-                            <td>{{ movie.codec }}</td>
-                            <td>{{ movie.duration / 60 }}</td>
-                            <td>{{ movie.fileName}}</td>
-                          </tr>
-                        }
-                      </tbody>
-                    </table>
-                  </td>
-                </tr>
-
-                <tr class="extra-row">
-                  <td class="extra-td" colspan="6">
-                    <table class="table table-sm">
-                      <caption>Seasons</caption>
-                      <thead>
-                      <tr>
-                        <th>season id</th>
-                        <th>season number</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                        @for (season of selectedShow?.seasons; track season.id) {
-                          <tr>
-                            <td>{{ season.id }}</td>
-                            <td>{{ season.number }}</td>
-                          </tr>
-
-                          <!-- epizody dla danego sezonu -->
-                          <tr>
-                            <td colspan="2">
-                              <table class="table table-bordered table-sm ms-3">
-                                <caption>Episodes</caption>
-                                <thead>
-                                <tr>
-                                  <th>episode id</th>
-                                  <th>episode number</th>
-                                  <th>episode name</th>
-                                  <th>episode duration</th>
-                                  <th>episode audio</th>
-                                  <th>episode codec</th>
-
-                                </tr>
-                                </thead>
-                                <tbody>
-                                  @for (episode of season.episodes; track episode.id) {
-                                    <tr>
-                                      <td>{{ episode.id }}</td>
-                                      <td>{{ episode.episodeNumber }}</td>
-                                      <td>{{ episode.fileName}}</td>
-                                      <td>{{ episode.duration / 60 }}</td>
-                                      <td>{{ episode.audio }}</td>
-                                      <td>{{ episode.codec }}</td>
-                                    </tr>
-                                  }
-                                </tbody>
-                              </table>
-                            </td>
-                          </tr>
-                        }
-                      </tbody>
-                    </table>
-                  </td>
-                </tr>
-
-
-
-              }
-
-            </ng-container>
+          <tr (click)="selectedShow = show; seletedSeason = undefined">
+            <th scope="row">{{ show.id }}</th>
+            <td>{{ show.name }}</td>
+            <td>{{ show.rootPath }}</td>
+            <td>{{ show.description }}</td>
+            <td>{{ show.structure }}</td>
+            <td>
+              <button (click)="setUpShowDeleteModalValues(show)" class="btn">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </td>
+          </tr>
           }
         </tbody>
       </table>
+      } @if (selectedShow) {
 
-    </mat-tab>
-    <mat-tab label="Genres">
+      <h2
+        (click)="isGenreTableVisible = !isGenreTableVisible"
+        class="mb-3"
+        style="cursor: pointer"
+      >
+        GENRES
+      </h2>
 
-      <table class="table table-hover">
+      @if (isGenreTableVisible) {
+      <table class="table">
         <thead>
-        <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Name</th>
-        </tr>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+          </tr>
         </thead>
         <tbody>
-
-          @for (genre of genreList; track genre.id) {
-
-            <tr>
-              <td>{{genre.id}}</td>
-              <td>{{genre.name}}</td>
-            </tr>
+          @for (genre of selectedShow.genres; track $index) {
+          <tr>
+            <th scope="row">{{ genre.id }}</th>
+            <td>{{ genre.name }}</td>
+          </tr>
           }
+        </tbody>
+      </table>
+      }
 
+      <h2
+        (click)="isSeasonsVisible = !isSeasonsVisible"
+        class="mb-3"
+        style="cursor: pointer"
+      >
+        SEASONS
+      </h2>
+
+      @if (isSeasonsVisible) {
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Number</th>
+            <th scope="col">Episodes</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (season of selectedShow.seasons; track $index) {
+          <tr (click)="seletedSeason = season">
+            <th scope="row">{{ season.id }}</th>
+            <td>{{ season.number }}</td>
+            <td>{{ season.episodes.length }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+      }
+
+      <h2
+        (click)="isEpisodeTableVisible = !isEpisodeTableVisible"
+        class="mb-3"
+        style="cursor: pointer"
+      >
+        EPISODES
+      </h2>
+
+      @if (seletedSeason) {
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Title</th>
+            <th scope="col">Parent title</th>
+            <th scope="col">Season number</th>
+            <th scope="col">episode number</th>
+            <th scope="col">Type</th>
+            <th scope="col">Root path</th>
+            <th scope="col">File name</th>
+            <th scope="col">Codec</th>
+            <th scope="col">Audio</th>
+            <th scope="col">Duration</th>
+            <th scope="col">videoHash</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (episode of seletedSeason.episodes; track $index) {
+          <tr>
+            <th scope="row">{{ episode.id }}</th>
+            <td>{{ episode.title }}</td>
+            <td>{{ episode.parentTitle }}</td>
+            <td>{{ episode.seasonNumber }}</td>
+            <td>{{ episode.episodeNumber }}</td>
+            <td>{{ episode.type }}</td>
+            <td>{{ episode.rootPath }}</td>
+            <td>{{ episode.fileName }}</td>
+            <td>{{ episode.codec }}</td>
+            <td>{{ episode.audio }}</td>
+            <td>{{ episode.duration }}</td>
+            <td>{{ episode.videoHash }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+      }
+
+      <h2
+        (click)="isMovieTableVisible = !isMovieTableVisible"
+        class="mb-3"
+        style="cursor: pointer"
+      >
+        MOVIES
+      </h2>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Title</th>
+            <th scope="col">Parent title</th>
+            <th scope="col">Season number</th>
+            <th scope="col">episode number</th>
+            <th scope="col">Type</th>
+            <th scope="col">Root path</th>
+            <th scope="col">File name</th>
+            <th scope="col">Codec</th>
+            <th scope="col">Audio</th>
+            <th scope="col">Duration</th>
+            <th scope="col">videoHash</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (movie of selectedShow.movies; track $index) {
+          <tr>
+            <th scope="row">{{ movie.id }}</th>
+            <td>{{ movie.title }}</td>
+            <td>{{ movie.parentTitle }}</td>
+            <td>{{ movie.seasonNumber }}</td>
+            <td>{{ movie.episodeNumber }}</td>
+            <td>{{ movie.type }}</td>
+            <td>{{ movie.rootPath }}</td>
+            <td>{{ movie.fileName }}</td>
+            <td>{{ movie.codec }}</td>
+            <td>{{ movie.audio }}</td>
+            <td>{{ movie.duration }}</td>
+            <td>{{ movie.videoHash }}</td>
+          </tr>
+          }
         </tbody>
       </table>
 
+      }
     </mat-tab>
-    <mat-tab label="Users"></mat-tab>
-    <mat-tab label="Roles"></mat-tab>
+    <mat-tab label="Genres">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (genre of genreList; track genre.id) {
+
+          <tr>
+            <td>{{ genre.id }}</td>
+            <td>{{ genre.name }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </mat-tab>
+    <mat-tab label="Users">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Username</th>
+            <th scope="col">Icon color</th>
+            <th scope="col">Icon Id</th>
+            <th scope="col">Roles</th>
+            <th scope="col">Registration date</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of users; track $index) {
+          <tr>
+            <th scope="row">{{ user.id }}</th>
+            <td>{{ user.username }}</td>
+            <td>{{ user.iconColor }}</td>
+            <td>{{ user.icon?.id }}</td>
+            <td>
+              @for (role of user.roles; track $index) {
+              <span
+                style="background-color: aqua; padding: 4px; margin-right: 3px"
+                >{{ role }}</span
+              >
+              }
+            </td>
+
+            <td>{{ user.registrationDate }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </mat-tab>
+    <mat-tab label="Roles">
+      <button (click)="testStreamAuthorize()" class="btn btn-success">
+        Test authorize
+      </button>
+    </mat-tab>
   </mat-tab-group>
 </div>
-
-

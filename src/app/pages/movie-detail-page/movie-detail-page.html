@@ -1,53 +1,47 @@
-@if (show) {
-  @if (show.structure === StructureTypeEnum.SINGLE_MOVIE) {
-    <app-single-movie-component
-      [isVideoPlaying]="isVideoPlaying"
-      [selectedVideoUrl]="selectedVideoUrl"
-      [subtitlesUrl]="subtitlesUrl"
-      [currentMediaItem]="currentMediaItem"
-      [show]="show"
-      (playVideoClicked)="playVideo()"
-      (updateMediaItem)="onUpdateVideoData($event)">
-    </app-single-movie-component>
-  }
-
-  @if (show.structure === StructureTypeEnum.SEASONAL_SERIES) {
-    <app-seasons-component
-      [isVideoPlaying]="isVideoPlaying"
-      [currentMediaItem]="currentMediaItem"
-      [show]="show"
-      [selectedSeason]="selectedSeason"
-      [selectedVideoUrl]="selectedVideoUrl"
-      (playVideoClicked)="playVideo()"
-      (updateMediaItem)="onUpdateVideoData($event)"
-      (seekChange)="onSeekTimeSelected($event)">
-    </app-seasons-component>
-  }
-
-  @if (show.structure === StructureTypeEnum.MOVIE_COLLECTION) {
-    <app-series-component
-      [isVideoPlaying]="isVideoPlaying"
-      [selectedVideoUrl]="selectedVideoUrl"
-      [subtitlesUrl]="subtitlesUrl"
-      [currentMediaItem]="currentMediaItem"
-      [show]="show"
-      (updateVideoData)="onUpdateVideoData($event)"
-      (playVideoClicked)="playVideo()">
-    </app-series-component>
-  }
-
-  @if (show.structure === StructureTypeEnum.HYBRID) {
-    <app-seasons-and-movies-component
-      [currentMediaItem]="currentMediaItem"
-      [isVideoPlaying]="isVideoPlaying"
-      [selectedSeason]="selectedSeason"
-      [selectedVideoUrl]="selectedVideoUrl"
-      [show]="show"
-      (updateMediaItem)="onUpdateVideoData($event)"
-      (playVideoClicked)="playVideo()">
-    </app-seasons-and-movies-component>
-  }
-}
-
-
-
+@if (show) { @if (show.structure === StructureTypeEnum.SINGLE_MOVIE) {
+<app-single-movie-component
+  [isVideoPlaying]="isVideoPlaying"
+  [selectedVideoUrl]="selectedVideoUrl"
+  [subtitlesUrl]="subtitlesUrl"
+  [currentMediaItem]="currentMediaItem"
+  [show]="show"
+  (playVideoClicked)="playVideo()"
+  (updateMediaItem)="onUpdateVideoData($event)"
+>
+</app-single-movie-component>
+} @if (show.structure === StructureTypeEnum.SEASONAL_SERIES) {
+<app-seasons-component
+  [isVideoPlaying]="isVideoPlaying"
+  [currentMediaItem]="currentMediaItem"
+  [subtitlesUrl]="subtitlesUrl"
+  [show]="show"
+  [selectedSeason]="selectedSeason"
+  [selectedVideoUrl]="selectedVideoUrl"
+  (playVideoClicked)="playVideo()"
+  (updateMediaItem)="onUpdateVideoData($event)"
+  (seekChange)="onSeekTimeSelected($event)"
+>
+</app-seasons-component>
+} @if (show.structure === StructureTypeEnum.MOVIE_COLLECTION) {
+<app-series-component
+  [isVideoPlaying]="isVideoPlaying"
+  [selectedVideoUrl]="selectedVideoUrl"
+  [subtitlesUrl]="subtitlesUrl"
+  [currentMediaItem]="currentMediaItem"
+  [show]="show"
+  (updateVideoData)="onUpdateVideoData($event)"
+  (playVideoClicked)="playVideo()"
+>
+</app-series-component>
+} @if (show.structure === StructureTypeEnum.HYBRID) {
+<app-seasons-and-movies-component
+  [currentMediaItem]="currentMediaItem"
+  [isVideoPlaying]="isVideoPlaying"
+  [selectedSeason]="selectedSeason"
+  [selectedVideoUrl]="selectedVideoUrl"
+  [show]="show"
+  (updateMediaItem)="onUpdateVideoData($event)"
+  (playVideoClicked)="playVideo()"
+>
+</app-seasons-and-movies-component>
+} }

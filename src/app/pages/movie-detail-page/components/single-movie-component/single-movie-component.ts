@@ -1,22 +1,24 @@
-import {Component, Input, CUSTOM_ELEMENTS_SCHEMA, Output, EventEmitter} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {NgOptimizedImage} from '@angular/common';
-import {VideoPlayerComponent} from '../../../../components/video-player-component/video-player-component';
-import {ShowModel} from '../../../../models/show/show-model';
-import {MediaItemModel} from '../../../../models/show/media-item-model';
-import {UtilService} from '../../../../services/local/util-service';
+import {
+  Component,
+  Input,
+  CUSTOM_ELEMENTS_SCHEMA,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgOptimizedImage } from '@angular/common';
+import { VideoPlayerComponent } from '../../../../components/video-player-component/video-player-component';
+import { ShowModel } from '../../../../models/show/show-model';
+import { MediaItemModel } from '../../../../models/show/media-item-model';
+import { UtilService } from '../../../../services/local/util-service';
 
 @Component({
   selector: 'app-single-movie-component',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [
-    FormsModule,
-    NgOptimizedImage,
-    VideoPlayerComponent
-  ],
+  imports: [FormsModule, NgOptimizedImage, VideoPlayerComponent],
   templateUrl: './single-movie-component.html',
   standalone: true,
-  styleUrl: './single-movie-component.scss'
+  styleUrl: './single-movie-component.scss',
 })
 export class SingleMovieComponent {
   @Input() show: ShowModel | undefined;
@@ -28,5 +30,4 @@ export class SingleMovieComponent {
   @Output() updateMediaItem = new EventEmitter<Partial<MediaItemModel>>();
 
   constructor(public utilService: UtilService) {}
-
 }

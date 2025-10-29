@@ -1,0 +1,219 @@
+@use "../../../styles/colors" as *;
+@use "../../../styles/mixins" as *;
+@use "../../../styles/components/buttons" as *;
+
+.content-box {
+  height: 60vh; /* 90% wysokości okna */
+  width: 100vw;
+}
+
+.movie-details-overlay .movie-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.movie-details-overlay .movie-description {
+  margin-top: 10px;
+  font-size: 1.1rem;
+}
+
+.movie-details-overlay .play-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  //background-color: #e50914;
+  background-color: $netflix-red;
+  border: none;
+  border-radius: 4px;
+  color: $normal-white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.movie-details-overlay .play-button:hover {
+  //background-color: #fc353f;
+  background-color: $netflix-red-hover;
+}
+.title-row {
+  display: flex;
+  justify-content: flex-start; /* lub flex-start, jeśli chcesz blisko siebie */
+  align-items: center;
+}
+
+.duration {
+  border-radius: 4px;
+  background: #727272;
+  padding-left: 4px;
+  padding-right: 4px;
+  margin-left: 5px;
+  color: #c5c5c5; /* przykładowy styl */
+  font-weight: normal;
+}
+
+.seasons-count {
+  margin-left: 5px;
+  font-size: 1.25rem;
+  font-weight: normal;
+  color: #aaa;
+}
+
+.genres {
+  display: flex; /* układa w jednej linii */
+  flex-wrap: wrap; /* zawijanie, jeśli za dużo tagów */
+  gap: 8px; /* odstęp między tagami */
+}
+
+.genre-tag {
+  background-color: #313131; /* Netflixowy czerwony, możesz zmienić */
+  border: #252525 2px solid;
+  color: white;
+  padding: 4px 10px; /* w pionie i poziomie */
+  border-radius: 4px; /* zaokrąglone końce */
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* lekki cień */
+  cursor: default; /* opcjonalnie */
+  transition: transform 0.2s; /* fajna animacja hover */
+}
+
+$body-bg: #020202;
+
+.backdrop-fullbleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  height: 80vh;
+  overflow: hidden;
+  position: relative;
+  background: $body-bg;
+}
+
+/* miękkie, stopniowe przyciemnienie — główny gradient (dłuższy, łagodny) */
+.backdrop-fullbleed::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 55%; /* wydłużony fade */
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(2, 2, 2, 0) 0%,
+    rgba(2, 2, 2, 0.04) 25%,
+    rgba(2, 2, 2, 0.1) 45%,
+    rgba(2, 2, 2, 0.25) 65%,
+    rgba(2, 2, 2, 0.55) 85%,
+    rgba(2, 2, 2, 1) 100%
+  );
+  filter: blur(6px); /* delikatne rozmycie krawędzi */
+  transform: translateY(1px);
+  will-change: opacity;
+}
+
+/* dodatkowa, skupiona warstwa przyciemnienia u samego dołu (możesz wyłączyć gdy zbyt ciężkie) */
+.backdrop-fullbleed::before {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 25%; /* mocniejsze przyciemnienie blisko dołu */
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(2, 2, 2, 0) 0%,
+    rgba(2, 2, 2, 0.35) 50%,
+    rgba(2, 2, 2, 1) 100%
+  );
+  mix-blend-mode: normal;
+  opacity: 1;
+}
+
+/* obraz */
+.backdrop-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  position: static;
+}
+
+.progress-bar-box {
+  position: absolute;
+  width: 240px;
+  right: 1rem;
+  top: 1rem;
+  z-index: 10;
+  padding: 20px 20px 20px 120px;
+
+  @include frosted-glass(10px);
+}
+
+.progress-bar-next {
+  position: absolute;
+  right: 12rem;
+  top: -0.3rem;
+  z-index: 10;
+}
+
+.progress-bar-play {
+  position: absolute;
+  right: 10rem;
+  top: -0.3rem;
+  z-index: 10;
+}
+
+.carousel-progress-bar {
+  position: absolute;
+  width: 150px; /* długość paska */
+  height: 6px; /* grubość paska */
+  right: 1rem;
+  top: 1rem;
+  z-index: 10;
+  border-radius: 3px;
+  padding: 5px;
+  background: #141414; /* ciemne tło jak w Netflix */
+  overflow: hidden;
+}
+
+/* styl dla wypełnienia (czerwony pasek) */
+::ng-deep .carousel-progress-bar .mat-progress-bar-fill::after {
+  background-color: #e50914 !important; /* Netflix red */
+  border-radius: 3px;
+  height: 6px; /* dopasowanie do wysokości kontenera */
+}
+
+.movie-details-overlay {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  z-index: 10;
+  color: $normal-white;
+  max-width: 500px;
+  padding: 1rem;
+
+  @include frosted-glass(10px);
+}
+
+.movie-details-overlay .movie-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.movie-details-overlay .movie-description {
+  margin-top: 10px;
+  font-size: 1.1rem;
+}
+
+.movie-details-overlay .play-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  //background-color: #e50914;
+  background-color: $netflix-red;
+  border: none;
+  border-radius: 4px;
+  color: $normal-white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.movie-details-overlay .play-button:hover {
+  //background-color: #fc353f;
+  background-color: $netflix-red-hover;
+}

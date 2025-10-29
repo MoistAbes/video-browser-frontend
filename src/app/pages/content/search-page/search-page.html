@@ -23,8 +23,6 @@
     @for (show of showListFiltered; track show.id) {
       <app-video-card-component
         [title]="show.name"
-        (mouseenter)="startHoverTimer(show)"
-        (mouseleave)="cancelHoverTimer()"
         (cardClick)="moveToMovieDetails(show.name)"
         [iconFilePath]="utilService.getIconUrl(show.rootPath)"
       ></app-video-card-component>

@@ -1,26 +1,36 @@
 .info-panel-fixed {
   position: relative;
   width: clamp(280px, 28vw, 380px);
-  color: #fff; background: #1d1f22; overflow: hidden;
-  box-shadow: 0 18px 40px rgba(0,0,0,0.45), 0 8px 16px rgba(0,0,0,0.35);
-
+  color: #fff;
+  background: #1d1f22;
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45), 0 8px 16px rgba(0, 0, 0, 0.35);
 
   opacity: 0;
   transform: translateY(-10px) scale(0.98);
   transition: opacity 0.22s ease, transform 0.22s ease;
 
-
-  &.pos-right { transform-origin: center left;  }
-  &.pos-left  { transform-origin: center right; }
-
+  &.pos-right {
+    transform-origin: center left;
+  }
+  &.pos-left {
+    transform-origin: center right;
+  }
 
   .caret {
-    position: absolute; width: 14px; height: 14px; background: #1d1f22; transform: rotate(45deg);
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: #1d1f22;
+    transform: rotate(45deg);
     top: 20px;
   }
-  &.pos-right .caret { left: -7px;  }
-  &.pos-left  .caret { right: -7px; }
-
+  &.pos-right .caret {
+    left: -7px;
+  }
+  &.pos-left .caret {
+    right: -7px;
+  }
 
   .preview-container {
     display: flex;
@@ -32,20 +42,22 @@
       width: 100%;
       height: auto;
       aspect-ratio: 16 / 9;
-
     }
-
-
   }
-
 }
 
+.desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* maks 3 linijki */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 /* Specjalne wejście z prawej */
 .info-panel-fixed.pos-right.show {
   transform: translateX(20px) translateY(0) scale(1);
 }
-
 
 .info-panel-fixed.hide {
   pointer-events: none;
@@ -54,11 +66,8 @@
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-
 .info-panel-fixed.show {
   pointer-events: auto;
   opacity: 1;
   transform: translateY(0) scale(1);
 }
-
-

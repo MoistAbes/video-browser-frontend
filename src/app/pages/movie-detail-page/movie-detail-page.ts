@@ -1,15 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {Endpoints} from '../../endpoints/endpoints';
-import {FormsModule} from '@angular/forms';
-import {SingleMovieComponent} from './components/single-movie-component/single-movie-component';
-import {SeasonsComponent} from './components/seasons-component/seasons-component';
-import {SeriesComponent} from './components/series-component/series-component';
-import {SeasonsAndMoviesComponent} from './components/seasons-and-movies-component/seasons-and-movies-component';
-import {ShowApiService} from '../../services/api/show-api-service';
-import {ShowModel} from '../../models/show/show-model';
-import {MediaItemModel} from '../../models/show/media-item-model';
-import {StructureTypeEnum} from '../../enums/structure-type-enum';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Endpoints } from '../../endpoints/endpoints';
+import { FormsModule } from '@angular/forms';
+import { SingleMovieComponent } from './components/single-movie-component/single-movie-component';
+import { SeasonsComponent } from './components/seasons-component/seasons-component';
+import { SeriesComponent } from './components/series-component/series-component';
+import { SeasonsAndMoviesComponent } from './components/seasons-and-movies-component/seasons-and-movies-component';
+import { ShowApiService } from '../../services/api/show-api-service';
+import { ShowModel } from '../../models/show/show-model';
+import { MediaItemModel } from '../../models/show/media-item-model';
+import { StructureTypeEnum } from '../../enums/structure-type-enum';
+import { StreamApiService } from '../../services/api/stream-api-service';
 
 @Component({
   standalone: true,
@@ -22,10 +23,9 @@ import {StructureTypeEnum} from '../../enums/structure-type-enum';
     SeasonsAndMoviesComponent,
   ],
   templateUrl: './movie-detail-page.html',
-  styleUrl: './movie-detail-page.scss'
+  styleUrl: './movie-detail-page.scss',
 })
 export class MovieDetailPage implements OnInit {
-
   protected readonly StructureTypeEnum = StructureTypeEnum;
 
   show: ShowModel | undefined;
@@ -33,40 +33,44 @@ export class MovieDetailPage implements OnInit {
   selectedVideoUrl: string = '';
   subtitlesUrl: string = '';
 
-  selectedSeason: number | null = null
+  selectedSeason: number | null = null;
 
   isVideoPlaying: boolean = false;
   private seekStartTime: number = 0;
 
-  constructor(private route: ActivatedRoute,
-              private showApiService: ShowApiService,) {}
+  streamAuthKey: string = '';
+
+  constructor(
+    private route: ActivatedRoute,
+    private showApiService: ShowApiService,
+    private streamApiService: StreamApiService
+  ) {}
 
   ngOnInit() {
     const parentTitle: string = this.route.snapshot.params['parentTitle'];
     this.findShowDetailByParentTitle(parentTitle);
-
   }
 
   findShowDetailByParentTitle(parentTitle: string): void {
     this.showApiService.findShowByParentTitle(parentTitle).subscribe({
-      next: data => {
+      next: (data) => {
         this.show = data;
-        console.log("show details: ", this.show);
-
+        console.log('show details: ', this.show);
       },
-      error: err => {
-        console.log("Error while findShowDetailByParentTitle: ", err);
+      error: (err) => {
+        console.log('Error while findShowDetailByParentTitle: ', err);
       },
       complete: () => {
         this.determineVideoCategory();
-
-      }
-    })
+      },
+    });
   }
 
-
   onUpdateVideoData(update: Partial<MediaItemModel>) {
-    this.currentMediaItem = { ...this.currentMediaItem, ...update } as MediaItemModel;
+    this.currentMediaItem = {
+      ...this.currentMediaItem,
+      ...update,
+    } as MediaItemModel;
 
     //reset video data
     this.isVideoPlaying = false;
@@ -77,54 +81,73 @@ export class MovieDetailPage implements OnInit {
     if (!this.currentMediaItem) return;
 
     const fullVideoPath: string = `${this.currentMediaItem.rootPath}/${this.currentMediaItem.fileName}`;
-    const needsConversion: boolean = !['aac', 'mp3'].includes(this.currentMediaItem.audio!);
+    const needsConversion: boolean = !['aac', 'mp3'].includes(
+      this.currentMediaItem.audio!
+    );
 
     if (needsConversion) {
-      this.selectedVideoUrl =
-        `${Endpoints.stream.convert}?path=${encodeURIComponent(fullVideoPath)}&start=${this.seekStartTime}`;
+      this.selectedVideoUrl = `${
+        Endpoints.stream.convert
+      }?path=${encodeURIComponent(fullVideoPath)}&start=${this.seekStartTime}`;
     } else {
-      this.selectedVideoUrl =
-        `${Endpoints.stream.normal}?path=${encodeURIComponent(fullVideoPath)}`;
+      this.selectedVideoUrl = `${
+        Endpoints.stream.normal
+      }?path=${encodeURIComponent(fullVideoPath)}&authKey=${
+        this.streamAuthKey
+      }`;
     }
   }
 
+  authorizeAndUpdateVideoUrl() {
+    this.streamApiService.authorizeStream().subscribe({
+      next: (value) => {
+        console.log('KEY: ', value);
+        this.streamAuthKey = value;
+        this.updateVideoUrl();
+      },
+      error: (err) => {
+        console.log(
+          'something went wrong while genereating stream key: ',
+          err.error
+        );
+      },
+      complete: () => {},
+    });
+  }
 
   playVideo() {
+    console.log('play video');
 
     if (!this.currentMediaItem) return;
 
     this.isVideoPlaying = true;
 
-    this.updateVideoUrl()
+    this.authorizeAndUpdateVideoUrl();
 
-    // Ustawienie napisów
+    // // Ustawienie napisów
     const subtitleName: string = this.currentMediaItem.title;
     const rootPath: string = encodeURIComponent(this.currentMediaItem.rootPath);
-    this.subtitlesUrl = `${Endpoints.videos.subtitles}/${encodeURIComponent(subtitleName)}?path=${rootPath}`;
+    this.subtitlesUrl = `${Endpoints.videos.subtitles}/${encodeURIComponent(
+      subtitleName
+    )}?path=${rootPath}`;
 
+    console.log('subtitles in movie detail url: ', this.subtitlesUrl);
   }
 
   onSeekTimeSelected(time: number) {
     this.seekStartTime = time;
-    this.updateVideoUrl()
-
+    this.updateVideoUrl();
   }
 
   determineVideoCategory() {
     if (this.show?.structure == StructureTypeEnum.SINGLE_MOVIE) {
       this.currentMediaItem = this.show!.movies[0]!;
-
     } else if (this.show?.structure == StructureTypeEnum.SEASONAL_SERIES) {
       this.currentMediaItem = this.show!.seasons[0].episodes[0]!;
-
     } else if (this.show?.structure == StructureTypeEnum.MOVIE_COLLECTION) {
-
     } else if (this.show?.structure == StructureTypeEnum.HYBRID) {
-
-    }else {
+    } else {
       console.warn('Nieznany typ struktury show:', this.show?.structure);
     }
-
   }
-
 }

@@ -7,6 +7,7 @@ export class ShowModel {
   id: number | undefined;
   name: string = '';
   rootPath: string = '';
+  description: string = '';
 
   seasons: SeasonModel[] = []
   movies: MediaItemModel[] = []

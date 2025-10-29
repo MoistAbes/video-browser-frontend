@@ -1,91 +1,13 @@
 <div class="main-box">
   <div class="random-show-box">
-
-    <div class="content-box">
-      @if (selectedShow) {
-
-        <div class="movie-details-overlay">
-
-          <div class="movie-header">
-            <div class="title-row">
-              <h1 class="movie-title">{{selectedShow.name}}</h1>
-              @if (selectedShow.seasons.length > 0) {
-                <h1 class="seasons-count">{{selectedShow.seasons.length}} Seasons</h1>
-              }
-            </div>
-          </div>
-          <p class="movie-description">
-            To jest przykładowy opis filmu. Możesz go później podmienić na dane z backendu.
-          </p>
-          <button class="play-button"
-          (click)="moveToMovieDetails(selectedShow.name)"
-          >
-            <i class="fa-solid fa-play"></i> Watch
-          </button>
-        </div>
-
-        <div class="image-wrapper">
-          <div class="image-placeholder"></div>
-          <img
-            class="content"
-            [ngSrc]="utilService.getBackdropUrl(selectedShow.rootPath)"
-            priority
-            fill
-            (load)="onImageLoad($event)"
-            alt="backdrop"
-          />
-        </div>
-      }
-    </div>
-
-    <div>
-      <div class="carousel-container">
-        <h2 class="carousel-title">Proponowane</h2>
-        <div class="progress-bar-box">
-
-          <button class="netflix-button progress-bar-next" (click)="onNextButtonClick()">
-            <i class="fa-solid fa-chevron-right"></i>
-          </button>
-
-          <button class="netflix-button progress-bar-play" (click)="toggleTimer()">
-            @if (isTimerRunning) {
-              <i class="fa-solid fa-pause"></i>
-            }
-            @if (!isTimerRunning) {
-              <i class="fa-solid fa-play"></i>
-            }
-          </button>
-
-
-          <mat-progress-bar
-            class="carousel-progress-bar"
-            mode="determinate"
-            [value]="progressValue">
-          </mat-progress-bar>
-        </div>
-        <button class="arrow left" (click)="scrollLeftBtn()">‹</button>
-
-        <div class="carousel" #carousel>
-          @for (show of randomShows; track show.id) {
-
-            <div class="item">
-              <app-video-card-component
-                [title]="show.name"
-                [showPreview]="true"
-                [iconFilePath]="utilService.getIconUrl(show.rootPath)"
-                (cardClick)="moveToMovieDetails(show.name)">
-              </app-video-card-component>
-            </div>
-
-          }
-        </div>
-
-        <button class="arrow right" (click)="scrollRightBtn()">›</button>
-      </div>
-    </div>
-
-
+    @if (randomShows.length > 0) {
+    <app-main-show-carousel-component [shows]="randomShows">
+    </app-main-show-carousel-component>
+    } @for (genreWithShows of genreShowList; track $index) {
+    <app-show-carousel-component
+      [shows]="genreWithShows.shows"
+      [carouselTitle]="genreWithShows.genre"
+    ></app-show-carousel-component>
+    }
   </div>
-
-
 </div>

@@ -1,21 +1,25 @@
 import {
-  AfterViewInit, ChangeDetectorRef,
+  AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
-  Input, OnChanges,
+  Input,
+  OnChanges,
   OnDestroy,
   OnInit,
-  Output, SimpleChanges,
-  ViewChild
+  Output,
+  SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import videojs from 'video.js';
-import {MatSlider, MatSliderThumb} from '@angular/material/slider';
-import {VideoSelectorComponent} from './video-selector-component/video-selector-component';
-import {ShowModel} from '../../models/show/show-model';
-import {MediaItemModel} from '../../models/show/media-item-model';
-import {ShowUtilService} from '../../services/local/show-util-service';
-import {VideoTimelineComponent} from '../video-timeline-component/video-timeline-component';
+import { MatSlider, MatSliderThumb } from '@angular/material/slider';
+import { VideoSelectorComponent } from './video-selector-component/video-selector-component';
+import { ShowModel } from '../../models/show/show-model';
+import { MediaItemModel } from '../../models/show/media-item-model';
+import { ShowUtilService } from '../../services/local/show-util-service';
+import { VideoTimelineComponent } from '../video-timeline-component/video-timeline-component';
+import { StructureTypeEnum } from '../../enums/structure-type-enum';
 
 type VideoJSPlayer = ReturnType<typeof videojs>;
 
@@ -31,7 +35,9 @@ type VideoJSPlayer = ReturnType<typeof videojs>;
   styleUrl: './video-player-component.scss',
   standalone: true,
 })
-export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
+export class VideoPlayerComponent
+  implements OnInit, OnDestroy, AfterViewInit, OnChanges
+{
   @ViewChild('target', { static: true }) target!: ElementRef<HTMLVideoElement>;
 
   @Input() currentMediaItem: MediaItemModel | undefined;
@@ -53,7 +59,7 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
   volume: number = 1;
   isPlaying: boolean = false;
   isVideoListVisible: boolean = false;
-  wasPlaying: boolean = true
+  wasPlaying: boolean = true;
   isSeeking = false;
 
   showControls: boolean = false;
@@ -61,68 +67,99 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
   nextEpisodeTimerCounter: number = 16;
   isNextEpisodeNoticeVisible: boolean = false;
 
-  constructor(private cdr: ChangeDetectorRef,
-              private showUtilService: ShowUtilService) {
-  }
+  private mouseMoveTimeout: any;
 
-  ngOnInit() {
-  }
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private showUtilService: ShowUtilService
+  ) {}
+
+  ngOnInit() {}
 
   ngAfterViewInit(): void {
-    this.player = videojs(this.target.nativeElement, {
-      controls: false,
-      autoplay: true,
-      preload: 'auto',
-      textTrackSettings: false,
-      fluid: true,
-      userActions: {
-        hotkeys: false // 👈 wyłącza wbudowane hotkeye
+    this.player = videojs(
+      this.target.nativeElement,
+      {
+        controls: false,
+        autoplay: true,
+        preload: 'auto',
+        textTrackSettings: false,
+        fluid: true,
+        userActions: {
+          hotkeys: false, // 👈 wyłącza wbudowane hotkeye
+        },
+        sources: [{ src: this.src, type: 'video/mp4' }],
+        tracks: [
+          {
+            kind: 'captions',
+            src: this.subtitlesUrl,
+            srclang: 'en',
+            label: 'English',
+            default: true,
+          },
+        ],
       },
-      sources: [{ src: this.src, type: 'video/mp4' }],
-      tracks: [
-        {
-          kind: 'captions',
-          src: this.subtitlesUrl,
-          srclang: 'en',
-          label: 'English',
-          default: true
-        }
-      ]
-    }, () => {
+      () => {
+        const container = document.querySelector(
+          '.video-player-container'
+        ) as HTMLElement;
 
-      // Add key event listener
-      document.addEventListener('keydown', this.handleKeydown);
+        const hideCursor = () => container.classList.add('hide-cursor');
+        const showCursor = () => container.classList.remove('hide-cursor');
 
-      //on time update
-      this.player.on('timeupdate', () => {
+        const resetMouseTimer = () => {
+          showCursor();
+          clearTimeout(this.mouseMoveTimeout);
+          this.mouseMoveTimeout = setTimeout(() => {
+            // Ukryj tylko, jeśli jesteśmy w fullscreenie
+            if (document.fullscreenElement === container) hideCursor();
+          }, 3000);
+        };
 
-        if (!this.isSeeking) {
+        container.addEventListener('mousemove', resetMouseTimer);
+        container.addEventListener('mouseleave', hideCursor);
 
-          this.currentTime = this.player.currentTime()!;
-          this.duration = this.player.duration()!;
+        // Wyczyszczenie po zniszczeniu
+        this.player.on('dispose', () => {
+          container.removeEventListener('mousemove', resetMouseTimer);
+          container.removeEventListener('mouseleave', hideCursor);
+          clearTimeout(this.mouseMoveTimeout);
+        });
 
-          const timeLeft: number = this.duration - this.currentTime;
+        // Add key event listener
+        document.addEventListener('keydown', this.handleKeydown);
 
-          if (timeLeft <= 15) {
-            this.isNextEpisodeNoticeVisible = true;
-            // licznik w sekundach, zaokrąglony w dół
-            this.nextEpisodeTimerCounter = Math.floor(timeLeft);
-          } else {
-            this.isNextEpisodeNoticeVisible = false;
+        //on time update
+        this.player.on('timeupdate', () => {
+          if (!this.isSeeking) {
+            this.currentTime = this.player.currentTime()!;
+            this.duration = this.player.duration()!;
+
+            const timeLeft: number = this.duration - this.currentTime;
+
+            if (
+              timeLeft <= 15 &&
+              this.show?.structure != StructureTypeEnum.SINGLE_MOVIE
+            ) {
+              this.isNextEpisodeNoticeVisible = true;
+              // licznik w sekundach, zaokrąglony w dół
+              this.nextEpisodeTimerCounter = Math.floor(timeLeft);
+            } else {
+              this.isNextEpisodeNoticeVisible = false;
+            }
           }
-        }
-      });
+        });
 
+        this.player.on('ended', () => {
+          this.onVideoEnd();
+        });
 
-      this.player.on('ended', () => {
-        this.onVideoEnd();
-      });
+        this.player.on('play', () => (this.isPlaying = true));
+        this.player.on('pause', () => (this.isPlaying = false));
 
-      this.player.on('play', () => (this.isPlaying = true));
-      this.player.on('pause', () => (this.isPlaying = false));
-
-      this.volume = this.player.volume()!;
-    });
+        this.volume = this.player.volume()!;
+      }
+    );
   }
 
   formatTime(seconds: number): string {
@@ -131,7 +168,7 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
     const s = Math.floor(seconds % 60);
 
     const hh = h > 0 ? `${h}:` : '';
-    const mm = (h > 0 && m < 10) ? `0${m}` : `${m}`;
+    const mm = h > 0 && m < 10 ? `0${m}` : `${m}`;
     const ss = s < 10 ? `0${s}` : `${s}`;
 
     return h > 0 ? `${hh}${mm}:${ss}` : `${mm}:${ss}`;
@@ -139,14 +176,14 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
 
   onSeekChangeFromSlider(newTime: number) {
     this.player.currentTime(newTime);
-    this.currentTime = newTime;  // zsynchronizuj zmienną w Angularze
+    this.currentTime = newTime; // zsynchronizuj zmienną w Angularze
   }
 
-// Aktualizacja slidera tylko wtedy, gdy player wysyła timeupdate
+  // Aktualizacja slidera tylko wtedy, gdy player wysyła timeupdate
   onTimeUpdateFromPlayer(time: number) {
     if (this.isSeeking) {
       this.currentTime = time;
-      this.player.currentTime(this.currentTime)
+      this.player.currentTime(this.currentTime);
     }
   }
 
@@ -160,30 +197,25 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
   }
 
-
   onSeekEnd(newTime: number) {
-    console.log("onSeekEnd player: ", newTime)
     this.player.currentTime(newTime);
     this.isSeeking = false;
 
     if (this.wasPlaying) {
-      this.player?.play()!.catch(err => {
-        console.warn("Play interrupted:", err);
-      });
+      this.player?.play()!.catch((err) => {});
     }
   }
 
-
   // Metoda wywoływana, gdy zmienia się odcinek w selektorze
   onUpdateVideoData(videoInfo: Partial<MediaItemModel>) {
-    this.currentMediaItem = { ...this.currentMediaItem, ...videoInfo } as MediaItemModel;
-    this.updateMediaItem.emit(videoInfo)
-
+    this.currentMediaItem = {
+      ...this.currentMediaItem,
+      ...videoInfo,
+    } as MediaItemModel;
+    this.updateMediaItem.emit(videoInfo);
   }
 
   onTimeUpdate(): void {
-
-
     this.currentTime = this.player.currentTime()!;
 
     // const input = this.progressSlider?.nativeElement;
@@ -193,16 +225,16 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
     // }
   }
 
-
-
   onVideoEnd() {
-    const nextMediaItem: MediaItemModel | undefined = this.showUtilService.findNextMediaItemAutoplay(this.show, this.currentMediaItem)
+    const nextMediaItem: MediaItemModel | undefined =
+      this.showUtilService.findNextMediaItemAutoplay(
+        this.show,
+        this.currentMediaItem
+      );
 
     if (nextMediaItem) {
       this.playNextMedia(nextMediaItem);
-
     }
-
   }
 
   private playNextMedia(mediaItem: MediaItemModel): void {
@@ -213,13 +245,14 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['src'] && !changes['src'].firstChange && this.player) {
-      console.log('Video source changed:', this.src);
       this.player.src({ src: this.src, type: 'video/mp4' });
     }
 
-    if (changes['subtitlesUrl'] && !changes['subtitlesUrl'].firstChange && this.player) {
-      console.log('Subtitles changed:', this.subtitlesUrl);
-
+    if (
+      changes['subtitlesUrl'] &&
+      !changes['subtitlesUrl'].firstChange &&
+      this.player
+    ) {
       // Usuń stare napisy
       const tracks = this.player.remoteTextTracks() as any; // rzutujemy na any
 
@@ -229,17 +262,18 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
       }
 
       // Dodaj nowe napisy
-      this.player.addRemoteTextTrack({
-        kind: 'captions',
-        src: this.subtitlesUrl,
-        srclang: 'en',
-        label: 'English',
-        default: true
-      }, false);
+      this.player.addRemoteTextTrack(
+        {
+          kind: 'captions',
+          src: this.subtitlesUrl,
+          srclang: 'en',
+          label: 'English',
+          default: true,
+        },
+        false
+      );
     }
   }
-
-
 
   onVolumeChange(event: Event) {
     const target = event.target as HTMLInputElement;
@@ -253,7 +287,9 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
   }
 
   toggleFullscreen() {
-    const container = document.querySelector('.video-player-container') as HTMLElement;
+    const container = document.querySelector(
+      '.video-player-container'
+    ) as HTMLElement;
     if (document.fullscreenElement) {
       document.exitFullscreen();
     } else {
@@ -261,11 +297,11 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
       this.showControls = true;
     }
   }
-
 
   onVideoDoubleClick() {
-
-    const container = document.querySelector('.video-player-container') as HTMLElement;
+    const container = document.querySelector(
+      '.video-player-container'
+    ) as HTMLElement;
     if (document.fullscreenElement) {
       document.exitFullscreen();
     } else {
@@ -273,7 +309,6 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
       this.showControls = true;
     }
   }
-
 
   private showOverlay(text: string) {
     this.overlayText = text;
@@ -288,13 +323,11 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
     }, 1500);
   }
 
-
   handleKeydown = (event: KeyboardEvent): void => {
     const player = this.player;
     if (!player) return;
 
     switch (event.key) {
-
       case 'ArrowLeft':
       case 'a': // alternatywnie klawisz 'A'
       case 'A':
@@ -306,7 +339,9 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
       case 'ArrowRight':
       case 'd': // alternatywnie klawisz 'D'
       case 'D':
-        player.currentTime(Math.min(player.duration()!, player.currentTime()! + 5));
+        player.currentTime(
+          Math.min(player.duration()!, player.currentTime()! + 5)
+        );
         this.currentTime = player.currentTime()!;
 
         // this.showOverlay(`⏩ +5s`);
@@ -314,7 +349,7 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
 
       case ' ':
       case 'Spacebar': // starsze przeglądarki
-        this.togglePlay()
+        this.togglePlay();
         break;
 
       case 'ArrowUp':
@@ -330,7 +365,6 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
         this.volume = this.player.volume()!;
         this.showOverlay(`Volume: ${Math.round(volDown * 100)}%`);
         break;
-
     }
   };
 
@@ -359,7 +393,7 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
     clearTimeout(this.overlayTimeout);
     this.overlayTimeout = setTimeout(() => {
       this.showControls = false;
-      this.isVideoListVisible = false
+      this.isVideoListVisible = false;
     }, 3000); // auto-hide after 3s
   }
 
@@ -369,5 +403,4 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
     document.removeEventListener('keydown', this.handleKeydown);
   }
-
 }

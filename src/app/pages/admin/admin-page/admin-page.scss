@@ -1,0 +1,13 @@
+
+
+.form-row {
+  display: flex;
+  gap: 1rem; /* odstęp między kolumnami */
+  flex-wrap: wrap; /* jeśli ekran jest wąski, przełamiemy wiersz */
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column; /* label nad selectem */
+  flex: 1 1 150px; /* elastyczna szerokość, min. 150px */
+}

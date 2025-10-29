@@ -1,18 +1,26 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {ChangeContext, NgxSliderModule, Options} from '@angular-slider/ngx-slider';
-import {NgStyle} from '@angular/common';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
+import {
+  ChangeContext,
+  NgxSliderModule,
+  Options,
+} from '@angular-slider/ngx-slider';
+import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-video-timeline-component',
-  imports: [
-    NgxSliderModule,
-    NgStyle
-  ],
+  imports: [NgxSliderModule, NgStyle],
   templateUrl: './video-timeline-component.html',
   standalone: true,
-  styleUrl: './video-timeline-component.scss'
+  styleUrl: './video-timeline-component.scss',
 })
-export class VideoTimelineComponent implements OnChanges{
+export class VideoTimelineComponent implements OnChanges {
   @Input() duration: number = 0;
   @Input() currentTime: number = 0;
 
@@ -32,7 +40,7 @@ export class VideoTimelineComponent implements OnChanges{
     showTicksValues: false,
     showSelectionBar: true,
     animate: false,
-    translate: (value: number): string => this.formatTime(value)
+    translate: (value: number): string => this.formatTime(value),
   };
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -61,11 +69,16 @@ export class VideoTimelineComponent implements OnChanges{
   }
 
   formatTime(seconds: number): string {
-    const minutes = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
-    return `${minutes}:${secs}`;
-  }
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = Math.floor(seconds % 60);
 
+    const hh = h > 0 ? `${h}:` : '';
+    const mm = h > 0 && m < 10 ? `0${m}` : `${m}`;
+    const ss = s < 10 ? `0${s}` : `${s}`;
+
+    return h > 0 ? `${hh}${mm}:${ss}` : `${mm}:${ss}`;
+  }
 
   //ToDO do naprawy czas hoverowany nie zgadza sie z faktycznym czasem po kliknieciu
   onSliderHover(event: MouseEvent) {
@@ -75,10 +88,14 @@ export class VideoTimelineComponent implements OnChanges{
 
     const rect = sliderEl.getBoundingClientRect();
     const percent = (event.clientX - rect.left) / rect.width;
-    this.hoverTime = Math.min(Math.max(0, percent * this.duration), this.duration);
+
+ 
+    this.hoverTime = Math.min(
+      Math.max(0, percent * this.duration),
+      this.duration
+    );
 
     // pozycja tooltipu względem wrappera
     this.hoverX = event.clientX - sliderWrapper.getBoundingClientRect().left;
-    console.log("hover x: ", this.hoverX)
   }
 }

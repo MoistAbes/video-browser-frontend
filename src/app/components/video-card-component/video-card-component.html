@@ -6,14 +6,7 @@
   #cardRef
 >
   <div class="b-game-card__plane">
-    <img
-      ngSrc="cover.webp"
-      alt="cover"
-      class="b-game-card__cover"
-      fill
-    />
+    <img [ngSrc]="iconFilePath" alt="cover" class="b-game-card__cover" fill />
     <div class="b-game-card__gloss"></div>
   </div>
-
-  <p class="video-title">{{ title }}</p>
 </div>

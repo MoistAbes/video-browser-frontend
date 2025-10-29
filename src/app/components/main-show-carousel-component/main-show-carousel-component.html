@@ -1,0 +1,76 @@
+<div class="content-box">
+  @if (selectedShow) {
+
+  <div class="movie-details-overlay">
+    <div class="movie-header">
+      <div class="title-row">
+        <h1 class="movie-title">{{ selectedShow.name }}</h1>
+        @if (selectedShow.seasons.length > 0) {
+        <h1 class="seasons-count">{{ selectedShow.seasons.length }} Seasons</h1>
+        }
+      </div>
+    </div>
+
+    <div class="genres">
+      @for (genre of selectedShow.genres; track genre.id) {
+      <span class="genre-tag">{{ genre.name }}</span>
+      }
+    </div>
+
+    <p class="movie-description">
+      {{ selectedShow.description }}
+    </p>
+    <button class="play-button" (click)="moveToMovieDetails(selectedShow.name)">
+      <i class="fa-solid fa-play"></i> Watch
+    </button>
+  </div>
+
+  <div>
+    <div class="backdrop-fullbleed">
+      <img
+        [ngSrc]="utilService.getBackdropUrl(selectedShow.rootPath)"
+        [width]="1920"
+        [height]="1080"
+        sizes="100vw"
+        class="backdrop-img"
+        alt="backdrop"
+        priority="true"
+        (load)="onImageLoad($event)"
+      />
+    </div>
+  </div>
+  }
+</div>
+
+<div class="carousel-container">
+  <div class="progress-bar-box">
+    <button
+      class="netflix-button progress-bar-next"
+      (click)="onNextButtonClick()"
+    >
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+
+    <button class="netflix-button progress-bar-play" (click)="toggleTimer()">
+      @if (isTimerRunning) {
+      <i class="fa-solid fa-pause"></i>
+      } @if (!isTimerRunning) {
+      <i class="fa-solid fa-play"></i>
+      }
+    </button>
+
+    <mat-progress-bar
+      class="carousel-progress-bar"
+      mode="determinate"
+      [value]="progressValue"
+    >
+    </mat-progress-bar>
+  </div>
+
+  <app-show-carousel-component
+    [shows]="shows"
+    [carouselTitle]="'Polecane'"
+  ></app-show-carousel-component>
+
+  <!-- <button class="arrow right" (click)="scrollRightBtn()">›</button> -->
+</div>

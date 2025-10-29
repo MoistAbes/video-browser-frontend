@@ -1,0 +1,35 @@
+@use "../../../styles/colors" as *;
+
+.carousel-container {
+  z-index: 10;
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.carousel {
+  margin: 4rem 2rem 2rem;
+  display: flex;
+  gap: 1rem;
+  overflow: hidden;
+  scroll-behavior: smooth;
+  padding: 6px 2rem;
+}
+
+.carousel-title {
+  position: absolute;
+  z-index: 10;
+  top: -0.4rem;
+  left: 1rem;
+  font-size: 3rem;
+  font-weight: bold;
+  color: $normal-white;
+  text-shadow: 2px 2px 0 #000, -2px 2px 0 #000, 2px -2px 0 #000,
+    -2px -2px 0 #000; /* czarne kontury wokół tekstu */
+}
+
+.item {
+  flex: 0 0 auto; /* zapobiega rozciąganiu */
+  width: 180px; /* szerokość jednego elementu */
+}

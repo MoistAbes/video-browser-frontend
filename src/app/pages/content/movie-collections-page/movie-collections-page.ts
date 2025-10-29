@@ -1,53 +1,67 @@
-import {Component, OnInit} from '@angular/core';
-import {StructureTypeEnum} from '../../../enums/structure-type-enum';
-import {GenreTypeEnum} from '../../../enums/genre-type-enum';
-import {ShowModel} from '../../../models/show/show-model';
-import {ShowApiService} from '../../../services/api/show-api-service';
+import { Component, OnInit } from '@angular/core';
+import { StructureTypeEnum } from '../../../enums/structure-type-enum';
+import { GenreTypeEnum } from '../../../enums/genre-type-enum';
+import { ShowModel } from '../../../models/show/show-model';
+import { ShowApiService } from '../../../services/api/show-api-service';
+import { ShowCarouselComponent } from '../../../components/show-carousel-component/show-carousel-component';
+import { MainShowCarouselComponent } from '../../../components/main-show-carousel-component/main-show-carousel-component';
 
 @Component({
   selector: 'app-movie-collections-page',
-  imports: [],
+  imports: [ShowCarouselComponent, MainShowCarouselComponent],
   templateUrl: './movie-collections-page.html',
   standalone: true,
-  styleUrl: './movie-collections-page.scss'
+  styleUrl: './movie-collections-page.scss',
 })
 export class MovieCollectionsPage implements OnInit {
-
-
+  featuredShows: ShowModel[] = [];
   showStructureType: StructureTypeEnum = StructureTypeEnum.MOVIE_COLLECTION;
-  showGroupedByGenre: Map<GenreTypeEnum, ShowModel[]> = new Map<GenreTypeEnum, ShowModel[]>()
-  genreShowList: { genre: GenreTypeEnum; shows: ShowModel[] }[] = [];
+  showGroupedByGenre: Map<string, ShowModel[]> = new Map<string, ShowModel[]>();
+  genreShowList: { genre: string; shows: ShowModel[] }[] = [];
 
-
-  constructor(private showApiService: ShowApiService,) { }
+  constructor(private showApiService: ShowApiService) {}
 
   ngOnInit(): void {
-    this.loadRandomShowsByStructureAndGenre()
+    this.findRandomByStructure();
+    this.loadRandomShowsByStructureAndGenre();
   }
 
+  findRandomByStructure() {
+    this.showApiService
+      .findRandomShowsByStructure(this.showStructureType)
+      .subscribe({
+        next: (result) => {
+          console.log('featured shows: ', result);
+          this.featuredShows = result;
+        },
+        error: (err) => {
+          console.error('Failed to load featured shows', err);
+        },
+      });
+  }
 
   loadRandomShowsByStructureAndGenre() {
-
-    this.showApiService.findRandomShowsByStructureAndGroupedByGenre(this.showStructureType).subscribe({
-      next: (result: Map<GenreTypeEnum, ShowModel[]>) => {
-        this.showGroupedByGenre = result
-      },
-      error: err => {
-        console.error('Failed to load random show random shows', err)
-      },
-      complete: () => {
-        this.mapMapToList()
-
-      }
-    })
-
+    this.showApiService
+      .findRandomShowsByStructureAndGroupedByGenre(this.showStructureType)
+      .subscribe({
+        next: (result: Map<string, ShowModel[]>) => {
+          this.showGroupedByGenre = result;
+        },
+        error: (err) => {
+          console.error('Failed to load random show random shows', err);
+        },
+        complete: () => {
+          this.mapMapToList();
+        },
+      });
   }
 
   mapMapToList() {
-    this.genreShowList = Array.from(this.showGroupedByGenre.entries()).map(([genre, shows]) => ({
-      genre,
-      shows
-    }));
+    this.genreShowList = Array.from(this.showGroupedByGenre.entries()).map(
+      ([genre, shows]) => ({
+        genre,
+        shows,
+      })
+    );
   }
-
 }

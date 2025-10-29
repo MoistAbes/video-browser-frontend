@@ -25,7 +25,6 @@ export class VideoSelectorComponent implements OnInit {
   @Output() playVideoClicked = new EventEmitter<void>();
 
   ngOnInit(): void {
-    console.log("Show: ", this.show)
     // console.log("curernt video: ", this.currentVideoInfo);
   }
 
@@ -33,7 +32,6 @@ export class VideoSelectorComponent implements OnInit {
     if (mediaItem) {
       this.updateVideoData.emit(mediaItem);
       this.playVideoClicked.emit();
-      console.log("play video: ", mediaItem);
     }
   }
 

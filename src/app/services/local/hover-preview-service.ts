@@ -1,16 +1,18 @@
-import {ComponentRef, Injectable, Injector} from '@angular/core';
-import {ConnectedPosition, Overlay, OverlayRef, FlexibleConnectedPositionStrategy} from '@angular/cdk/overlay';
-import { ComponentPortal } from '@angular/cdk/portal';
+import { ComponentRef, Injectable, Injector } from '@angular/core';
 import {
-  VideoCardInfoPanelComponent
-} from '../../components/video-card-component/video-card-info-panel-component/video-card-info-panel-component';
-import {Subscription} from 'rxjs';
+  ConnectedPosition,
+  Overlay,
+  OverlayRef,
+  FlexibleConnectedPositionStrategy,
+} from '@angular/cdk/overlay';
+import { ComponentPortal } from '@angular/cdk/portal';
+import { VideoCardInfoPanelComponent } from '../../components/video-card-component/video-card-info-panel-component/video-card-info-panel-component';
+import { Subscription } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class HoverPreviewService {
-
   private overlayRef?: OverlayRef;
   private currentRef?: ComponentRef<VideoCardInfoPanelComponent>;
   private positionSub?: Subscription;
@@ -18,14 +20,18 @@ export class HoverPreviewService {
 
   constructor(private overlay: Overlay, private injector: Injector) {}
 
-  updateAnchor(newAnchor: HTMLElement, data: { title: string; description: string; videoSrc: string }) {
+  updateAnchor(
+    newAnchor: HTMLElement,
+    data: { title: string; description: string; videoSrc: string }
+  ) {
     this.cancelClose(); // nie zamykaj, bo przechodzimy do nowej karty
     this.open(newAnchor, data); // otwórz nowy panel
   }
 
-
-  open(anchor: HTMLElement, data: { title: string; description: string; videoSrc: string }) {
-
+  open(
+    anchor: HTMLElement,
+    data: { title: string; description: string; videoSrc: string }
+  ) {
     // metoda open() zaczyna się od ustalenia pozycji panelu względem elementu kotwicy (anchor),
     // czyli karty, nad którą znajduje się myszka.
 
@@ -36,15 +42,19 @@ export class HoverPreviewService {
     const positions: ConnectedPosition[] = [
       // 1) PRAWA (preferowana)
       {
-        originX: 'end', originY: 'center',
-        overlayX: 'start', overlayY: 'center',
-        offsetX: 0
+        originX: 'end',
+        originY: 'center',
+        overlayX: 'start',
+        overlayY: 'center',
+        offsetX: 0,
       },
       // 2) LEWA (fallback)
       {
-        originX: 'start', originY: 'center',
-        overlayX: 'end', overlayY: 'center',
-        offsetX: 0
+        originX: 'start',
+        originY: 'center',
+        overlayX: 'end',
+        overlayY: 'center',
+        offsetX: 0,
       },
     ];
 
@@ -53,12 +63,13 @@ export class HoverPreviewService {
     // scrollStrategy.reposition(): panel będzie się przesuwał razem z kartą przy scrollowaniu.
 
     if (!this.overlayRef) {
-      const strategy = this.overlay.position()
+      const strategy = this.overlay
+        .position()
         .flexibleConnectedTo(anchor)
         .withPositions(positions)
         .withFlexibleDimensions(false) // nie ściskaj panelu
         .withViewportMargin(8)
-        .withPush(false);              // jeśli nie mieści się po prawej -> flip na lewo
+        .withPush(false); // jeśli nie mieści się po prawej -> flip na lewo
 
       this.overlayRef = this.overlay.create({
         positionStrategy: strategy,
@@ -67,11 +78,11 @@ export class HoverPreviewService {
         panelClass: ['preview-overlay-panel'],
       });
     } else {
-
       // Jeśli overlayRef już istnieje, aktualizujesz jego pozycję względem nowej karty (anchor).
       // Dzięki temu panel nie jest tworzony od nowa — tylko przesuwany i aktualizowany.
 
-      const strategy = this.overlayRef.getConfig().positionStrategy as FlexibleConnectedPositionStrategy;
+      const strategy = this.overlayRef.getConfig()
+        .positionStrategy as FlexibleConnectedPositionStrategy;
       strategy.setOrigin(anchor);
       strategy.withPositions(positions); // na wszelki wypadek, gdybyś zmieniał strategie dynamicznie
       this.overlayRef.updatePosition();
@@ -87,7 +98,11 @@ export class HoverPreviewService {
     // Tworzysz nowy ComponentPortal dla VideoCardInfoPanelComponent.
     // Podpinasz go do overlayRef, zapisujesz referencję do currentRef.
 
-    const portal = new ComponentPortal(VideoCardInfoPanelComponent, null, this.injector);
+    const portal = new ComponentPortal(
+      VideoCardInfoPanelComponent,
+      null,
+      this.injector
+    );
     const componentRef = this.overlayRef!.attach(portal);
     this.currentRef = componentRef;
 
@@ -104,12 +119,15 @@ export class HoverPreviewService {
 
     // Subskrybuje zmiany pozycji panelu (np. gdy nie zmieści się po prawej i flipnie się na lewo).
     // mapPosition() tłumaczy ConnectedPosition na stringa ('left' lub 'right'), który możesz użyć np. do ustawienia klasy CSS w komponencie.
-    const strategy = this.overlayRef!.getConfig().positionStrategy as FlexibleConnectedPositionStrategy;
+    const strategy = this.overlayRef!.getConfig()
+      .positionStrategy as FlexibleConnectedPositionStrategy;
     this.positionSub?.unsubscribe();
-    this.positionSub = strategy.positionChanges.subscribe(({ connectionPair }) => {
-      const pos = this.mapPosition(connectionPair);
-      if (this.currentRef) this.currentRef.instance.position = pos;
-    });
+    this.positionSub = strategy.positionChanges.subscribe(
+      ({ connectionPair }) => {
+        const pos = this.mapPosition(connectionPair);
+        if (this.currentRef) this.currentRef.instance.position = pos;
+      }
+    );
 
     // queueMicrotask() opóźnia wykonanie kodu do momentu, aż DOM się zaktualizuje — dzięki temu masz pewność, że element panelu już istnieje w DOM.
     // Dodajesz klasę show, która uruchamia animację CSS (np. opacity, transform).
@@ -120,7 +138,6 @@ export class HoverPreviewService {
       componentRef.instance.playPreview();
     });
   }
-
 
   // Najpierw czyści poprzedni timer zamykający, jeśli taki istnieje.
   // Dzięki temu nie masz wielu setTimeout() naraz, które mogłyby się nawzajem nadpisywać lub powodować błędne zamknięcia.
@@ -134,9 +151,11 @@ export class HoverPreviewService {
   }
 
   cancelClose() {
-    if (this.closeTimerId) { clearTimeout(this.closeTimerId); this.closeTimerId = null; }
+    if (this.closeTimerId) {
+      clearTimeout(this.closeTimerId);
+      this.closeTimerId = null;
+    }
   }
-
 
   //this.cancelClose()
   // Na wszelki wypadek anulujesz timer zamykający (closeTimerId), jeśli jeszcze działa.
@@ -173,14 +192,14 @@ export class HoverPreviewService {
   }
 
   private getPanelHTMLElement(): HTMLElement | null {
-    return this.overlayRef?.overlayElement.querySelector('.info-panel-fixed') ?? null;
+    return (
+      this.overlayRef?.overlayElement.querySelector('.info-panel-fixed') ?? null
+    );
   }
 
   private mapPosition(pair: ConnectedPosition): 'right' | 'left' {
-    if (pair.originX === 'end'   && pair.overlayX === 'start') return 'right';
-    if (pair.originX === 'start' && pair.overlayX === 'end')   return 'left';
+    if (pair.originX === 'end' && pair.overlayX === 'start') return 'right';
+    if (pair.originX === 'start' && pair.overlayX === 'end') return 'left';
     return 'right';
   }
-
-
 }

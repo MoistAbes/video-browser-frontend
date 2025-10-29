@@ -1,6 +1,5 @@
-@use '../../../../src/styles/colors' as *;
-@use '../../../../src/styles/mixins' as *;
-
+@use "../../../../src/styles/colors" as *;
+@use "../../../../src/styles/mixins" as *;
 
 .top-container {
   position: relative; /* potrzebne, by pozycjonować wewnętrzne elementy */
@@ -57,7 +56,6 @@
     color: $normal-white;
     cursor: pointer;
     transition: background-color 0.2s ease;
-
   }
   .movie-details-overlay .play-button:hover {
     background-color: $netflix-red-hover;
@@ -154,8 +152,6 @@
   }
 }
 
-
-
 .season-container {
   width: 200px;
 }
@@ -199,8 +195,6 @@
     }
   }
 }
-
-
 
 .back-button {
   background: none;
@@ -252,4 +246,39 @@
   color: $normal-white;
   max-width: 1200px;
   margin: auto;
+}
+
+.genres {
+  display: flex; /* układa w jednej linii */
+  flex-wrap: wrap; /* zawijanie, jeśli za dużo tagów */
+  gap: 8px; /* odstęp między tagami */
+}
+
+.genre-tag {
+  background-color: #313131; /* Netflixowy czerwony, możesz zmienić */
+  border: #252525 2px solid;
+  color: white;
+  padding: 4px 10px; /* w pionie i poziomie */
+  border-radius: 4px; /* zaokrąglone końce */
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* lekki cień */
+  cursor: default; /* opcjonalnie */
+  transition: transform 0.2s; /* fajna animacja hover */
+}
+
+.title-row {
+  display: flex;
+  justify-content: flex-start; /* lub flex-start, jeśli chcesz blisko siebie */
+  align-items: center;
+}
+
+.duration {
+  border-radius: 4px;
+  background: #727272;
+  padding-left: 4px;
+  padding-right: 4px;
+  margin-left: 5px;
+  color: #c5c5c5; /* przykładowy styl */
+  font-weight: normal;
 }

@@ -1,39 +1,46 @@
 <div class="top-container">
-
   @if (!isVideoPlaying) {
-    <div class="preview-wrapper">
-
-
-      <div class="image-wrapper">
-        <div class="image-placeholder"></div>
-        <img
-          class="content"
-          priority
-          [ngSrc]="utilService.getBackdropUrl(currentMediaItem?.rootPath)"
-          fill
-          alt="backdrop"
-          (load)="utilService.onImageLoad($event)"
-        />
-      </div>
-
-
-      <div class="movie-details-overlay">
-        <div class="movie-header">
-          <h1 class="movie-title">{{currentMediaItem!.title}}</h1>
-
-        </div>
-        <p class="movie-description">
-          To jest przykładowy opis filmu. Możesz go później podmienić na dane z backendu.
-        </p>
-        <button class="play-button" (click)="playVideoClicked.emit()">
-          <i class="fa-solid fa-play"></i> Play
-        </button>
-      </div>
+  <div class="preview-wrapper">
+    <div class="image-wrapper">
+      <div class="image-placeholder"></div>
+      <img
+        class="content"
+        priority
+        [ngSrc]="utilService.getBackdropUrl(currentMediaItem?.rootPath)"
+        fill
+        alt="backdrop"
+        (load)="utilService.onImageLoad($event)"
+      />
     </div>
-  }
 
-  @if (selectedVideoUrl.length > 0) {
-    <div class="video-wrapper">
+    <div class="movie-details-overlay">
+      <div class="movie-header">
+        @if (currentMediaItem) {
+        <div class="title-row">
+          <h2 class="m-0">{{ currentMediaItem.title }}</h2>
+          <h6 class="duration">
+            {{ utilService.formatVideoDuration(currentMediaItem.duration) }}
+          </h6>
+        </div>
+        }
+      </div>
+
+      <div class="genres">
+        @for (genre of show?.genres; track genre.id) {
+        <span class="genre-tag">{{ genre.name }}</span>
+        }
+      </div>
+
+      <p class="movie-description">
+        {{ show?.description }}
+      </p>
+      <button class="play-button" (click)="playVideoClicked.emit()">
+        <i class="fa-solid fa-play"></i> Play
+      </button>
+    </div>
+  </div>
+  } @if (selectedVideoUrl.length > 0) {
+  <div class="video-wrapper">
     <app-video-player-component
       [show]="show"
       [currentMediaItem]="currentMediaItem"
@@ -45,6 +52,3 @@
   </div>
   }
 </div>
-
-
-

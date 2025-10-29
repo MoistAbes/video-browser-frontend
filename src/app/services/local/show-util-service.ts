@@ -1,56 +1,76 @@
-import {Injectable} from '@angular/core';
-import {ShowModel} from '../../models/show/show-model';
-import {MediaItemModel} from '../../models/show/media-item-model';
-import {StructureTypeEnum} from '../../enums/structure-type-enum';
-import {SeasonModel} from '../../models/show/season-model';
+import { Injectable } from '@angular/core';
+import { ShowModel } from '../../models/show/show-model';
+import { MediaItemModel } from '../../models/show/media-item-model';
+import { StructureTypeEnum } from '../../enums/structure-type-enum';
+import { SeasonModel } from '../../models/show/season-model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ShowUtilService {
+  constructor() {}
 
-  constructor() { }
-
-  getEpisodesForSeason(show: ShowModel | undefined, seasonNumber: number | null): MediaItemModel[] {
-
+  getEpisodesForSeason(
+    show: ShowModel | undefined,
+    seasonNumber: number | null
+  ): MediaItemModel[] {
     if (!show || !seasonNumber) return [];
 
-    console.log("seasons: ", show.seasons)
-
     return show.seasons
-      .filter(season => season.number == seasonNumber)
-      .flatMap(season => season.episodes);
-
+      .filter((season) => season.number == seasonNumber)
+      .flatMap((season) => season.episodes);
   }
 
-  getNextShow(shows: ShowModel[], currentIndex: number): { nextShow: ShowModel | undefined, nextIndex: number } {
-    if (shows.length === 0) return { nextShow: undefined, nextIndex: currentIndex };
+  getNextShow(
+    shows: ShowModel[],
+    currentIndex: number
+  ): { nextShow: ShowModel | undefined; nextIndex: number } {
+    if (shows.length === 0)
+      return { nextShow: undefined, nextIndex: currentIndex };
 
     const nextIndex: number = (currentIndex + 1) % shows.length;
     return {
       nextShow: shows[nextIndex],
-      nextIndex
+      nextIndex,
     };
   }
 
-
-  findNextMediaItemAutoplay(show: ShowModel | undefined, currentMediaitem: MediaItemModel | undefined): MediaItemModel | undefined {
-
+  findNextMediaItemAutoplay(
+    show: ShowModel | undefined,
+    currentMediaitem: MediaItemModel | undefined
+  ): MediaItemModel | undefined {
     if (!show || !currentMediaitem) return;
 
-    if (show.structure == StructureTypeEnum.SEASONAL_SERIES) {
+    if (
+      show.structure == StructureTypeEnum.SEASONAL_SERIES ||
+      show.structure == StructureTypeEnum.HYBRID
+    ) {
       return this.handlePlayNextEpisode(show, currentMediaitem);
-
-    }else if (show.structure == StructureTypeEnum.MOVIE_COLLECTION) {
+    } else if (show.structure == StructureTypeEnum.MOVIE_COLLECTION) {
       return this.handlePlayNextMovie(show, currentMediaitem);
     }
 
     return undefined;
-
   }
 
+  findFirstMediaItemToPlay(show: ShowModel): MediaItemModel | undefined {
+    if (show.structure == StructureTypeEnum.SINGLE_MOVIE) {
+      return show.movies[0]!;
+    } else if (show.structure == StructureTypeEnum.SEASONAL_SERIES) {
+      return show.seasons[0].episodes[0]!;
+    } else if (show.structure == StructureTypeEnum.MOVIE_COLLECTION) {
+      return show.movies[0]!;
+    } else if (show.structure == StructureTypeEnum.HYBRID) {
+      return show.seasons[0].episodes[0]!;
+    } 
 
-  private handlePlayNextEpisode(show: ShowModel | undefined, currentMediaItem: MediaItemModel | undefined): MediaItemModel | undefined {
+    return undefined;
+  }
+
+  private handlePlayNextEpisode(
+    show: ShowModel | undefined,
+    currentMediaItem: MediaItemModel | undefined
+  ): MediaItemModel | undefined {
     if (!show || !currentMediaItem) return;
 
     const currentSeasonNumber: number = currentMediaItem.seasonNumber ?? 1;
@@ -58,7 +78,7 @@ export class ShowUtilService {
 
     // Znajdź aktualny sezon
     const currentSeasonIndex: number = show.seasons.findIndex(
-      season => season.number === currentSeasonNumber
+      (season) => season.number === currentSeasonNumber
     );
     if (currentSeasonIndex === -1) return;
 
@@ -66,11 +86,12 @@ export class ShowUtilService {
 
     // Znajdź indeks obecnego odcinka w sezonie
     const currentEpisodeIndex: number = currentSeason.episodes.findIndex(
-      ep => ep.episodeNumber === currentEpisodeNumber
+      (ep) => ep.episodeNumber === currentEpisodeNumber
     );
 
     // 1. Próba pobrania następnego odcinka w tym samym sezonie
-    const nextEpisode: MediaItemModel = currentSeason.episodes[currentEpisodeIndex + 1];
+    const nextEpisode: MediaItemModel =
+      currentSeason.episodes[currentEpisodeIndex + 1];
     if (nextEpisode) {
       return nextEpisode;
     }
@@ -86,17 +107,18 @@ export class ShowUtilService {
     return undefined;
   }
 
-
-  private handlePlayNextMovie(show: ShowModel | undefined, currentMediaItem: MediaItemModel | undefined): MediaItemModel | undefined {
+  private handlePlayNextMovie(
+    show: ShowModel | undefined,
+    currentMediaItem: MediaItemModel | undefined
+  ): MediaItemModel | undefined {
     if (!show || !currentMediaItem) return;
 
     // Znajdź aktualny sezon
     const currentMovieIndex = show.movies.findIndex(
-      movie => movie.id === currentMediaItem?.id
+      (movie) => movie.id === currentMediaItem?.id
     );
 
     if (currentMovieIndex === -1) return;
-
 
     const nextMovie: MediaItemModel = show.movies[currentMovieIndex + 1];
 
@@ -106,5 +128,4 @@ export class ShowUtilService {
 
     return undefined;
   }
-
 }

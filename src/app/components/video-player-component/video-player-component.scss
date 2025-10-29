@@ -9,13 +9,11 @@
   position: static !important;
 }
 
-
 .video-player-container {
-
-  user-select: none;      /* standard */
+  user-select: none; /* standard */
   -webkit-user-select: none; /* Safari/Chrome */
-  -moz-user-select: none;    /* Firefox */
-  -ms-user-select: none;     /* IE/Edge */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge */
 
   //position: relative; // <-- this is critical for overlays
   z-index: 0;
@@ -41,7 +39,7 @@
     }
   }
 
-  .timeline-box{
+  .timeline-box {
     position: absolute;
     width: 100%;
     bottom: 33px;
@@ -57,10 +55,7 @@
       pointer-events: auto;
       transform: translateY(0); // wjeżdża na dół ekranu
     }
-
-
   }
-
 
   .left-controls,
   .right-controls {
@@ -77,8 +72,8 @@
   }
 
   .netflix-button {
-    width: 48px;       // Fixed width
-    height: 48px;      // Fixed height (optional)
+    width: 48px; // Fixed width
+    height: 48px; // Fixed height (optional)
     font-size: 24px;
     text-align: center;
 
@@ -90,7 +85,6 @@
     padding: 8px;
     border-radius: 50%;
     color: white;
-
 
     &:hover {
       transform: scale(1.1);
@@ -117,12 +111,11 @@
     transition: opacity 0.5s ease-out;
   }
 
-
   .movie-details-overlay {
-    user-select: none;      /* standard */
+    user-select: none; /* standard */
     -webkit-user-select: none; /* Safari/Chrome */
-    -moz-user-select: none;    /* Firefox */
-    -ms-user-select: none;     /* IE/Edge */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE/Edge */
 
     position: absolute;
     top: 0;
@@ -168,10 +161,7 @@
       transform: translateY(0);
       pointer-events: auto;
     }
-
   }
-
-
 }
 
 .next-episode-notice {
@@ -207,4 +197,8 @@
 
 .play-btn:hover {
   background-color: #f6121d;
+}
+
+.hide-cursor {
+  cursor: none !important;
 }

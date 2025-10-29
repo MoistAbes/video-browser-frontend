@@ -1,75 +1,11 @@
-@for (genre of genreShowList; track genre.genre) {
-  <div>
-    <h3>{{ genre.genre }}</h3>
-    <div class="show-row">
-      @for (show of genre.shows; track show.id) {
-        <div class="show-card">
-          {{ show.name }}
-        </div>
-      }
-    </div>
-  </div>
-}
-
-
-
-
-
-<!--ToDO dzialajacy przyklad video preview w kontenerze-->
-<!--<div class="preview-container small">-->
-<!--  <app-video-preview-player-component [videoSrc]="'sample.mp4'"></app-video-preview-player-component>-->
-<!--</div>-->
-
-<!--<div class="preview-container medium">-->
-<!--  <app-video-preview-player-component [videoSrc]="'sample.mp4'"></app-video-preview-player-component>-->
-<!--</div>-->
-
-<!--<div class="preview-container large">-->
-<!--  <app-video-preview-player-component [videoSrc]="'sample.mp4'"></app-video-preview-player-component>-->
-<!--</div>-->
-
-<div style="height: 300px" class="mt-5"></div>
-
-<div class="video-grid mt-4">
-  <app-video-card-component
-    [title]="'Test title'"
-    [iconFilePath]="'test/path'"
-    [showPreview]="true">
-  </app-video-card-component>
-  <app-video-card-component
-    [title]="'Test title'"
-    [iconFilePath]="'test/path'"
-    [showPreview]="true">
-  </app-video-card-component>
-  <app-video-card-component
-    [title]="'Test title'"
-    [iconFilePath]="'test/path'"
-    [showPreview]="true">
-  </app-video-card-component>
-  <app-video-card-component
-    [title]="'Test title'"
-    [iconFilePath]="'test/path'"
-    [showPreview]="false">
-  </app-video-card-component>
-  <app-video-card-component
-    [title]="'Test title'"
-    [iconFilePath]="'test/path'"
-    [showPreview]="false">
-  </app-video-card-component>
-  <app-video-card-component
-    [title]="'Test title'"
-    [iconFilePath]="'test/path'"
-    [showPreview]="false">
-  </app-video-card-component>
-  <app-video-card-component
-    [title]="'Test title'"
-    [iconFilePath]="'test/path'"
-    [showPreview]="false">
-  </app-video-card-component>
-  <app-video-card-component
-    [title]="'Test title'"
-    [iconFilePath]="'test/path'"
-    [showPreview]="false">
-  </app-video-card-component>
+<div style="position: relative">
+  @if (featuredShows.length > 0) {
+  <app-main-show-carousel-component [shows]="featuredShows">
+  </app-main-show-carousel-component>
+  } @for (genreWithShows of genreShowList; track $index) {
+  <app-show-carousel-component
+    [shows]="genreWithShows.shows"
+    [carouselTitle]="genreWithShows.genre"
+  ></app-show-carousel-component>
+  }
 </div>
-

@@ -23,7 +23,7 @@
             }
           </div>
           <p class="movie-description">
-            To jest przykładowy opis filmu. Możesz go później podmienić na dane z backendu.
+            {{show?.description}}
           </p>
           <button class="play-button" (click)="playVideoClicked.emit()">
             <i class="fa-solid fa-play"></i> Play
