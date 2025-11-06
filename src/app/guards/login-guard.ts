@@ -1,12 +1,12 @@
+import { AuthService } from './../services/local/auth-service';
 import {CanActivateFn, Router} from '@angular/router';
 import {inject} from '@angular/core';
-import {JwtService} from '../services/local/jwt-service';
 
 export const loginGuard: CanActivateFn = (route, state) => {
-  const jwtService = inject(JwtService);
+  const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (jwtService.isLoggedIn()) {
+  if (authService.isLoggedIn()) {
     return router.parseUrl('/home'); // przekierowanie
   }
 

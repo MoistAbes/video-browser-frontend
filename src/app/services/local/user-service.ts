@@ -1,8 +1,8 @@
+import { AuthService } from './auth-service';
 import { Injectable } from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {UserInfoModel} from '../../models/user/user-info-model';
 import {UserInfoApiService} from '../api/user-info-api-service';
-import {JwtService} from './jwt-service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +26,7 @@ export class UserService {
   user$ = this.userSubject.asObservable();
 
   constructor(private userInfoApiService: UserInfoApiService,
-              private jwtService: JwtService,) {}
+              private authService: AuthService,) {}
 
   loadUser(): void {
     this.userInfoApiService.findUserInfo().subscribe({
@@ -37,7 +37,7 @@ export class UserService {
   }
 
   getCurrentUser(): UserInfoModel | null {
-    if (!this.userSubject.value && this.jwtService.isLoggedIn()) {
+    if (!this.userSubject.value && this.authService.isLoggedIn()) {
       this.loadUser(); // automatyczne załadowanie
     }
     return this.userSubject.value;

@@ -2,9 +2,9 @@ import {Component} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {TopbarComponent} from '../../components/topbar-component/topbar-component';
 import {animate, style, transition, trigger} from '@angular/animations';
-import {JwtService} from '../../services/local/jwt-service';
 import {NgClass} from '@angular/common';
 import {UserInfoModel} from '../../models/user/user-info-model';
+import { AuthService } from '../../services/local/auth-service';
 
 @Component({
   selector: 'app-main-layout-component',
@@ -26,7 +26,7 @@ export class MainLayoutComponent {
   isSidebarOpen: boolean = false;
   friendList: UserInfoModel[] = [];
 
-  constructor(public jwtService: JwtService) {
+  constructor(public authService: AuthService) {
   }
 
   prepareRoute(outlet: RouterOutlet) {

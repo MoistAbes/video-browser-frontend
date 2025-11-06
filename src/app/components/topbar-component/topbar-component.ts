@@ -1,3 +1,4 @@
+import { AuthService } from './../../services/local/auth-service';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { JwtService } from '../../services/local/jwt-service';
@@ -5,7 +6,6 @@ import { UserInfoApiService } from '../../services/api/user-info-api-service';
 import { UserInfoModel } from '../../models/user/user-info-model';
 import { UserService } from '../../services/local/user-service';
 import { NgClass } from '@angular/common';
-import { WebSocketService } from '../../services/websocket/websocket-service';
 
 @Component({
   selector: 'app-topbar-component',
@@ -24,7 +24,7 @@ export class TopbarComponent implements OnInit {
     private router: Router,
     private userInfoApiService: UserInfoApiService,
     private userService: UserService,
-    private websocketService: WebSocketService
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -37,10 +37,7 @@ export class TopbarComponent implements OnInit {
 
   logout() {
     // tu dodajesz logikę wylogowania
-
-    this.jwtService.clearToken();
-    this.websocketService.disconnect();
-    this.router.navigateByUrl('/login');
+    this.authService.logout();
   }
 
   routeToAccountPage() {

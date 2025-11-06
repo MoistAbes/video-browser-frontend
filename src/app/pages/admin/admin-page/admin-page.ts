@@ -29,8 +29,12 @@ import { StreamApiService } from '../../../services/api/stream-api-service';
 })
 export class AdminPage implements OnInit {
   showList: ShowModel[] = [];
+  filteredShowList: ShowModel[] = [];
   selectedShow: ShowModel | undefined;
   seletedSeason: SeasonModel | undefined;
+
+  idShowFilterValue: number | null = null;
+  nameShowFilterValue: string = '';
 
   genreList: GenreModel[] = [];
 
@@ -111,6 +115,7 @@ export class AdminPage implements OnInit {
       next: (result) => {
         this.showList = result;
         this.showList.sort((a, b) => a.id! - b.id!);
+        this.filteredShowList = [...this.showList];
         console.log('SHOWS: ', result);
       },
       error: (err) => {
@@ -200,5 +205,26 @@ export class AdminPage implements OnInit {
       },
       complete: () => {},
     });
+  }
+
+  filterShows() {
+    this.filteredShowList = [...this.showList];
+
+    console.log('this.idShowFilterValue: ', this.idShowFilterValue);
+    console.log('this.nameShowFilterValue: ', this.nameShowFilterValue);
+
+    if (this.idShowFilterValue) {
+      this.filteredShowList = this.filteredShowList.filter(
+        (show) => show.id == this.idShowFilterValue
+      );
+    }
+
+
+    
+    this.filteredShowList = this.filteredShowList.filter((show) =>
+      show.name
+        .toLowerCase()
+        .includes(this.nameShowFilterValue.toLowerCase().trim())
+    );
   }
 }

@@ -1,6 +1,8 @@
 <div class="layout-container">
-  @if (jwtService.isLoggedIn()) {
-    <app-topbar-component (openSidebar)="handleOpenSidebar($event)"></app-topbar-component>
+  @if (authService.isLoggedIn()) {
+  <app-topbar-component
+    (openSidebar)="handleOpenSidebar($event)"
+  ></app-topbar-component>
   }
 
   <main class="main-content" [@routeAnimations]="prepareRoute(o)">
@@ -11,26 +13,33 @@
     <button class="close-btn" (click)="closeSidebar()">✖</button>
     <h2>Friends</h2>
     <div class="menu">
-      @for  (friend of friendList; track friend.id) {
-        <div class="friend-item">
-          <i class="friend-icon" [ngClass]="friend.icon"
-             [style.color]="friend.iconColor"></i>
-          <div class="friend-info">
-            <div class="friend-header">
-              <span class="username">{{ friend.username }}</span>
-              <span class="status" [ngClass]="friend.status?.isOnline ? 'online' : 'offline'"></span>
-            </div>
-            @if (friend.status) {
-              <div class="activity">
-                {{ friend.status.isWatching ? ('Watching: ' + friend.status.isWatching) : 'Idle' }}
-              </div>
-            }
+      @for (friend of friendList; track friend.id) {
+      <div class="friend-item">
+        <i
+          class="friend-icon"
+          [ngClass]="friend.icon"
+          [style.color]="friend.iconColor"
+        ></i>
+        <div class="friend-info">
+          <div class="friend-header">
+            <span class="username">{{ friend.username }}</span>
+            <span
+              class="status"
+              [ngClass]="friend.status?.isOnline ? 'online' : 'offline'"
+            ></span>
           </div>
+          @if (friend.status) {
+          <div class="activity">
+            {{
+              friend.status.isWatching
+                ? "Watching: " + friend.status.isWatching
+                : "Idle"
+            }}
+          </div>
+          }
         </div>
+      </div>
       }
-
     </div>
   </div>
-
-
 </div>

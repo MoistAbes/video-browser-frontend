@@ -1,12 +1,12 @@
-import {CanActivateChildFn, CanActivateFn, Router} from '@angular/router';
-import {inject} from '@angular/core';
-import {JwtService} from '../services/local/jwt-service';
+import { AuthService } from './../services/local/auth-service';
+import { CanActivateFn, Router } from '@angular/router';
+import { inject } from '@angular/core';
 
 export const authGuard: CanActivateFn = (route, state) => {
-  const jwtService: JwtService = inject(JwtService);
+  const authService: AuthService = inject(AuthService);
   const router: Router = inject(Router);
 
-  if (jwtService.isLoggedIn()) {
+  if (authService.isLoggedIn()) {
     return true; // użytkownik zalogowany
   }
 

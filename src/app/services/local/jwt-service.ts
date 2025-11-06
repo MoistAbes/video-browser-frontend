@@ -1,19 +1,18 @@
 import { Injectable } from '@angular/core';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 interface JwtPayload {
-  sub?: string;       // username
-  id?: number;        // user id
-  roles?: string[];   // roles
-  exp?: number;       // expiration time (unix timestamp)
-  iat?: number;       // issued at
+  sub?: string; // username
+  id?: number; // user id
+  roles?: string[]; // roles
+  exp?: number; // expiration time (unix timestamp)
+  iat?: number; // issued at
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class JwtService {
-
   private readonly TOKEN_KEY = 'auth_token';
 
   // zapisanie tokena
@@ -61,7 +60,7 @@ export class JwtService {
   hasAdminRole(): boolean {
     const roles: string[] = this.getRoles();
 
-    return roles.includes("ADMIN");
+    return roles.includes('ADMIN');
   }
 
   // sprawdzenie czy token wygasł
@@ -69,10 +68,5 @@ export class JwtService {
     const exp = this.decodeToken()?.exp;
     if (!exp) return true;
     return Date.now() >= exp * 1000;
-  }
-
-  // sprawdzenie czy użytkownik zalogowany
-  isLoggedIn(): boolean {
-    return !!this.getToken() && !this.isTokenExpired();
   }
 }

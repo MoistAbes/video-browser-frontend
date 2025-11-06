@@ -1,7 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {JwtService} from './services/local/jwt-service';
-import {WebSocketService} from './services/websocket/websocket-service';
+import { JwtService } from './services/local/jwt-service';
+import { WebSocketService } from './services/websocket/websocket-service';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +10,7 @@ import {WebSocketService} from './services/websocket/websocket-service';
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App implements OnInit, OnDestroy{
+export class App implements OnInit, OnDestroy {
   protected title: string = 'video-browser-app-frontend';
 
   constructor(
@@ -21,11 +21,12 @@ export class App implements OnInit, OnDestroy{
   ngOnInit(): void {
     const token: string | null = this.jwtService.getToken();
     if (token && !this.jwtService.isTokenExpired()) {
-      console.log("🔗 Auto-connect WebSocket przy starcie aplikacji");
+      console.log('🔗 Auto-connect WebSocket przy starcie aplikacji');
       this.websocketService.connect();
     }
   }
 
   ngOnDestroy(): void {
     this.websocketService.disconnect();
-  }}
+  }
+}

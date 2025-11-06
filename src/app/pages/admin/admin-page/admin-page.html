@@ -10,7 +10,7 @@
 ></app-custom-modal-component>
 }
 
-<div>
+<div class="main-container">
   <!--  <div>-->
   <!--    aac	✅	Najlepszy wybór-->
   <!--    mp3	✅	Też działa, ale rzadziej używany z wideo-->
@@ -40,26 +40,28 @@
         </button>
       </div>
     </mat-tab>
-    <mat-tab label="Edycja video">
+    <mat-tab label="Edycja shows">
       <div class="form-row">
         <div class="form-field">
-          <label>Id</label>
-          <ng-select placeholder="Id"></ng-select>
+          <label>ID</label>
+          <input
+            class="show-filter-input"
+            type="number"
+            [(ngModel)]="idShowFilterValue"
+            (input)="filterShows()"
+            placeholder="Show id"
+          />
         </div>
 
         <div class="form-field">
           <label>Name</label>
-          <ng-select placeholder="Name"></ng-select>
-        </div>
-
-        <div class="form-field">
-          <label>Root path</label>
-          <ng-select placeholder="Root path"></ng-select>
-        </div>
-
-        <div class="form-field">
-          <label>Category</label>
-          <ng-select placeholder="Category"></ng-select>
+          <input
+            class="show-filter-input"
+            type="text"
+            [(ngModel)]="nameShowFilterValue"
+            (input)="filterShows()"
+            placeholder="Name"
+          />
         </div>
 
         <div class="form-field">
@@ -78,7 +80,7 @@
       </h2>
 
       @if (isShowTableVisible) {
-      <table class="table">
+      <table class="table table-hover">
         <thead>
           <tr>
             <th scope="col">Id</th>
@@ -86,17 +88,31 @@
             <th scope="col">Root path</th>
             <th scope="col">Description</th>
             <th scope="col">Show structure</th>
+            <th scope="col">Genres</th>
             <th scope="col">Delete</th>
           </tr>
         </thead>
         <tbody>
-          @for (show of showList; track show.id) {
+          @for (show of filteredShowList; track show.id) {
           <tr (click)="selectedShow = show; seletedSeason = undefined">
             <th scope="row">{{ show.id }}</th>
             <td>{{ show.name }}</td>
             <td>{{ show.rootPath }}</td>
-            <td>{{ show.description }}</td>
+            <td class="truncate-2">{{ show.description }}</td>
             <td>{{ show.structure }}</td>
+            <td>
+              @for (genre of show.genres; track $index) {
+              <span
+                style="
+                  background-color: aquamarine;
+                  border-radius: 6p;
+                  padding: 2px;
+                  margin-right: 5px;
+                "
+                >{{ genre.name }}</span
+              >
+              }
+            </td>
             <td>
               <button (click)="setUpShowDeleteModalValues(show)" class="btn">
                 <i class="fa-solid fa-trash"></i>
@@ -107,33 +123,6 @@
         </tbody>
       </table>
       } @if (selectedShow) {
-
-      <h2
-        (click)="isGenreTableVisible = !isGenreTableVisible"
-        class="mb-3"
-        style="cursor: pointer"
-      >
-        GENRES
-      </h2>
-
-      @if (isGenreTableVisible) {
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Name</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (genre of selectedShow.genres; track $index) {
-          <tr>
-            <th scope="row">{{ genre.id }}</th>
-            <td>{{ genre.name }}</td>
-          </tr>
-          }
-        </tbody>
-      </table>
-      }
 
       <h2
         (click)="isSeasonsVisible = !isSeasonsVisible"
