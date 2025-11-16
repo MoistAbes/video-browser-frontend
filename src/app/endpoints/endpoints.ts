@@ -1,6 +1,7 @@
-// const BASE_URL = 'http://192.168.15.13:8080';
-// const BASE_URL = 'http://192.168.108.13:8080';
-const BASE_URL = '';
+import { environment } from "../../environments/environment";
+
+const BASE_URL = environment.baseUrl;
+
 
 export const Endpoints = {
   auth: {
@@ -24,18 +25,19 @@ export const Endpoints = {
     addGenre: `${BASE_URL}/add/genre/`,
     removeGenre: `${BASE_URL}/remove/genre/`,
     deleteShow: `${BASE_URL}/show/`,
+    deleteAllShows: `${BASE_URL}/show/deleteAll`
   },
   stream: {
     normal: `${BASE_URL}/stream/normal`,
     normalPreview: `${BASE_URL}/stream/normal/preview`,
     convert: `${BASE_URL}/stream/convert`,
-    authorize: `${BASE_URL}/stream/authorize`
+    authorize: `${BASE_URL}/stream/authorize`,
   },
   user: {
     friends: `${BASE_URL}/users/friends`,
     userInfo: `${BASE_URL}/users/userInfo`,
     updateIcon: `${BASE_URL}/users/update/icon/`,
-    findAll: `${BASE_URL}/users/`
+    findAll: `${BASE_URL}/users/`,
   },
   userIcon: {
     findAll: `${BASE_URL}/user-icon/find-all`,
@@ -45,4 +47,7 @@ export const Endpoints = {
     findAll: `${BASE_URL}/genre/find/all`,
     update: `${BASE_URL}/genre/update`,
   },
+  mediaItem: {
+    convertAudioCodec: `${BASE_URL}/mediaItem/convert/audio`
+  }
 };

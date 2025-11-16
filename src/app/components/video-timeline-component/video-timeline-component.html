@@ -1,20 +1,23 @@
+
 <div
   class="custom-slider"
+ 
+>
+<ngx-slider
+  #sliderElement
+  class="my-slider"
   (mousemove)="onSliderHover($event)"
   (mouseleave)="hoverTime = null"
->
-  <ngx-slider
-    [(value)]="currentTime"
-    [options]="options"
-    (valueChange)="onValueChange($event)"
-    (userChangeStart)="onSeekStart()"
-    (userChangeEnd)="onUserSeek($event)"
-  >
-  </ngx-slider>
+  [(value)]="currentTime"
+  [options]="options"
+  (valueChange)="onValueChange($event)"
+  (userChangeStart)="onSeekStart()"
+  (userChangeEnd)="onUserSeek($event)"
+></ngx-slider>
 
   @if (hoverTime) {
-  <div class="hover-tooltip" [ngStyle]="{ left: hoverX + 'px' }">
-    {{ formatTime(hoverTime) }}
-  </div>
+    <div class="hover-tooltip" [ngStyle]="{ left: hoverX + 'px' }">
+      {{ formatTime(hoverTime) }}
+    </div>
   }
 </div>

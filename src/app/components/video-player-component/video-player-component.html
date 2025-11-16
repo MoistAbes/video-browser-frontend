@@ -9,21 +9,18 @@
     preload="auto"
   ></video>
 
-  <div [class.visible]="showControls" class="movie-details-overlay">
-    <div class="movie-header">
-      <h1 class="movie-title">{{ show?.name }}</h1>
-      @if (currentMediaItem) {
-      <h5>{{ currentMediaItem.title }}</h5>
-      }
-    </div>
+ <div [class.visible]="showControls" class="movie-details-overlay">
+  <div class="movie-header">
+    <h1 class="movie-title">{{ show?.name }}</h1>
+    <h5>{{ getSubtitle() }}</h5>
   </div>
+</div>
 
+  
   @if (isNextEpisodeNoticeVisible) {
   <div class="next-episode-notice">
     <div class="notice-content">
-      <p class="font-bold text-lg mr-4 mb-0">
-        Next episode in {{ nextEpisodeTimerCounter }}
-      </p>
+      <p class="font-bold text-lg mr-4 mb-0">Next episode in {{ nextEpisodeTimerCounter }}</p>
       <i class="fa-solid fa-chevron-right"></i>
     </div>
   </div>
@@ -74,16 +71,10 @@
           }
 
           <mat-slider min="0" max="1" step="0.01">
-            <input
-              matSliderThumb
-              [value]="volume"
-              (input)="onVolumeChange($event)"
-            />
+            <input matSliderThumb [value]="volume" (input)="onVolumeChange($event)" />
           </mat-slider>
 
-          <span
-            >{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</span
-          >
+          <span>{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</span>
         </div>
       </div>
 

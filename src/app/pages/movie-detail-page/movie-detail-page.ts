@@ -11,6 +11,7 @@ import { ShowModel } from '../../models/show/show-model';
 import { MediaItemModel } from '../../models/show/media-item-model';
 import { StructureTypeEnum } from '../../enums/structure-type-enum';
 import { StreamApiService } from '../../services/api/stream-api-service';
+import { StreamKeyService } from '../../services/local/stream-key-service';
 
 @Component({
   standalone: true,
@@ -43,7 +44,8 @@ export class MovieDetailPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private showApiService: ShowApiService,
-    private streamApiService: StreamApiService
+    private streamApiService: StreamApiService,
+    private streamKeyService: StreamKeyService
   ) {}
 
   ngOnInit() {
@@ -77,66 +79,43 @@ export class MovieDetailPage implements OnInit {
     this.selectedVideoUrl = '';
   }
 
-  private updateVideoUrl() {
+  private updateVideoUrl(key: string) {
     if (!this.currentMediaItem) return;
 
-    const fullVideoPath: string = `${this.currentMediaItem.rootPath}/${this.currentMediaItem.fileName}`;
-    const needsConversion: boolean = !['aac', 'mp3'].includes(
-      this.currentMediaItem.audio!
-    );
+    const fullVideoPath = `${this.currentMediaItem.rootPath}/${this.currentMediaItem.fileName}`;
 
-    if (needsConversion) {
-      this.selectedVideoUrl = `${
-        Endpoints.stream.convert
-      }?path=${encodeURIComponent(fullVideoPath)}&start=${this.seekStartTime}`;
-    } else {
-      this.selectedVideoUrl = `${
-        Endpoints.stream.normal
-      }?path=${encodeURIComponent(fullVideoPath)}&authKey=${
-        this.streamAuthKey
-      }`;
-    }
+    this.selectedVideoUrl = `${Endpoints.stream.normal}?path=${encodeURIComponent(
+      fullVideoPath
+    )}&authKey=${key}`;
   }
 
-  authorizeAndUpdateVideoUrl() {
-    this.streamApiService.authorizeStream().subscribe({
-      next: (value) => {
-        console.log('KEY: ', value);
-        this.streamAuthKey = value;
-        this.updateVideoUrl();
-      },
-      error: (err) => {
-        console.log(
-          'something went wrong while genereating stream key: ',
-          err.error
-        );
-      },
-      complete: () => {},
-    });
-  }
-
-  playVideo() {
-    console.log('play video');
-
+  async playVideo() {
     if (!this.currentMediaItem) return;
 
     this.isVideoPlaying = true;
 
-    this.authorizeAndUpdateVideoUrl();
+    // Pobieramy klucz z serwisu
+    const key = await this.streamKeyService.getValidKey();
 
-    // // Ustawienie napisów
-    const subtitleName: string = this.currentMediaItem.title;
-    const rootPath: string = encodeURIComponent(this.currentMediaItem.rootPath);
+    // Aktualizujemy URL video
+    this.updateVideoUrl(key);
+
+    // Ustawiamy napisy
+    const subtitleName = this.currentMediaItem.title;
+    const rootPath = encodeURIComponent(this.currentMediaItem.rootPath);
     this.subtitlesUrl = `${Endpoints.videos.subtitles}/${encodeURIComponent(
       subtitleName
     )}?path=${rootPath}`;
-
-    console.log('subtitles in movie detail url: ', this.subtitlesUrl);
   }
 
-  onSeekTimeSelected(time: number) {
+  async onSeekTimeSelected(time: number) {
     this.seekStartTime = time;
-    this.updateVideoUrl();
+
+    // pobieramy aktualny key z serwisu
+    const key = await this.streamKeyService.getValidKey();
+
+    // aktualizujemy URL z kluczem
+    this.updateVideoUrl(key);
   }
 
   determineVideoCategory() {

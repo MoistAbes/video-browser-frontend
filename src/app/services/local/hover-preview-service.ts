@@ -8,6 +8,7 @@ import {
 import { ComponentPortal } from '@angular/cdk/portal';
 import { VideoCardInfoPanelComponent } from '../../components/video-card-component/video-card-info-panel-component/video-card-info-panel-component';
 import { Subscription } from 'rxjs';
+import { StreamKeyService } from './stream-key-service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,11 @@ export class HoverPreviewService {
   private positionSub?: Subscription;
   private closeTimerId: ReturnType<typeof setTimeout> | null = null;
 
-  constructor(private overlay: Overlay, private injector: Injector) {}
+  constructor(
+    private overlay: Overlay,
+    private injector: Injector,
+    private streamKeyService: StreamKeyService
+  ) {}
 
   updateAnchor(
     newAnchor: HTMLElement,
@@ -28,10 +33,7 @@ export class HoverPreviewService {
     this.open(newAnchor, data); // otwórz nowy panel
   }
 
-  open(
-    anchor: HTMLElement,
-    data: { title: string; description: string; videoSrc: string }
-  ) {
+  async open(anchor: HTMLElement, data: { title: string; description: string; videoSrc: string }) {
     // metoda open() zaczyna się od ustalenia pozycji panelu względem elementu kotwicy (anchor),
     // czyli karty, nad którą znajduje się myszka.
 
@@ -98,18 +100,25 @@ export class HoverPreviewService {
     // Tworzysz nowy ComponentPortal dla VideoCardInfoPanelComponent.
     // Podpinasz go do overlayRef, zapisujesz referencję do currentRef.
 
-    const portal = new ComponentPortal(
-      VideoCardInfoPanelComponent,
-      null,
-      this.injector
-    );
+    const portal = new ComponentPortal(VideoCardInfoPanelComponent, null, this.injector);
     const componentRef = this.overlayRef!.attach(portal);
     this.currentRef = componentRef;
 
     // Przekazujesz dane z karty do panelu — tytuł, opis, źródło wideo.
     componentRef.instance.title = data.title;
     componentRef.instance.description = data.description;
-    componentRef.instance.videoSrc = data.videoSrc;
+
+    // pobieramy aktualny klucz
+    const key = await this.streamKeyService.getValidKey();
+
+    // budujemy URL z authKey
+    const urlWithKey = this.streamKeyService.rebuildUrlWithKey(data.videoSrc);
+
+    // ustawiamy w komponencie preview
+    componentRef.instance.videoSrc = urlWithKey;
+
+    // componentRef.instance.videoSrc = data.videoSrc;
+    console.log('video preview src: ', urlWithKey);
 
     // Panel może sam kontrolować swój cykl życia — np. jeśli użytkownik najedzie na panel, to nie zamykaj go (cancelClose()).
     // Jeśli opuści panel, to zamknij go po 220 ms (scheduleClose()).
@@ -122,12 +131,10 @@ export class HoverPreviewService {
     const strategy = this.overlayRef!.getConfig()
       .positionStrategy as FlexibleConnectedPositionStrategy;
     this.positionSub?.unsubscribe();
-    this.positionSub = strategy.positionChanges.subscribe(
-      ({ connectionPair }) => {
-        const pos = this.mapPosition(connectionPair);
-        if (this.currentRef) this.currentRef.instance.position = pos;
-      }
-    );
+    this.positionSub = strategy.positionChanges.subscribe(({ connectionPair }) => {
+      const pos = this.mapPosition(connectionPair);
+      if (this.currentRef) this.currentRef.instance.position = pos;
+    });
 
     // queueMicrotask() opóźnia wykonanie kodu do momentu, aż DOM się zaktualizuje — dzięki temu masz pewność, że element panelu już istnieje w DOM.
     // Dodajesz klasę show, która uruchamia animację CSS (np. opacity, transform).
@@ -192,9 +199,7 @@ export class HoverPreviewService {
   }
 
   private getPanelHTMLElement(): HTMLElement | null {
-    return (
-      this.overlayRef?.overlayElement.querySelector('.info-panel-fixed') ?? null
-    );
+    return this.overlayRef?.overlayElement.querySelector('.info-panel-fixed') ?? null;
   }
 
   private mapPosition(pair: ConnectedPosition): 'right' | 'left' {

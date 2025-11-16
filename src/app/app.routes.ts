@@ -82,7 +82,7 @@ export const routes: Routes = [
       {
         path: 'login',
         component: LoginPage,
-        // canActivate: [loginGuard],
+        canActivate: [loginGuard],
         data: { animation: 'Login' },
       },
     ],

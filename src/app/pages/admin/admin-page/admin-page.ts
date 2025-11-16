@@ -13,16 +13,11 @@ import { SeasonModel } from '../../../models/show/season-model';
 import { UserInfoApiService } from '../../../services/api/user-info-api-service';
 import { UserInfoModel } from '../../../models/user/user-info-model';
 import { StreamApiService } from '../../../services/api/stream-api-service';
+import { MediaItemApiService } from '../../../services/api/media-item-api-service';
 
 @Component({
   selector: 'app-admin-page',
-  imports: [
-    FormsModule,
-    MatTabGroup,
-    MatTab,
-    NgSelectComponent,
-    CustomModalComponent,
-  ],
+  imports: [FormsModule, MatTabGroup, MatTab, NgSelectComponent, CustomModalComponent],
   templateUrl: './admin-page.html',
   standalone: true,
   styleUrl: './admin-page.scss',
@@ -57,7 +52,8 @@ export class AdminPage implements OnInit {
     private toastService: ToastrService,
     private genreApiService: GenreApiService,
     private userInfoApiService: UserInfoApiService,
-    private streamApiService: StreamApiService
+    private streamApiService: StreamApiService,
+    private mediaItemApiService: MediaItemApiService
   ) {}
 
   ngOnInit(): void {
@@ -151,8 +147,7 @@ export class AdminPage implements OnInit {
   }
 
   setUpVideoScanModalValues() {
-    this.modalContent =
-      'Czy na pewno chcesz przeprowadzić skanowanie plików video?';
+    this.modalContent = 'Czy na pewno chcesz przeprowadzić skanowanie plików video?';
 
     this.confirmAction = () => this.scanAllMovies();
 
@@ -170,8 +165,7 @@ export class AdminPage implements OnInit {
 
   setUpShowDeleteModalValues(selectedShow: ShowModel) {
     this.selectedShow = selectedShow;
-    this.modalContent =
-      'Czy na pewno chcesz usunąć ' + selectedShow?.name + ' show ?';
+    this.modalContent = 'Czy na pewno chcesz usunąć ' + selectedShow?.name + ' show ?';
 
     this.confirmAction = () => this.deleteShow();
 
@@ -198,10 +192,7 @@ export class AdminPage implements OnInit {
         console.log('KEY: ', value);
       },
       error: (err) => {
-        console.log(
-          'something went wrong while genereating stream key: ',
-          err.error
-        );
+        console.log('something went wrong while genereating stream key: ', err.error);
       },
       complete: () => {},
     });
@@ -219,12 +210,44 @@ export class AdminPage implements OnInit {
       );
     }
 
-
-    
     this.filteredShowList = this.filteredShowList.filter((show) =>
-      show.name
-        .toLowerCase()
-        .includes(this.nameShowFilterValue.toLowerCase().trim())
+      show.name.toLowerCase().includes(this.nameShowFilterValue.toLowerCase().trim())
     );
+  }
+
+  convertMediaItemsAudioCodec() {
+    this.mediaItemApiService.convertAudioCodec().subscribe({
+      next: () => {},
+      error: (err) => {
+        this.toastService.error(
+          'Something went wrong while trying to start converting audio codecs: ' + err.error
+        );
+      },
+      complete: () => {
+        this.toastService.success('Started converting audio codes');
+      },
+    });
+  }
+
+  setUpDeleteAllShows() {
+    this.modalContent = 'Czy na pewno chcesz usunąć wszystkie shows ?';
+
+    this.confirmAction = () => this.deleteAllShows();
+
+    this.isModalVisible = true;
+  }
+
+  deleteAllShows() {
+    this.showApiService.deleteAllShows().subscribe({
+      next: () => {},
+      error: (err) => {
+        this.toastService.error(
+          'Something went wrong while trying to delete all shows: ' + err.error
+        );
+      },
+      complete: () => {
+        this.toastService.success('Succesfully deleted all shows');
+      },
+    });
   }
 }

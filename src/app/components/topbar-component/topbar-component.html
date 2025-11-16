@@ -6,9 +6,7 @@
       <a routerLink="/search" routerLinkActive="active-link">Search</a>
       <a routerLink="/movies" routerLinkActive="active-link">Movies</a>
       <a routerLink="/tv-shows" routerLinkActive="active-link">TV Shows</a>
-      <a routerLink="/movie-collections" routerLinkActive="active-link"
-        >Movie Collections</a
-      >
+      <a routerLink="/movie-collections" routerLinkActive="active-link">Movie Collections</a>
       <a routerLink="/universes" routerLinkActive="active-link">Universes</a>
       @if (jwtService.hasAdminRole()) {
       <a routerLink="/admin" routerLinkActive="active-link">Admin</a>
@@ -16,16 +14,17 @@
     </nav>
   </div>
 
-  @if (authService.isLoggedIn() && user) {
   <div class="user-icon-wrapper">
     <div class="user-info">
       <p class="username">{{ jwtService.getUsername() }}</p>
       <div class="user-icon">
+        @if(user) {
         <i
-          [style.color]="user.iconColor"
-          [ngClass]="user.icon!.name"
+          [style.color]="user!.iconColor"
+          [ngClass]="user!.icon!.name"
           style="font-size: 1.5rem"
         ></i>
+        }
       </div>
     </div>
 
@@ -44,5 +43,4 @@
       </li>
     </ul>
   </div>
-  }
 </header>

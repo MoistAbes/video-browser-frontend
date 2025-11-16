@@ -76,4 +76,8 @@ export class ShowApiService {
   deleteShow(showId: number): Observable<any> {
     return this.http.delete<any>(Endpoints.show.deleteShow + showId);
   }
+
+   deleteAllShows(): Observable<any> {
+    return this.http.delete<any>(Endpoints.show.deleteAllShows);
+  }
 }

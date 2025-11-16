@@ -1,6 +1,6 @@
 import { AuthService } from './../services/local/auth-service';
-import {CanActivateFn, Router} from '@angular/router';
-import {inject} from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
+import { inject } from '@angular/core';
 
 export const loginGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
@@ -12,6 +12,3 @@ export const loginGuard: CanActivateFn = (route, state) => {
 
   return true; // pozwól wejść niezalogowanemu
 };
-
-
-

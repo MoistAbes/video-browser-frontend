@@ -10,9 +10,7 @@ import {JwtService} from '../../services/local/jwt-service';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {UserService} from '../../services/local/user-service';
-import {WebSocketService} from '../../services/websocket/websocket-service';
-import {ScreenOverlayComponent} from '../../components/screen-overlay-component/screen-overlay-component';
-import {CustomModalComponent} from '../../components/custom-modal-component/custom-modal-component';
+import { AuthService } from '../../services/local/auth-service';
 
 @Component({
   selector: 'app-login-page',
@@ -52,7 +50,7 @@ export class LoginPage {
               private router: Router,
               private toastr: ToastrService,
               private userService: UserService,
-              private websocketService: WebSocketService) {
+              private authService: AuthService) {
   }
 
   togglePassword(event: MouseEvent) {
@@ -151,12 +149,8 @@ export class LoginPage {
 
     this.authApiService.login(authRequest).subscribe({
       next: token => {
-        this.jwtService.saveToken(token.token)
+        this.authService.login(token.token)
         this.userService.loadUser();
-        console.log("Login Token: ", this.jwtService.getToken())
-        // 🔗 Połącz się z WebSocketem
-        this.websocketService.connect();
-
       },
       error: err => {
         this.isLoading = false

@@ -25,19 +25,14 @@ type VideoJSPlayer = ReturnType<typeof videojs>;
 
 @Component({
   selector: 'app-video-player-component',
-  imports: [
-    MatSlider,
-    MatSliderThumb,
-    VideoSelectorComponent,
-    VideoTimelineComponent,
-  ],
+  imports: [MatSlider, MatSliderThumb, VideoSelectorComponent, VideoTimelineComponent],
   templateUrl: './video-player-component.html',
   styleUrl: './video-player-component.scss',
   standalone: true,
 })
-export class VideoPlayerComponent
-  implements OnInit, OnDestroy, AfterViewInit, OnChanges
-{
+export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
+  protected readonly StructureTypeEnum = StructureTypeEnum;
+
   @ViewChild('target', { static: true }) target!: ElementRef<HTMLVideoElement>;
 
   @Input() currentMediaItem: MediaItemModel | undefined;
@@ -69,10 +64,7 @@ export class VideoPlayerComponent
 
   private mouseMoveTimeout: any;
 
-  constructor(
-    private cdr: ChangeDetectorRef,
-    private showUtilService: ShowUtilService
-  ) {}
+  constructor(private cdr: ChangeDetectorRef, private showUtilService: ShowUtilService) {}
 
   ngOnInit() {}
 
@@ -100,9 +92,7 @@ export class VideoPlayerComponent
         ],
       },
       () => {
-        const container = document.querySelector(
-          '.video-player-container'
-        ) as HTMLElement;
+        const container = document.querySelector('.video-player-container') as HTMLElement;
 
         const hideCursor = () => container.classList.add('hide-cursor');
         const showCursor = () => container.classList.remove('hide-cursor');
@@ -137,10 +127,7 @@ export class VideoPlayerComponent
 
             const timeLeft: number = this.duration - this.currentTime;
 
-            if (
-              timeLeft <= 15 &&
-              this.show?.structure != StructureTypeEnum.SINGLE_MOVIE
-            ) {
+            if (timeLeft <= 15 && this.show?.structure != StructureTypeEnum.SINGLE_MOVIE) {
               this.isNextEpisodeNoticeVisible = true;
               // licznik w sekundach, zaokrąglony w dół
               this.nextEpisodeTimerCounter = Math.floor(timeLeft);
@@ -227,10 +214,7 @@ export class VideoPlayerComponent
 
   onVideoEnd() {
     const nextMediaItem: MediaItemModel | undefined =
-      this.showUtilService.findNextMediaItemAutoplay(
-        this.show,
-        this.currentMediaItem
-      );
+      this.showUtilService.findNextMediaItemAutoplay(this.show, this.currentMediaItem);
 
     if (nextMediaItem) {
       this.playNextMedia(nextMediaItem);
@@ -248,11 +232,7 @@ export class VideoPlayerComponent
       this.player.src({ src: this.src, type: 'video/mp4' });
     }
 
-    if (
-      changes['subtitlesUrl'] &&
-      !changes['subtitlesUrl'].firstChange &&
-      this.player
-    ) {
+    if (changes['subtitlesUrl'] && !changes['subtitlesUrl'].firstChange && this.player) {
       // Usuń stare napisy
       const tracks = this.player.remoteTextTracks() as any; // rzutujemy na any
 
@@ -287,9 +267,7 @@ export class VideoPlayerComponent
   }
 
   toggleFullscreen() {
-    const container = document.querySelector(
-      '.video-player-container'
-    ) as HTMLElement;
+    const container = document.querySelector('.video-player-container') as HTMLElement;
     if (document.fullscreenElement) {
       document.exitFullscreen();
     } else {
@@ -299,9 +277,7 @@ export class VideoPlayerComponent
   }
 
   onVideoDoubleClick() {
-    const container = document.querySelector(
-      '.video-player-container'
-    ) as HTMLElement;
+    const container = document.querySelector('.video-player-container') as HTMLElement;
     if (document.fullscreenElement) {
       document.exitFullscreen();
     } else {
@@ -339,9 +315,7 @@ export class VideoPlayerComponent
       case 'ArrowRight':
       case 'd': // alternatywnie klawisz 'D'
       case 'D':
-        player.currentTime(
-          Math.min(player.duration()!, player.currentTime()! + 5)
-        );
+        player.currentTime(Math.min(player.duration()!, player.currentTime()! + 5));
         this.currentTime = player.currentTime()!;
 
         // this.showOverlay(`⏩ +5s`);
@@ -402,5 +376,29 @@ export class VideoPlayerComponent
       this.player.dispose();
     }
     document.removeEventListener('keydown', this.handleKeydown);
+  }
+
+  getSubtitle(): string | null {
+    if (!this.show) return null;
+
+    switch (this.show.structure) {
+      case StructureTypeEnum.SINGLE_MOVIE:
+        return null;
+
+      case StructureTypeEnum.MOVIE_COLLECTION:
+        return this.currentMediaItem?.title ?? null;
+
+      case StructureTypeEnum.SEASONAL_SERIES:
+        return `Season ${this.currentMediaItem?.seasonNumber} Episode ${this.currentMediaItem?.episodeNumber}`;
+
+      case StructureTypeEnum.HYBRID:
+        if (this.currentMediaItem?.episodeNumber) {
+          return `Season ${this.currentMediaItem?.seasonNumber} Episode ${this.currentMediaItem?.episodeNumber}`;
+        }
+        return this.currentMediaItem?.title ?? null;
+
+      default:
+        return null;
+    }
   }
 }

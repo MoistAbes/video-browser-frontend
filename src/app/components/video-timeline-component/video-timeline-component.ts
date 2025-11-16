@@ -1,15 +1,18 @@
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnChanges,
   Output,
   SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import {
   ChangeContext,
   NgxSliderModule,
   Options,
+  SliderComponent,
 } from '@angular-slider/ngx-slider';
 import { NgStyle } from '@angular/common';
 
@@ -23,6 +26,12 @@ import { NgStyle } from '@angular/common';
 export class VideoTimelineComponent implements OnChanges {
   @Input() duration: number = 0;
   @Input() currentTime: number = 0;
+
+  @ViewChild('sliderElement', { read: ElementRef })
+  sliderEl!: ElementRef<HTMLElement>;
+
+  @ViewChild(SliderComponent)
+  sliderCmp!: SliderComponent;
 
   @Output() timeChange = new EventEmitter<number>();
   @Output() seekStart = new EventEmitter<void>();
@@ -60,11 +69,17 @@ export class VideoTimelineComponent implements OnChanges {
     this.seekEnd.emit(value ?? 0);
   }
 
-  // valueChange może służyć do podglądu slidera, ale nie ruszamy playera
-  onValueChange(value: number): void {
+  onValueChange(value: number, isHover = false): void {
+    if (isHover) {
+      // tylko tooltip
+      this.hoverTime = value;
+      return;
+    }
+
     if (this.isUserSeeking) {
       this.currentTime = value;
       this.timeChange.emit(this.currentTime);
+      console.log('current time: ', this.currentTime);
     }
   }
 
@@ -80,22 +95,33 @@ export class VideoTimelineComponent implements OnChanges {
     return h > 0 ? `${hh}${mm}:${ss}` : `${mm}:${ss}`;
   }
 
-  //ToDO do naprawy czas hoverowany nie zgadza sie z faktycznym czasem po kliknieciu
   onSliderHover(event: MouseEvent) {
-    const sliderWrapper = event.currentTarget as HTMLElement;
-    const sliderEl = sliderWrapper.querySelector('.ngx-slider') as HTMLElement;
-    if (!sliderEl) return;
+    if (!this.sliderEl || !this.sliderCmp) return;
 
-    const rect = sliderEl.getBoundingClientRect();
-    const percent = (event.clientX - rect.left) / rect.width;
+    const cmp: any = this.sliderCmp;
+    const rect = this.sliderEl.nativeElement.getBoundingClientRect();
 
- 
-    this.hoverTime = Math.min(
-      Math.max(0, percent * this.duration),
-      this.duration
-    );
+    // pozycja kursora względem slidera
+    let relativeX = event.clientX - rect.left;
 
-    // pozycja tooltipu względem wrappera
-    this.hoverX = event.clientX - sliderWrapper.getBoundingClientRect().left;
+    const handleHalf = cmp.handleHalfDimension;
+    const fullWidth = cmp.fullBarElement._dimension;
+
+    // ograniczamy hoverX w obrębie slidera (uchwyt nie wychodzi poza)
+    relativeX = Math.max(handleHalf, Math.min(relativeX, fullWidth - handleHalf));
+    this.hoverX = relativeX;
+
+    // procent w ruchomym obszarze slidera
+    const percent = (relativeX - handleHalf) / (fullWidth - 2 * handleHalf);
+
+    const floor = cmp.options.floor ?? 0;
+    const ceil = cmp.options.ceil ?? 100;
+    const step = cmp.options.step ?? 1;
+
+    let rawValue = floor + percent * (ceil - floor);
+    const steppedValue = Math.round(rawValue / step) * step;
+
+    // wywołujemy onValueChange dla hovera, żeby logika value była identyczna
+    this.onValueChange(steppedValue, true);
   }
 }

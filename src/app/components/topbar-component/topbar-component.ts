@@ -38,6 +38,7 @@ export class TopbarComponent implements OnInit {
   logout() {
     // tu dodajesz logikę wylogowania
     this.authService.logout();
+    this.router.navigateByUrl('/login');
   }
 
   routeToAccountPage() {

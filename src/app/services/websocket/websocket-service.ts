@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import {Client} from '@stomp/stompjs';
+import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
-import {JwtService} from '../local/jwt-service';
+import { JwtService } from '../local/jwt-service';
 
 @Injectable({ providedIn: 'root' })
 export class WebSocketService {
-
   private stompClient: Client | null = null;
 
   constructor(private jwtService: JwtService) {}
@@ -13,19 +12,25 @@ export class WebSocketService {
   private createClient(): Client {
     const token = this.jwtService.getToken();
 
+    // Dynamiczny host WebSocket
+    const host =
+      window.location.hostname === 'localhost'
+        ? 'localhost:8080'
+        : `${window.location.hostname}:8080`;
+
     return new Client({
-      webSocketFactory: () => new SockJS('/ws'),
+      webSocketFactory: () => new SockJS(`http://${host}/ws`),
       connectHeaders: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      debug: str => console.log(str),
+      debug: (str) => console.log(str),
       reconnectDelay: 5000,
-      onConnect: frame => {
+      onConnect: (frame) => {
         console.log('✅ Połączono z WebSocketem:', frame);
       },
-      onStompError: frame => {
+      onStompError: (frame) => {
         console.error('❌ Błąd STOMP:', frame);
-      }
+      },
     });
   }
 
@@ -33,7 +38,7 @@ export class WebSocketService {
     const token = this.jwtService.getToken();
 
     if (!token) {
-      console.error("Brak tokena JWT → nie łączę się z WebSocket!");
+      console.error('Brak tokena JWT → nie łączę się z WebSocket!');
       return;
     }
 
@@ -57,18 +62,16 @@ export class WebSocketService {
     if (this.stompClient?.connected) {
       this.stompClient.publish({
         destination,
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       });
     }
   }
 
   subscribe(topic: string, callback: (message: any) => void): void {
     if (this.stompClient?.connected) {
-      this.stompClient.subscribe(topic, message => {
+      this.stompClient.subscribe(topic, (message) => {
         callback(JSON.parse(message.body));
       });
     }
   }
 }
-
-

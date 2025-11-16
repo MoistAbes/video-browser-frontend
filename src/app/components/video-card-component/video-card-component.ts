@@ -38,7 +38,7 @@ export class VideoCardComponent {
 
   @ViewChild('cardRef') cardRef!: ElementRef;
 
-  private openTimer: number | null = null;
+  openTimer: ReturnType<typeof setTimeout> | null = null;
   constructor(
     private utilService: UtilService,
     private showUtilService: ShowUtilService,

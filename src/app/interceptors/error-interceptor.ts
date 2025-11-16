@@ -3,14 +3,12 @@ import { inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
-import { JwtService } from '../services/local/jwt-service';
-import { WebSocketService } from '../services/websocket/websocket-service';
+import { AuthService } from '../services/local/auth-service';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const snackBar = inject(MatSnackBar);
   const router = inject(Router);
-  const jwtService = inject(JwtService);
-  const websocketService = inject(WebSocketService);
+  const authService = inject(AuthService);
 
   return next(req).pipe(
     catchError((error) => {
@@ -21,6 +19,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         case 401:
           console.log('401 error: brak uprawnien: ', error);
 
+          authService.logout();
+          router.navigateByUrl('/login');
 
           snackBar.open(backendMessage ?? 'Nieautoryzowany dostęp', 'Zamknij', {
             duration: 3000,
@@ -29,6 +29,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
         case 403:
           console.log('403 error: brak uprawnien: ', backendMessage);
+          
+          authService.logout();
+          router.navigateByUrl('/login');
           snackBar.open(backendMessage ?? 'Brak uprawnień', 'Zamknij', {
             duration: 3000,
           });

@@ -1,9 +1,9 @@
 <div class="layout-container">
-  @if (authService.isLoggedIn()) {
   <app-topbar-component
+    *ngIf="authService.isLoggedIn$ | async"
     (openSidebar)="handleOpenSidebar($event)"
-  ></app-topbar-component>
-  }
+  >
+  </app-topbar-component>
 
   <main class="main-content" [@routeAnimations]="prepareRoute(o)">
     <router-outlet #o="outlet"></router-outlet>

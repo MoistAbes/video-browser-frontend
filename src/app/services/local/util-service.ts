@@ -41,9 +41,7 @@ export class UtilService {
       return '';
     }
 
-    return `${Endpoints.videos.image}?path=${encodeURIComponent(
-      rootPath + '/icon/icon.webp'
-    )}`;
+    return `${Endpoints.videos.image}?path=${encodeURIComponent(rootPath + '/icon/icon.webp')}`;
   }
 
   onImageLoad(event: Event) {
@@ -53,22 +51,11 @@ export class UtilService {
 
   getVideoUrlPreview(mediaItem: MediaItemModel): string {
     const fullVideoPath: string = `${mediaItem.rootPath}/${mediaItem.fileName}`;
-    const needsConversion: boolean = !['aac', 'mp3'].includes(mediaItem.audio!);
 
     let resultVideoUrl: string = '';
 
-    if (needsConversion) {
-      // resultVideoUrl = `${
-      //   Endpoints.stream.convert
-      // }?path=${encodeURIComponent(fullVideoPath)}&start=${this.seekStartTime}`;
+    resultVideoUrl = `${Endpoints.stream.normalPreview}?path=${encodeURIComponent(fullVideoPath)}`;
 
-      return '';
-    } else {
-      resultVideoUrl = `${Endpoints.stream.normalPreview}?path=${encodeURIComponent(
-        fullVideoPath
-      )}`;
-
-      return resultVideoUrl;
-    }
+    return resultVideoUrl;
   }
 }
