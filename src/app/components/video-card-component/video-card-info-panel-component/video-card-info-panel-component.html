@@ -12,13 +12,21 @@
   <div class="caret" aria-hidden="true"></div>
 
   <div class="preview-container auto">
-    <app-video-preview-player-component
-      [videoSrc]="videoSrc"
-    ></app-video-preview-player-component>
+    <app-video-preview-player-component [videoSrc]="videoSrc"></app-video-preview-player-component>
   </div>
 
   <div class="meta">
-    <strong class="title">{{ title }}</strong>
+    <div class="title-line">
+      <strong class="title">{{ title }}</strong>
+      <span class="show-info">• {{ formattedShowInfo }}</span>
+    </div>
+
+    <div class="genres">
+      @for (genre of genres; track genre.id) {
+      <span class="genre">{{ genre.name }}</span>
+      }
+    </div>
+
     <p class="desc">{{ description }}</p>
   </div>
 </div>

@@ -1,16 +1,20 @@
-@use "styles/colors" as *;
-@use "./app/pages/movie-detail-page/movie-detail-page" as *;
-@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@use 'styles/colors' as *;
+@use './app/pages/movie-detail-page/movie-detail-page' as *;
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 html,
 body {
   overflow-y: auto; /* lub scroll, jeśli chcesz zawsze */
-  font-family: "Bebas Neue", sans-serif;
+  font-family: 'Bebas Neue', sans-serif;
   background-color: $body-bg;
 }
 
-html {
-  scroll-behavior: smooth;
+body.scrolling * {
+  pointer-events: none !important;
+}
+
+body.scrolling {
+  cursor: default !important;
 }
 
 body::-webkit-scrollbar {
@@ -24,7 +28,7 @@ body::-webkit-scrollbar {
   padding-left: 1rem;
   padding-right: 1rem;
   //ToDO do implementacji na pozniej
-  scroll-behavior: smooth; /* makes horizontal scroll smooth */
+  // scroll-behavior: smooth; /* makes horizontal scroll smooth */
 }
 
 .video-card:hover {
@@ -34,12 +38,11 @@ body::-webkit-scrollbar {
 
 //SUBTITLES
 .vjs-text-track-cue > div {
-  font-family: "Roboto", Arial, sans-serif !important;
+  font-family: 'Roboto', Arial, sans-serif !important;
   background-color: transparent !important;
   color: white !important;
 
-  text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
-    2px 2px 0 #000;
+  text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
 }
 //--
 
@@ -53,7 +56,7 @@ body::-webkit-scrollbar {
 
 /* Nakładka */
 .loading-button::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -66,7 +69,7 @@ body::-webkit-scrollbar {
 
 /* Spinner */
 .loading-button::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 50%;
   left: 50%;
@@ -93,9 +96,7 @@ body::-webkit-scrollbar {
   inset: 0;
   background: #111; /* ciemne tło jako baza */
   filter: blur(20px);
-  transform: scale(
-    1.1
-  ); /* trochę powiększamy, żeby blur nie odsłaniał krawędzi */
+  transform: scale(1.1); /* trochę powiększamy, żeby blur nie odsłaniał krawędzi */
   animation: pulse 1.5s infinite; /* opcjonalne migotanie */
 }
 

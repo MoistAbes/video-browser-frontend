@@ -1,11 +1,17 @@
-@use "../../../styles/colors" as *;
+@use '../../../styles/colors' as *;
 
 /* Layout: topbar + main content */
+// .layout-container {
+//   display: flex;
+//   flex-direction: column;
+//   height: 100vh;
+//   overflow: hidden;
+// }
 .layout-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh; /* zamiast height */
+  overflow: auto; /* albo nie ustawiaj wcale overflow */
 }
 
 /* Główna zawartość */

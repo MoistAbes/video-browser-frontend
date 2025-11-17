@@ -1,4 +1,4 @@
-import { ComponentRef, Injectable, Injector } from '@angular/core';
+import { ComponentRef, Injectable, Injector, OnDestroy } from '@angular/core';
 import {
   ConnectedPosition,
   Overlay,
@@ -9,31 +9,68 @@ import { ComponentPortal } from '@angular/cdk/portal';
 import { VideoCardInfoPanelComponent } from '../../components/video-card-component/video-card-info-panel-component/video-card-info-panel-component';
 import { Subscription } from 'rxjs';
 import { StreamKeyService } from './stream-key-service';
+import { GenreModel } from '../../models/show/genre-model';
+import { NavigationStart, Router } from '@angular/router';
+import { UtilService } from './util-service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class HoverPreviewService {
+export class HoverPreviewService implements OnDestroy {
   private overlayRef?: OverlayRef;
   private currentRef?: ComponentRef<VideoCardInfoPanelComponent>;
   private positionSub?: Subscription;
   private closeTimerId: ReturnType<typeof setTimeout> | null = null;
 
+  private routerSub?: Subscription;
+
   constructor(
     private overlay: Overlay,
     private injector: Injector,
-    private streamKeyService: StreamKeyService
-  ) {}
+    private streamKeyService: StreamKeyService,
+    private router: Router,
+    private utilService: UtilService
+  ) {
+    // automatycznie zamykaj panel przy każdej zmianie trasy
+    this.routerSub = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        this.close(); // zamyka panel overlay
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.routerSub?.unsubscribe();
+  }
 
   updateAnchor(
     newAnchor: HTMLElement,
-    data: { title: string; description: string; videoSrc: string }
+    data: {
+      title: string;
+      description: string;
+      genres: GenreModel[];
+      seasonsAmount: number;
+      moviesAmount: number;
+      videoLength: number;
+      videoSrc: string;
+    }
   ) {
     this.cancelClose(); // nie zamykaj, bo przechodzimy do nowej karty
     this.open(newAnchor, data); // otwórz nowy panel
   }
 
-  async open(anchor: HTMLElement, data: { title: string; description: string; videoSrc: string }) {
+  async open(
+    anchor: HTMLElement,
+    data: {
+      title: string;
+      description: string;
+      genres: GenreModel[];
+      seasonsAmount: number;
+      moviesAmount: number;
+      videoLength: number;
+      videoSrc: string;
+    }
+  ) {
     // metoda open() zaczyna się od ustalenia pozycji panelu względem elementu kotwicy (anchor),
     // czyli karty, nad którą znajduje się myszka.
 
@@ -106,6 +143,12 @@ export class HoverPreviewService {
 
     // Przekazujesz dane z karty do panelu — tytuł, opis, źródło wideo.
     componentRef.instance.title = data.title;
+    componentRef.instance.formattedShowInfo = this.formatPreviewInfo(
+      data.seasonsAmount,
+      data.moviesAmount,
+      data.videoLength
+    );
+    componentRef.instance.genres = data.genres;
     componentRef.instance.description = data.description;
 
     // pobieramy aktualny klucz
@@ -116,9 +159,6 @@ export class HoverPreviewService {
 
     // ustawiamy w komponencie preview
     componentRef.instance.videoSrc = urlWithKey;
-
-    // componentRef.instance.videoSrc = data.videoSrc;
-    console.log('video preview src: ', urlWithKey);
 
     // Panel może sam kontrolować swój cykl życia — np. jeśli użytkownik najedzie na panel, to nie zamykaj go (cancelClose()).
     // Jeśli opuści panel, to zamknij go po 220 ms (scheduleClose()).
@@ -178,14 +218,15 @@ export class HoverPreviewService {
   // Dzięki temu animacja ma czas się zakończyć, zanim DOM zostanie wyczyszczony.
   close() {
     this.cancelClose();
-    if (!this.overlayRef || !this.overlayRef.hasAttached()) return;
+    if (!this.overlayRef?.hasAttached()) return;
 
     const panelEl = this.getPanelHTMLElement();
     panelEl?.classList.remove('show');
     panelEl?.classList.add('hide');
+
     this.currentRef?.instance.pauseAndUnload?.();
 
-    setTimeout(() => this.detachWithCleanup(), 200);
+    setTimeout(() => this.detachWithCleanup(), 200); // 200ms = czas animacji hide
   }
 
   //Odłącza komponent z overlayRef.
@@ -206,5 +247,29 @@ export class HoverPreviewService {
     if (pair.originX === 'end' && pair.overlayX === 'start') return 'right';
     if (pair.originX === 'start' && pair.overlayX === 'end') return 'left';
     return 'right';
+  }
+
+  private formatPreviewInfo(
+    seasonsAmount: number,
+    moviesAmount: number,
+    videoLength: number
+  ): string {
+    // przypadek: są i sezony i filmy
+    if (seasonsAmount > 0 && moviesAmount > 0) {
+      return `Seasons ${seasonsAmount} Movies ${moviesAmount}`;
+    }
+
+    // tylko sezony
+    if (seasonsAmount > 0) {
+      return `Seasons ${seasonsAmount}`;
+    }
+
+    // brak sezonów, wiele filmów
+    if (moviesAmount > 1) {
+      return `Movies ${moviesAmount}`;
+    }
+
+    // brak sezonów, dokładnie jeden film lub brak filmów
+    return this.utilService.formatVideoDuration(videoLength);
   }
 }

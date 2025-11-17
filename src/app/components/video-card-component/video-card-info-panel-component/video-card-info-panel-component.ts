@@ -1,16 +1,11 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { VideoPreviewPlayerComponent } from '../../video-preview-player-component/video-preview-player-component';
+import { GenreModel } from '../../../models/show/genre-model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-video-card-info-panel-component',
-  imports: [VideoPreviewPlayerComponent],
+  imports: [VideoPreviewPlayerComponent, CommonModule],
   templateUrl: './video-card-info-panel-component.html',
   standalone: true,
   styleUrl: './video-card-info-panel-component.scss',
@@ -19,6 +14,8 @@ export class VideoCardInfoPanelComponent implements OnDestroy {
   @Input() title = '';
   @Input() description = '';
   @Input() videoSrc = '';
+  @Input() genres: GenreModel[] = [];
+  @Input() formattedShowInfo: string = '' //tutaj przesylam informacje zalezna od struktury show czyli ilosc sezonow ilosc movies czas filmu itd.
   @Input() poster?: string;
 
   @Input() top = 0;

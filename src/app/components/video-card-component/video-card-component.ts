@@ -16,6 +16,7 @@ import { ShowModel } from '../../models/show/show-model';
 import { UtilService } from '../../services/local/util-service';
 import { ShowUtilService } from '../../services/local/show-util-service';
 import { MediaItemModel } from '../../models/show/media-item-model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-video-card-component',
@@ -31,10 +32,10 @@ export class VideoCardComponent {
   @Input() showId: number | undefined;
   @Output() cardClick = new EventEmitter<void>();
 
+  private apiSub?: Subscription;
+
   show: ShowModel | undefined;
   mediaItemToPlay: MediaItemModel | undefined;
-
-  private isHovering: boolean = false;
 
   @ViewChild('cardRef') cardRef!: ElementRef;
 
@@ -55,9 +56,6 @@ export class VideoCardComponent {
 
   @HostListener('mouseenter')
   onEnter() {
-    if (this.isHovering) return; // 👈 już hoverujemy, nie rób nic
-    this.isHovering = true;
-
     console.log('ON ENTER');
 
     if (!this.showPreview) return;
@@ -73,37 +71,75 @@ export class VideoCardComponent {
       this.openTimer = null;
     }
     this.hoverPreview.scheduleClose(0);
-    this.isHovering = false; // 👈 reset flagi
   }
 
   loadShowDetails() {
     console.log('loadShowDetails is running');
     if (this.showId == undefined) return;
 
-    this.showApiService.findById(this.showId).subscribe({
+    // 👉 ANULUJ POPRZEDNIE REQUESTY
+    if (this.apiSub) {
+      this.apiSub.unsubscribe();
+      this.apiSub = undefined;
+    }
+
+    this.apiSub = this.showApiService.findById(this.showId).subscribe({
       next: (result) => {
         this.show = result;
-        this.mediaItemToPlay = this.showUtilService.findFirstMediaItemToPlay(
-          this.show!
-        );
-        this.cdr.detectChanges(); // 👈 powiadom Angulara o zmianach
+        this.mediaItemToPlay = this.showUtilService.findFirstMediaItemToPlay(this.show!);
+        this.cdr.detectChanges();
       },
       complete: () => {
+        // 200 ms zamiast 1000 ms
+        const previewDelay = 200;
+
         this.openTimer = setTimeout(() => {
           this.openTimer = null;
 
-          // 👇 WYWOŁAJ POZA STREFĄ ANGULARA
           this.zone.runOutsideAngular(() => {
             this.hoverPreview.updateAnchor(this.el.nativeElement, {
               title: this.title,
               description: this.show!.description,
-              videoSrc: this.utilService.getVideoUrlPreview(
-                this.mediaItemToPlay!
-              ),
+              genres: this.show!.genres,
+              seasonsAmount: this.show?.seasons.length ?? 0,
+              moviesAmount: this.show?.movies.length ?? 0,
+              videoLength: this.show?.movies?.[0]?.duration ?? 0,
+              videoSrc: this.utilService.getVideoUrlPreview(this.mediaItemToPlay!),
             });
           });
-        }, 1000);
+        }, previewDelay);
       },
     });
   }
+
+  // loadShowDetails() {
+  //   console.log('loadShowDetails is running');
+  //   if (this.showId == undefined) return;
+
+  //   this.showApiService.findById(this.showId).subscribe({
+  //     next: (result) => {
+  //       this.show = result;
+  //       this.mediaItemToPlay = this.showUtilService.findFirstMediaItemToPlay(
+  //         this.show!
+  //       );
+  //       this.cdr.detectChanges(); // 👈 powiadom Angulara o zmianach
+  //     },
+  //     complete: () => {
+  //       this.openTimer = setTimeout(() => {
+  //         this.openTimer = null;
+
+  //         // 👇 WYWOŁAJ POZA STREFĄ ANGULARA
+  //         this.zone.runOutsideAngular(() => {
+  //           this.hoverPreview.updateAnchor(this.el.nativeElement, {
+  //             title: this.title,
+  //             description: this.show!.description,
+  //             videoSrc: this.utilService.getVideoUrlPreview(
+  //               this.mediaItemToPlay!
+  //             ),
+  //           });
+  //         });
+  //       }, 1000);
+  //     },
+  //   });
+  // }
 }
