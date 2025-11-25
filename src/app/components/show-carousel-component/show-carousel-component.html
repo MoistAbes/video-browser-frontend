@@ -1,21 +1,20 @@
- <div class="carousel-container">
-        <h2 class="carousel-title">{{carouselTitle}}</h2>
-        
+<div class="carousel-container disable-during-scroll">
+  <h2 class="carousel-title">{{ carouselTitle }}</h2>
 
-        <div class="carousel" #carousel>
-          @for (show of shows; track show.id) {
+  <div class="carousel" #carousel>
+    @for (show of shows; track show.id) {
 
-          <div class="item">
-            <app-video-card-component
-              [title]="show.name"
-              [showPreview]="true"
-              [iconFilePath]="utilService.getIconUrl(show.rootPath)"
-              [showId]="show.id"
-              (cardClick)="moveToMovieDetails(show.name)"
-            >
-            </app-video-card-component>
-          </div>
+    <div class="item">
+      <app-video-card-component
+        [title]="show.name"
+        [showPreview]="true"
+        [showRootPath]="show.rootPath"
+        [showId]="show.id"
+        (cardClick)="moveToMovieDetails(show.name)"
+      >
+      </app-video-card-component>
+    </div>
 
-          }
-        </div>
-      </div>
+    }
+  </div>
+</div>

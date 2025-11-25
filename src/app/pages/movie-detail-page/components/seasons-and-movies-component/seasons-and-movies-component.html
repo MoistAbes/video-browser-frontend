@@ -1,107 +1,94 @@
 <div class="top-container">
-
   @if (!isVideoPlaying && currentMediaItem) {
-    <div class="preview-wrapper">
+  <div class="preview-wrapper">
+    <div class="image-wrapper">
+      <div class="image-placeholder"></div>
+      <img
+        class="content"
+        priority
+        [src]="backdropImagePath"
+        fill
+        alt="backdrop"
+        (load)="utilService.onImageLoad($event)"
+      />
+    </div>
 
-      <div class="image-wrapper">
-        <div class="image-placeholder"></div>
-        <img
-          class="content"
-          priority
-          [ngSrc]="utilService.getBackdropUrl(currentMediaItem.rootPath)"
-          fill
-          alt="backdrop"
-          (load)="utilService.onImageLoad($event)"
-        />
+    <div class="movie-details-overlay">
+      <div class="movie-header">
+        <h1 class="movie-title">{{ show!.name }}</h1>
+        @if (currentMediaItem) {
+        <h5>{{ currentMediaItem.title }}</h5>
+        }
       </div>
-
-        <div class="movie-details-overlay">
-          <div class="movie-header">
-            <h1 class="movie-title">{{show!.name}}</h1>
-            @if (currentMediaItem) {
-              <h5>{{currentMediaItem.title}}</h5>
-            }
-          </div>
-          <p class="movie-description">
-            {{show?.description}}
-          </p>
-          <button class="play-button" (click)="playVideoClicked.emit()">
-            <i class="fa-solid fa-play"></i> Play
-          </button>
-        </div>
+      <p class="movie-description">
+        {{ show?.description }}
+      </p>
+      <button class="play-button" (click)="playVideoClicked.emit()">
+        <i class="fa-solid fa-play"></i> Play
+      </button>
     </div>
+  </div>
+  } @if (selectedVideoUrl.length > 0) {
+  <div class="video-wrapper">
+    <app-video-player-component
+      [show]="show"
+      [currentMediaItem]="currentMediaItem"
+      [src]="selectedVideoUrl"
+      (playVideoClicked)="playVideoClicked.emit()"
+      (updateMediaItem)="updateMediaItem.emit($event)"
+    >
+    </app-video-player-component>
+  </div>
   }
-
-  @if (selectedVideoUrl.length > 0) {
-    <div class="video-wrapper">
-      <app-video-player-component
-        [show]="show"
-        [currentMediaItem]="currentMediaItem"
-        [src]="selectedVideoUrl"
-        (playVideoClicked)="playVideoClicked.emit()"
-        (updateMediaItem)="updateMediaItem.emit($event)">
-      </app-video-player-component>
-    </div>
-  }
-
 </div>
 
 @if (show) {
-  <div class="movie-details-container">
+<div class="movie-details-container">
+  <div class="content-container">
+    <div class="content-type-toggle">
+      <button
+        class="tab-button"
+        [class.active]="selectedContentType === 'seasons'"
+        (click)="selectSeasonContentType()"
+      >
+        Seasons
+      </button>
 
-      <div class="content-container">
+      <button
+        class="tab-button"
+        [class.active]="selectedContentType === 'movies'"
+        (click)="selectMoviesContentType()"
+      >
+        Movies
+      </button>
+    </div>
+    @if (selectedContentType === 'seasons') { @if (selectedSeason) {
 
-        <div class="content-type-toggle">
-            <button
-              class="tab-button"
-              [class.active]="selectedContentType === 'seasons'"
-              (click)="selectSeasonContentType()">
-              Seasons
-            </button>
-
-
-            <button
-              class="tab-button"
-              [class.active]="selectedContentType === 'movies'"
-              (click)="selectMoviesContentType()">
-              Movies
-            </button>
-
-        </div>
-        @if (selectedContentType === 'seasons') {
-          @if (selectedSeason) {
-
-            <div class="season-container">
-              <select [(ngModel)]="selectedSeason" (ngModelChange)="setUpEpisodes()" class="form-select">
-                @for (season of show.seasons; track season.id) {
-                  <option [value]="season.number">Season {{season.number}}</option>
-                }
-              </select>
-            </div>
-            <div class="episode-container">
-              <select [(ngModel)]="selectedEpisode" (ngModelChange)="onEpisodeSelect()" class="form-select">
-                @for (episode of episodes; track episode.id) {
-                  <option [ngValue]="episode">Episode {{ episode.episodeNumber }}</option>
-                }
-              </select>
-            </div>
-          }
+    <div class="season-container">
+      <select [(ngModel)]="selectedSeason" (ngModelChange)="setUpEpisodes()" class="form-select">
+        @for (season of show.seasons; track season.id) {
+        <option [value]="season.number">Season {{ season.number }}</option>
         }
-
-        @if (selectedContentType === 'movies') {
-          <div class="video-grid">
-            @for (movie of show.movies; track movie.id) {
-              <app-video-card-component
-                [title]="movie!.title"
-                (cardClick)="watchMovie(movie!)"
-                [iconFilePath]=utilService.getIconUrl(movie.rootPath)
-              ></app-video-card-component>
-            }
-          </div>
+      </select>
+    </div>
+    <div class="episode-container">
+      <select [(ngModel)]="selectedEpisode" (ngModelChange)="onEpisodeSelect()" class="form-select">
+        @for (episode of episodes; track episode.id) {
+        <option [ngValue]="episode">Episode {{ episode.episodeNumber }}</option>
         }
-
-
-      </div>
-
+      </select>
+    </div>
+    } } @if (selectedContentType === 'movies') {
+    <div class="video-grid">
+      @for (movie of show.movies; track movie.id) {
+      <app-video-card-component
+        [title]="movie!.title"
+        (cardClick)="watchMovie(movie!)"
+        [showRootPath]="movie.rootPath"
+      ></app-video-card-component>
+      }
+    </div>
+    }
   </div>
+</div>
 }

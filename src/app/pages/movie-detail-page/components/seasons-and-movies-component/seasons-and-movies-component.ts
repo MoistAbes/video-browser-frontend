@@ -1,50 +1,52 @@
-import {Component, Input, CUSTOM_ELEMENTS_SCHEMA, OnInit, Output, EventEmitter, OnChanges} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {VideoCardComponent} from '../../../../components/video-card-component/video-card-component';
-import {VideoPlayerComponent} from '../../../../components/video-player-component/video-player-component';
-import {NgOptimizedImage} from '@angular/common';
-import {ShowModel} from '../../../../models/show/show-model';
-import {MediaItemModel} from '../../../../models/show/media-item-model';
-import {UtilService} from '../../../../services/local/util-service';
-import {ShowUtilService} from '../../../../services/local/show-util-service';
+import {
+  Component,
+  Input,
+  CUSTOM_ELEMENTS_SCHEMA,
+  OnInit,
+  Output,
+  EventEmitter,
+  OnChanges,
+} from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { VideoCardComponent } from '../../../../components/video-card-component/video-card-component';
+import { VideoPlayerComponent } from '../../../../components/video-player-component/video-player-component';
+import { ShowModel } from '../../../../models/show/show-model';
+import { MediaItemModel } from '../../../../models/show/media-item-model';
+import { UtilService } from '../../../../services/local/util-service';
+import { ShowUtilService } from '../../../../services/local/show-util-service';
 
 @Component({
   selector: 'app-seasons-and-movies-component',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [
-    FormsModule,
-    VideoCardComponent,
-    VideoPlayerComponent,
-    NgOptimizedImage
-  ],
+  imports: [FormsModule, VideoCardComponent, VideoPlayerComponent],
   templateUrl: './seasons-and-movies-component.html',
   standalone: true,
-  styleUrl: './seasons-and-movies-component.scss'
+  styleUrl: './seasons-and-movies-component.scss',
 })
 export class SeasonsAndMoviesComponent implements OnInit, OnChanges {
-
   @Input() currentMediaItem: MediaItemModel | undefined;
   @Input() isVideoPlaying: boolean = false;
   @Input() selectedVideoUrl: string = '';
   @Input() show: ShowModel | undefined;
 
-  @Input() selectedSeason: number | null = null
+  @Input() selectedSeason: number | null = null;
+  @Input() backdropImagePath: string = '';
 
-  @Output() updateMediaItem: EventEmitter<Partial<MediaItemModel>> = new EventEmitter<Partial<MediaItemModel>>();
+  @Output() updateMediaItem: EventEmitter<Partial<MediaItemModel>> = new EventEmitter<
+    Partial<MediaItemModel>
+  >();
   @Output() playVideoClicked: EventEmitter<void> = new EventEmitter<void>();
 
   selectedContentType: string = 'seasons';
 
   episodes: MediaItemModel[] = [];
-  selectedEpisode: MediaItemModel | undefined
+  selectedEpisode: MediaItemModel | undefined;
 
   private initialized: boolean = false;
 
-  constructor(public utilService: UtilService,
-              private showUtilService: ShowUtilService,) {}
+  constructor(public utilService: UtilService, private showUtilService: ShowUtilService) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngOnChanges() {
     if (!this.initialized && this.show?.seasons?.length) {
@@ -54,14 +56,12 @@ export class SeasonsAndMoviesComponent implements OnInit, OnChanges {
     }
   }
 
-
   watchMovie(mediaItem: MediaItemModel) {
-
-    console.log("watchMovie: ", mediaItem);
+    console.log('watchMovie: ', mediaItem);
 
     this.currentMediaItem = mediaItem;
     this.updateMediaItem.emit(this.currentMediaItem);
-    this.resetPlayingVideo()
+    this.resetPlayingVideo();
   }
 
   resetPlayingVideo() {
@@ -75,19 +75,17 @@ export class SeasonsAndMoviesComponent implements OnInit, OnChanges {
       this.selectedSeason = this.show.seasons[0].episodes[0].seasonNumber;
       this.setUpEpisodes();
     }
-
   }
 
   selectMoviesContentType() {
     this.selectedContentType = 'movies';
     this.currentMediaItem = this.show!.movies[0];
-    this.updateMediaItem.emit(this.currentMediaItem)
-    this.resetPlayingVideo()
-
+    this.updateMediaItem.emit(this.currentMediaItem);
+    this.resetPlayingVideo();
   }
 
   setUpEpisodes() {
-    console.log("Setup episodes");
+    console.log('Setup episodes');
 
     this.episodes = this.showUtilService.getEpisodesForSeason(this.show, this.selectedSeason);
 

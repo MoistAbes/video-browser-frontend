@@ -2,16 +2,16 @@ import { Component, Input } from '@angular/core';
 import { ShowModel } from '../../models/show/show-model';
 import { UtilService } from '../../services/local/util-service';
 import { Router } from '@angular/router';
-import { NgOptimizedImage } from '@angular/common';
 import { ShowUtilService } from '../../services/local/show-util-service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { interval } from 'rxjs/internal/observable/interval';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { ShowCarouselComponent } from '../show-carousel-component/show-carousel-component';
+import { VideoApi } from '../../services/api/video-api';
 
 @Component({
   selector: 'app-main-show-carousel-component',
-  imports: [NgOptimizedImage, MatProgressBar, ShowCarouselComponent],
+  imports: [MatProgressBar, ShowCarouselComponent],
   templateUrl: './main-show-carousel-component.html',
   styleUrl: './main-show-carousel-component.scss',
 })
@@ -23,18 +23,21 @@ export class MainShowCarouselComponent {
   isTimerRunning: boolean = true;
   progressValue: number = 0; // wartość dla progress bara (0–100)
 
+  backdropUrl: string = '/video_backdrop.png';
+
   private timerSubscription?: Subscription;
 
   constructor(
     public utilService: UtilService,
     private router: Router,
-    private showUtilService: ShowUtilService
+    private showUtilService: ShowUtilService,
+    private videoApiService: VideoApi
   ) {}
 
   ngOnInit(): void {
     this.selectedShow = this.shows[0];
+    this.loadBackdropImage();
     this.startTimer();
-
   }
 
   moveToMovieDetails(title: string) {
@@ -61,7 +64,19 @@ export class MainShowCarouselComponent {
     const result: { nextShow: ShowModel | undefined; nextIndex: number } =
       this.showUtilService.getNextShow(this.shows, this.showIndex);
     this.selectedShow = result.nextShow;
+    this.loadBackdropImage();
     this.showIndex = result.nextIndex;
+  }
+
+  loadBackdropImage() {
+    this.videoApiService.getBackdropBlob(this.selectedShow?.rootPath).subscribe({
+      next: (blob) => {
+        this.backdropUrl = URL.createObjectURL(blob);
+      },
+      error: () => {
+        this.backdropUrl = '';
+      },
+    });
   }
 
   private startTimer() {

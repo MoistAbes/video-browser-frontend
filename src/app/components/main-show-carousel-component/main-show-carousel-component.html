@@ -1,4 +1,4 @@
-<div class="content-box">
+<div class="content-box disable-during-scroll">
   @if (selectedShow) {
 
   <div class="movie-details-overlay">
@@ -28,7 +28,7 @@
   <div>
     <div class="backdrop-fullbleed">
       <img
-        [ngSrc]="utilService.getBackdropUrl(selectedShow.rootPath)"
+        [src]="backdropUrl"
         [width]="1920"
         [height]="1080"
         sizes="100vw"
@@ -44,10 +44,7 @@
 
 <div class="carousel-container">
   <div class="progress-bar-box">
-    <button
-      class="netflix-button progress-bar-next"
-      (click)="onNextButtonClick()"
-    >
+    <button class="netflix-button progress-bar-next" (click)="onNextButtonClick()">
       <i class="fa-solid fa-chevron-right"></i>
     </button>
 
@@ -59,11 +56,7 @@
       }
     </button>
 
-    <mat-progress-bar
-      class="carousel-progress-bar"
-      mode="determinate"
-      [value]="progressValue"
-    >
+    <mat-progress-bar class="carousel-progress-bar" mode="determinate" [value]="progressValue">
     </mat-progress-bar>
   </div>
 

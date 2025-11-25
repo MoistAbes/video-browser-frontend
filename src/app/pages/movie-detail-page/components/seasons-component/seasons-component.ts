@@ -7,7 +7,6 @@ import {
   OnInit,
 } from '@angular/core';
 import { VideoPlayerComponent } from '../../../../components/video-player-component/video-player-component';
-import { NgOptimizedImage } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ShowModel } from '../../../../models/show/show-model';
 import { MediaItemModel } from '../../../../models/show/media-item-model';
@@ -17,7 +16,7 @@ import { ShowUtilService } from '../../../../services/local/show-util-service';
 @Component({
   selector: 'app-seasons-component',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [VideoPlayerComponent, NgOptimizedImage, FormsModule],
+  imports: [VideoPlayerComponent, FormsModule],
   templateUrl: './seasons-component.html',
   standalone: true,
   styleUrl: './seasons-component.scss',
@@ -29,32 +28,27 @@ export class SeasonsComponent implements OnInit {
   @Input() selectedVideoUrl: string = '';
   @Input() selectedSeason: number | null = null;
   @Input() subtitlesUrl: string = '';
+  @Input() backdropImagePath: string = '';
 
-  @Output() updateMediaItem: EventEmitter<Partial<MediaItemModel>> =
-    new EventEmitter<Partial<MediaItemModel>>();
+  @Output() updateMediaItem: EventEmitter<Partial<MediaItemModel>> = new EventEmitter<
+    Partial<MediaItemModel>
+  >();
   @Output() playVideoClicked = new EventEmitter<void>();
   @Output() seekChange: EventEmitter<number> = new EventEmitter<number>();
 
   episodes: MediaItemModel[] = [];
   selectedEpisode: MediaItemModel | undefined;
 
-  constructor(
-    public utilService: UtilService,
-    private showUtilService: ShowUtilService
-  ) {}
+  constructor(public utilService: UtilService, private showUtilService: ShowUtilService) {}
 
   ngOnInit(): void {
+    console.log('backdrop image: ', this.backdropImagePath);
     this.selectedSeason = this.show!.seasons[0].episodes[0].seasonNumber;
     this.setUpEpisodes();
-    console.log('jello');
-    console.log('subtitles in seasons: ', this.subtitlesUrl);
   }
 
   setUpEpisodes() {
-    this.episodes = this.showUtilService.getEpisodesForSeason(
-      this.show,
-      this.selectedSeason
-    );
+    this.episodes = this.showUtilService.getEpisodesForSeason(this.show, this.selectedSeason);
 
     if (this.episodes.length > 0) {
       this.selectedEpisode = this.episodes[0];

@@ -24,6 +24,7 @@ export class SingleMovieComponent {
   @Input() show: ShowModel | undefined;
   @Input() isVideoPlaying: boolean = false;
   @Input() currentMediaItem: MediaItemModel | undefined;
+  @Input() backdropImagePath: string = ''
   @Input() selectedVideoUrl: string = '';
   @Input() subtitlesUrl: string = '';
   @Output() playVideoClicked = new EventEmitter<void>();

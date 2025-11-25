@@ -12,6 +12,7 @@ export class UtilService {
     return text
       .normalize('NFD') // rozdziela znaki diakrytyczne
       .replace(/[\u0300-\u036f]/g, '') // usuwa diakrytyki
+      .replace(/\s+/g, '') // usuwa wszystkie spacje
       .toLowerCase()
       .trim();
   }
@@ -25,23 +26,6 @@ export class UtilService {
     } else {
       return `${m}m`;
     }
-  }
-
-  getBackdropUrl(rootPath: string | undefined): string {
-    if (!rootPath) {
-      return '';
-    }
-    return `${Endpoints.videos.image}?path=${encodeURIComponent(
-      rootPath + '/backdrop/backdrop.jpg'
-    )}`;
-  }
-
-  getIconUrl(rootPath: string | undefined): string {
-    if (!rootPath) {
-      return '';
-    }
-
-    return `${Endpoints.videos.image}?path=${encodeURIComponent(rootPath + '/icon/icon.webp')}`;
   }
 
   onImageLoad(event: Event) {

@@ -9,7 +9,7 @@ body {
   background-color: $body-bg;
 }
 
-body.scrolling * {
+body.scrolling .disable-during-scroll {
   pointer-events: none !important;
 }
 

@@ -10,8 +10,8 @@ import { ShowApiService } from '../../services/api/show-api-service';
 import { ShowModel } from '../../models/show/show-model';
 import { MediaItemModel } from '../../models/show/media-item-model';
 import { StructureTypeEnum } from '../../enums/structure-type-enum';
-import { StreamApiService } from '../../services/api/stream-api-service';
 import { StreamKeyService } from '../../services/local/stream-key-service';
+import { VideoApi } from '../../services/api/video-api';
 
 @Component({
   standalone: true,
@@ -32,6 +32,7 @@ export class MovieDetailPage implements OnInit {
   show: ShowModel | undefined;
   currentMediaItem: MediaItemModel | undefined;
   selectedVideoUrl: string = '';
+  selectedBackdropUrl: string = '';
   subtitlesUrl: string = '';
 
   selectedSeason: number | null = null;
@@ -44,8 +45,8 @@ export class MovieDetailPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private showApiService: ShowApiService,
-    private streamApiService: StreamApiService,
-    private streamKeyService: StreamKeyService
+    private streamKeyService: StreamKeyService,
+    private videoApiService: VideoApi
   ) {}
 
   ngOnInit() {
@@ -53,11 +54,24 @@ export class MovieDetailPage implements OnInit {
     this.findShowDetailByParentTitle(parentTitle);
   }
 
+  loadBackdropImage(rootPath: string) {
+    console.log('loadBackdropImage...... : ', rootPath);
+
+    this.videoApiService.getBackdropBlob(rootPath).subscribe({
+      next: (blob) => {
+        this.selectedBackdropUrl = URL.createObjectURL(blob);
+      },
+      error: () => {
+        this.selectedBackdropUrl = '';
+      },
+    });
+  }
+
   findShowDetailByParentTitle(parentTitle: string): void {
     this.showApiService.findShowByParentTitle(parentTitle).subscribe({
       next: (data) => {
         this.show = data;
-        console.log('show details: ', this.show);
+        this.loadBackdropImage(this.show.rootPath);
       },
       error: (err) => {
         console.log('Error while findShowDetailByParentTitle: ', err);
@@ -73,6 +87,8 @@ export class MovieDetailPage implements OnInit {
       ...this.currentMediaItem,
       ...update,
     } as MediaItemModel;
+
+    this.loadBackdropImage(this.currentMediaItem.rootPath);
 
     //reset video data
     this.isVideoPlaying = false;

@@ -30,7 +30,6 @@ export const Endpoints = {
   stream: {
     normal: `${BASE_URL}/stream/normal`,
     normalPreview: `${BASE_URL}/stream/normal/preview`,
-    convert: `${BASE_URL}/stream/convert`,
     authorize: `${BASE_URL}/stream/authorize`,
   },
   user: {

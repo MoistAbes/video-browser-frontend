@@ -38,14 +38,6 @@ export class LenisService implements OnDestroy {
       this.lenis.options.wheelMultiplier = 0.5 * speedFactor;
     });
 
-    // // dynamiczny multiplier zależny od velocity
-    // this.lenis.on('scroll', (e: any) => {
-    //   if (!this.lenis) return;
-
-    //   // velocity określa jak mocno użytkownik scrolluje
-    //   const speedFactor = Math.min(Math.abs(e.velocity) * 2, 3); // max 3x
-    //   this.lenis.options.wheelMultiplier = 0.5 * speedFactor;
-    // });
   }
 
   ngOnDestroy() {

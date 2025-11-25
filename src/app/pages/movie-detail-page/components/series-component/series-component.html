@@ -6,7 +6,7 @@
       <img
         class="content"
         priority
-        [ngSrc]="utilService.getBackdropUrl(currentMediaItem?.rootPath)"
+        [src]="backdropImagePath"
         fill
         alt="backdrop"
         (load)="utilService.onImageLoad($event)"
@@ -55,7 +55,7 @@
       <app-video-card-component
         [title]="movie!.title"
         (cardClick)="watchMovie(movie!)"
-        [iconFilePath]="utilService.getIconUrl(movie.rootPath)"
+        [showRootPath]="movie.rootPath"
       ></app-video-card-component>
       }
     </div>

@@ -6,7 +6,7 @@
       <img
         class="content"
         priority
-        [ngSrc]="utilService.getBackdropUrl(currentMediaItem?.rootPath)"
+        [ngSrc]="backdropImagePath"
         fill
         alt="backdrop"
         (load)="utilService.onImageLoad($event)"

@@ -1,3 +1,4 @@
+import { StreamKeyService } from './stream-key-service';
 import { WebSocketService } from '../websocket/websocket-service';
 import { JwtService } from './jwt-service';
 import { Injectable } from '@angular/core';
@@ -13,7 +14,8 @@ export class AuthService {
 
   constructor(
     private jwtService: JwtService,
-    private webSocketService: WebSocketService
+    private webSocketService: WebSocketService,
+    private streamKeyService: StreamKeyService
   ) {
     const hasToken = this.hasValidToken();
     this.loggedInSubject = new BehaviorSubject<boolean>(hasToken);
@@ -28,6 +30,7 @@ export class AuthService {
   public logout() {
     this.jwtService.clearToken();
     this.webSocketService.disconnect();
+    this.streamKeyService.clearValues();
     this.loggedInSubject.next(false);
   }
 

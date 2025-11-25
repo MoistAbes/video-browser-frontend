@@ -11,7 +11,7 @@ export class StreamKeyService {
   private keyTimestamp: number | null = null;
 
   // TTL klucza w ms – np. 1 godzina
-  private readonly KEY_TTL = 60 * 60 * 1000;
+  private readonly KEY_TTL = 24 * 60 * 60 * 1000; // 24 godziny
 
   constructor(private http: HttpClient) {
     this.key = sessionStorage.getItem('streamAuthKey');
@@ -79,4 +79,14 @@ export class StreamKeyService {
     u.searchParams.set('authKey', key!);
     return u.toString();
   }
+
+  /**
+ * Czyści przechowywane wartości klucza stream.
+ */
+clearValues(): void {
+  this.key = null;
+  this.keyTimestamp = null;
+  sessionStorage.removeItem('streamAuthKey');
+  sessionStorage.removeItem('streamAuthKeyTimestamp');
+}
 }

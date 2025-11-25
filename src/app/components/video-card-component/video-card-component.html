@@ -1,12 +1,12 @@
 <div
-  class="b-game-card"
+  class="b-game-card disable-during-scroll"
   (mouseenter)="onEnter()"
   (mouseleave)="onLeave()"
   (click)="onClick()"
   #cardRef
 >
   <div class="b-game-card__plane">
-    <img [ngSrc]="iconFilePath" alt="cover" class="b-game-card__cover" fill />
+    <img [src]="iconImgPath" class="b-game-card__cover" fill />
     <div class="b-game-card__gloss"></div>
   </div>
 </div>

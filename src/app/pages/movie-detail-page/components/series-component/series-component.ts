@@ -1,22 +1,24 @@
-import {Component, Input, CUSTOM_ELEMENTS_SCHEMA, OnInit, Output, EventEmitter} from '@angular/core';
-import {VideoPlayerComponent} from '../../../../components/video-player-component/video-player-component';
-import {VideoCardComponent} from '../../../../components/video-card-component/video-card-component';
-import {ShowModel} from '../../../../models/show/show-model';
-import {MediaItemModel} from '../../../../models/show/media-item-model';
-import {NgOptimizedImage} from '@angular/common';
-import {UtilService} from '../../../../services/local/util-service';
+import {
+  Component,
+  Input,
+  CUSTOM_ELEMENTS_SCHEMA,
+  OnInit,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+import { VideoPlayerComponent } from '../../../../components/video-player-component/video-player-component';
+import { VideoCardComponent } from '../../../../components/video-card-component/video-card-component';
+import { ShowModel } from '../../../../models/show/show-model';
+import { MediaItemModel } from '../../../../models/show/media-item-model';
+import { UtilService } from '../../../../services/local/util-service';
 
 @Component({
   selector: 'app-series-component',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [
-    VideoPlayerComponent,
-    VideoCardComponent,
-    NgOptimizedImage
-  ],
+  imports: [VideoPlayerComponent, VideoCardComponent],
   templateUrl: './series-component.html',
   standalone: true,
-  styleUrl: './series-component.scss'
+  styleUrl: './series-component.scss',
 })
 export class SeriesComponent implements OnInit {
   @Input() currentMediaItem: MediaItemModel | undefined;
@@ -24,11 +26,12 @@ export class SeriesComponent implements OnInit {
 
   @Input() isVideoPlaying: boolean = false;
   @Input() selectedVideoUrl: string = '';
+  @Input() backdropImagePath: string = '';
+
   @Input() subtitlesUrl: string = '';
 
   @Output() updateVideoData = new EventEmitter<Partial<MediaItemModel>>();
   @Output() playVideoClicked = new EventEmitter<void>();
-
 
   constructor(public utilService: UtilService) {}
 
@@ -38,17 +41,15 @@ export class SeriesComponent implements OnInit {
   }
 
   watchMovie(mediaItem: MediaItemModel) {
-
-    console.log("watchMovie: ", mediaItem);
+    console.log('watchMovie: ', mediaItem);
 
     this.currentMediaItem = mediaItem;
     this.updateVideoData.emit(this.currentMediaItem);
-    this.resetPlayingVideo()
+    this.resetPlayingVideo();
   }
 
   resetPlayingVideo() {
     this.selectedVideoUrl = '';
     this.isVideoPlaying = false;
   }
-
 }

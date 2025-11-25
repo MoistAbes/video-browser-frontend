@@ -1,5 +1,4 @@
 <div>
-
   <div class="searchbar-container">
     <div class="searchbar-wrapper">
       <input
@@ -10,23 +9,20 @@
         class="searchbar-input"
       />
       <button (click)="onFilterClearClick()" class="clear-btn" aria-label="Clear filter">
-        <i class="fa-solid fa-x" ></i>
+        <i class="fa-solid fa-x"></i>
       </button>
     </div>
 
-    <div class="ng-select-container">
-
-    </div>
+    <div class="ng-select-container"></div>
   </div>
 
   <div class="video-grid">
     @for (show of showListFiltered; track show.id) {
-      <app-video-card-component
-        [title]="show.name"
-        (cardClick)="moveToMovieDetails(show.name)"
-        [iconFilePath]="utilService.getIconUrl(show.rootPath)"
-      ></app-video-card-component>
+    <app-video-card-component
+      [title]="show.name"
+      (cardClick)="moveToMovieDetails(show.name)"
+      [showRootPath]="show.rootPath"
+    ></app-video-card-component>
     }
   </div>
-
 </div>

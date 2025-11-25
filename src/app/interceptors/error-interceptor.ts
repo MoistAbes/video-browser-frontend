@@ -29,7 +29,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
         case 403:
           console.log('403 error: brak uprawnien: ', backendMessage);
-          
+
           authService.logout();
           router.navigateByUrl('/login');
           snackBar.open(backendMessage ?? 'Brak uprawnień', 'Zamknij', {
@@ -41,6 +41,15 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           snackBar.open(backendMessage ?? 'Nie znaleziono zasobu', 'Zamknij', {
             duration: 3000,
           });
+          break;
+
+        case 429:
+          // <- nowy case dla zbyt dużej liczby żądań
+          snackBar.open(
+            backendMessage ?? 'Przekroczono limit żądań. Spróbuj ponownie za chwilę.',
+            'Zamknij',
+            { duration: 5000 }
+          );
           break;
 
         case 500:

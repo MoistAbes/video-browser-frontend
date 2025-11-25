@@ -6,7 +6,7 @@
       <img
         class="content"
         priority
-        [ngSrc]="utilService.getBackdropUrl(currentMediaItem?.rootPath)"
+        [src]="backdropImagePath"
         fill
         alt="backdrop"
         (load)="utilService.onImageLoad($event)"
@@ -59,22 +59,14 @@
       <button class="tab-button" [class.active]="'seasons'">Seasons</button>
     </div>
     <div class="season-container">
-      <select
-        [(ngModel)]="selectedSeason"
-        (ngModelChange)="setUpEpisodes()"
-        class="form-select"
-      >
+      <select [(ngModel)]="selectedSeason" (ngModelChange)="setUpEpisodes()" class="form-select">
         @for (season of show.seasons; track season.id) {
         <option [value]="season.number">Season {{ season.number }}</option>
         }
       </select>
     </div>
     <div class="episode-container">
-      <select
-        [(ngModel)]="selectedEpisode"
-        (ngModelChange)="onEpisodeSelect()"
-        class="form-select"
-      >
+      <select [(ngModel)]="selectedEpisode" (ngModelChange)="onEpisodeSelect()" class="form-select">
         @for (episode of episodes; track episode.id) {
         <option [ngValue]="episode">Episode {{ episode.episodeNumber }}</option>
         }
