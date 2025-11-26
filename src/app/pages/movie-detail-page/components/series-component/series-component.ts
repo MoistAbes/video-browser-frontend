@@ -41,7 +41,6 @@ export class SeriesComponent implements OnInit {
   }
 
   watchMovie(mediaItem: MediaItemModel) {
-    console.log('watchMovie: ', mediaItem);
 
     this.currentMediaItem = mediaItem;
     this.updateVideoData.emit(this.currentMediaItem);

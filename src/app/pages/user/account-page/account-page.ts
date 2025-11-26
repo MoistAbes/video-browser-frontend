@@ -38,7 +38,6 @@ export class AccountPage implements OnInit {
 
     this.userService.user$.subscribe(user => {
       this.user = user;
-      console.log("user: ", this.user)
     });
 
     this.findAllIcons();
@@ -68,7 +67,6 @@ export class AccountPage implements OnInit {
     this.userIconApiService.findAllUserIcons().subscribe({
       next: data => {
         this.icons = data
-        console.log("icons: ", this.icons)
       },
       error: err => {},
       complete: () => {

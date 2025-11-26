@@ -10,10 +10,7 @@ import { SeasonModel } from '../../models/show/season-model';
 export class ShowUtilService {
   constructor() {}
 
-  getEpisodesForSeason(
-    show: ShowModel | undefined,
-    seasonNumber: number | null
-  ): MediaItemModel[] {
+  getEpisodesForSeason(show: ShowModel | undefined, seasonNumber: number | null): MediaItemModel[] {
     if (!show || !seasonNumber) return [];
 
     return show.seasons
@@ -25,8 +22,7 @@ export class ShowUtilService {
     shows: ShowModel[],
     currentIndex: number
   ): { nextShow: ShowModel | undefined; nextIndex: number } {
-    if (shows.length === 0)
-      return { nextShow: undefined, nextIndex: currentIndex };
+    if (shows.length === 0) return { nextShow: undefined, nextIndex: currentIndex };
 
     const nextIndex: number = (currentIndex + 1) % shows.length;
     return {
@@ -62,7 +58,7 @@ export class ShowUtilService {
       return show.movies[0]!;
     } else if (show.structure == StructureTypeEnum.HYBRID) {
       return show.seasons[0].episodes[0]!;
-    } 
+    }
 
     return undefined;
   }
@@ -90,8 +86,7 @@ export class ShowUtilService {
     );
 
     // 1. Próba pobrania następnego odcinka w tym samym sezonie
-    const nextEpisode: MediaItemModel =
-      currentSeason.episodes[currentEpisodeIndex + 1];
+    const nextEpisode: MediaItemModel = currentSeason.episodes[currentEpisodeIndex + 1];
     if (nextEpisode) {
       return nextEpisode;
     }
@@ -103,7 +98,6 @@ export class ShowUtilService {
     }
 
     // 3. Koniec listy
-    console.log('Brak następnego odcinka ani sezonu – autoplay zakończony');
     return undefined;
   }
 
@@ -114,9 +108,7 @@ export class ShowUtilService {
     if (!show || !currentMediaItem) return;
 
     // Znajdź aktualny sezon
-    const currentMovieIndex = show.movies.findIndex(
-      (movie) => movie.id === currentMediaItem?.id
-    );
+    const currentMovieIndex = show.movies.findIndex((movie) => movie.id === currentMediaItem?.id);
 
     if (currentMovieIndex === -1) return;
 

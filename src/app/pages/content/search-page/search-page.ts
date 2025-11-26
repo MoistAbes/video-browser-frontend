@@ -40,7 +40,6 @@ export class SearchPage implements OnInit {
       next: (result) => {
         this.showList = result;
         this.showListFiltered = result;
-        console.log('result: ', this.showList);
       },
       error: (err) => {
         console.log('error: ', err);

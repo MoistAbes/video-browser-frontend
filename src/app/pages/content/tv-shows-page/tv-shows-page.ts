@@ -33,7 +33,6 @@ export class TvShowsPage implements OnInit {
       .findRandomShowsByStructure(this.showStructureType)
       .subscribe({
         next: (result) => {
-          console.log('featured shows: ', result);
           this.featuredShows = result;
         },
         error: (err) => {

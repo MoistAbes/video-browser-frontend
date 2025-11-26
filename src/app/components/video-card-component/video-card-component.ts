@@ -71,8 +71,6 @@ export class VideoCardComponent implements OnInit, OnDestroy {
 
   @HostListener('mouseenter')
   onEnter() {
-    console.log('ON ENTER');
-
     if (!this.showPreview) return;
     if (this.openTimer) clearTimeout(this.openTimer);
 
@@ -89,7 +87,6 @@ export class VideoCardComponent implements OnInit, OnDestroy {
   }
 
   loadShowDetails() {
-    console.log('loadShowDetails is running');
     if (this.showId == undefined) return;
 
     // 👉 ANULUJ POPRZEDNIE REQUESTY

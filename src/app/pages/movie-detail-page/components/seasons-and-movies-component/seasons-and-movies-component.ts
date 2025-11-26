@@ -57,7 +57,6 @@ export class SeasonsAndMoviesComponent implements OnInit, OnChanges {
   }
 
   watchMovie(mediaItem: MediaItemModel) {
-    console.log('watchMovie: ', mediaItem);
 
     this.currentMediaItem = mediaItem;
     this.updateMediaItem.emit(this.currentMediaItem);
@@ -85,14 +84,8 @@ export class SeasonsAndMoviesComponent implements OnInit, OnChanges {
   }
 
   setUpEpisodes() {
-    console.log('Setup episodes');
 
     this.episodes = this.showUtilService.getEpisodesForSeason(this.show, this.selectedSeason);
-
-    // this.episodes = this.show?.seasons
-    //   .filter(season => season.number == this.selectedSeason)
-    //   .flatMap(season => season.episodes)
-    //   .flatMap(episode => episode.mediaItem) || [];
 
     if (this.episodes.length > 0) {
       this.selectedEpisode = this.episodes[0];

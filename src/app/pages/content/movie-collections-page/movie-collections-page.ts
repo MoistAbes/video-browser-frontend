@@ -31,7 +31,6 @@ export class MovieCollectionsPage implements OnInit {
       .findRandomShowsByStructure(this.showStructureType)
       .subscribe({
         next: (result) => {
-          console.log('featured shows: ', result);
           this.featuredShows = result;
         },
         error: (err) => {

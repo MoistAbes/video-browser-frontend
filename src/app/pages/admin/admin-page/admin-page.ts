@@ -66,7 +66,6 @@ export class AdminPage implements OnInit {
     this.userInfoApiService.findAll().subscribe({
       next: (result) => {
         this.users = result;
-        console.log('USERS: ', this.users);
       },
       error: (err) => {
         console.log(err);
@@ -77,7 +76,6 @@ export class AdminPage implements OnInit {
   }
 
   scanAllMovies() {
-    console.log('scan all movies');
     this.videoApiService.scanAllVideos().subscribe({
       next: (result) => {},
       error: (err) => {
@@ -85,14 +83,12 @@ export class AdminPage implements OnInit {
         this.toastService.error(err.message);
       },
       complete: () => {
-        console.log('ScanAllMovies complete');
         this.toastService.success('Successfully scan All Movies');
       },
     });
   }
 
   updateGenres() {
-    console.log('update genres');
 
     this.genreApiService.updateGenresFromTmdb().subscribe({
       next: () => {},
@@ -112,7 +108,6 @@ export class AdminPage implements OnInit {
         this.showList = result;
         this.showList.sort((a, b) => a.id! - b.id!);
         this.filteredShowList = [...this.showList];
-        console.log('SHOWS: ', result);
       },
       error: (err) => {
         console.log('Error while loading shows: ', err);
@@ -125,7 +120,6 @@ export class AdminPage implements OnInit {
     this.genreApiService.findAll().subscribe({
       next: (value) => {
         this.genreList = value;
-        console.log('genres: ', this.genreList);
       },
       error: (err) => {
         console.log('err while loading genres: ', err);
@@ -173,7 +167,6 @@ export class AdminPage implements OnInit {
   }
 
   deleteShow() {
-    console.log('delete show is running');
 
     this.showApiService.deleteShow(this.selectedShow!.id!).subscribe({
       next: () => {},
@@ -189,7 +182,6 @@ export class AdminPage implements OnInit {
   testStreamAuthorize() {
     this.streamApiService.authorizeStream().subscribe({
       next: (value) => {
-        console.log('KEY: ', value);
       },
       error: (err) => {
         console.log('something went wrong while genereating stream key: ', err.error);
@@ -200,9 +192,6 @@ export class AdminPage implements OnInit {
 
   filterShows() {
     this.filteredShowList = [...this.showList];
-
-    console.log('this.idShowFilterValue: ', this.idShowFilterValue);
-    console.log('this.nameShowFilterValue: ', this.nameShowFilterValue);
 
     if (this.idShowFilterValue) {
       this.filteredShowList = this.filteredShowList.filter(

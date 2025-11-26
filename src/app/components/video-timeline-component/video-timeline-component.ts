@@ -79,7 +79,6 @@ export class VideoTimelineComponent implements OnChanges {
     if (this.isUserSeeking) {
       this.currentTime = value;
       this.timeChange.emit(this.currentTime);
-      console.log('current time: ', this.currentTime);
     }
   }
 

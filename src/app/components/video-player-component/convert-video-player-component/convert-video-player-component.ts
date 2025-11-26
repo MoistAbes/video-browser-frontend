@@ -193,47 +193,6 @@ export class ConvertVideoPlayerComponent {
     // this.handlePlayNextEpisode();
   }
 
-  // handlePlayNextEpisode(): void {
-  //
-  //   // if (!this.show || !this.currentVideoInfo) return;
-  //   //
-  //   // const currentSeasonNumber = this.currentVideoInfo!.videoDetails!.season;
-  //   // const currentEpisodeNumber = this.currentVideoInfo!.videoDetails!.episode;
-  //
-  //   // Znajdź aktualny sezon
-  //   const currentSeasonIndex = this.show.seasons.findIndex(
-  //     season => season.number === currentSeasonNumber
-  //   );
-  //
-  //   if (currentSeasonIndex === -1) return;
-  //
-  //   const currentSeason = this.show.seasons[currentSeasonIndex];
-  //
-  //   // 1. Szukamy następnego odcinka w tym samym sezonie
-  //   const nextEpisode = currentSeason.episodes.find(
-  //     ep => ep.number === currentEpisodeNumber + 1
-  //   );
-  //
-  //   if (nextEpisode) {
-  //     // this.currentVideoInfo = nextEpisode.videoInfo;
-  //     // this.updateVideoData.emit(this.currentVideoInfo);
-  //     this.playVideoClicked.emit();
-  //     return;
-  //   }
-  //
-  //   // 2. Jeśli nie ma, sprawdzamy kolejny sezon
-  //   const nextSeason = this.show.seasons[currentSeasonIndex + 1];
-  //   if (nextSeason && nextSeason.episodes.length > 0) {
-  //     const firstEpisodeOfNextSeason = nextSeason.episodes[0];
-  //     // this.currentVideoInfo = firstEpisodeOfNextSeason.videoInfo;
-  //     // this.updateVideoData.emit(this.currentVideoInfo);
-  //     this.playVideoClicked.emit();
-  //     return;
-  //   }
-  //
-  //   // 3. Jeśli to ostatni sezon i odcinek
-  //   console.log('Brak następnego odcinka ani sezonu – autoplay zakończony');
-  // }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['src'] && !changes['src'].firstChange && this.player) {

@@ -34,4 +34,16 @@ export class VideoApi {
     )}`;
     return this.http.get(url, { responseType: 'blob' });
   }
+
+  getSubtitleBlob(rootPath: string | undefined, subtitleFileName: string): Observable<Blob> {
+    if (!rootPath) {
+      return of(new Blob()); // pusty blob
+    }
+
+    const url = `${Endpoints.videos.subtitles}?path=${encodeURIComponent(
+      rootPath
+    )}&subtitle=${encodeURIComponent(subtitleFileName)}`;
+
+    return this.http.get(url, { responseType: 'blob' });
+  }
 }

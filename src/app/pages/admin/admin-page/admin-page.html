@@ -22,37 +22,77 @@
 
   <mat-tab-group>
     <mat-tab label="Skanowanie video">
-      <div style="background-color: #4d4d4d; padding: 10px">
-        <h1 style="display: inline-block; margin: 0">Aktualizacja filmów</h1>
-        <button
-          style="margin-bottom: 15px; margin-left: 10px"
-          (click)="setUpVideoScanModalValues()"
-          class="btn btn-success"
+      <div
+        style="
+          margin-top: 20px;
+          background-color: #3a3a3a;
+          padding: 20px;
+          border-radius: 10px;
+          color: #fff;
+          font-family: Arial, sans-serif;
+        "
+      >
+        <h1 style="margin-bottom: 20px">Aktualizacja filmów</h1>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+          "
         >
-          SKANUJ FILMY
-        </button>
-        <button
-          style="margin-bottom: 15px; margin-left: 10px"
-          (click)="convertMediaItemsAudioCodec()"
-          class="btn btn-success"
-        >
-          KONWERTUJ AUDIO CODEC
-        </button>
-        <button
-          style="margin-bottom: 15px; margin-left: 10px"
-          (click)="setUpGenreModalValues()"
-          class="btn btn-success"
-        >
-          AKTUALIZUJ GENRE
-        </button>
+          <div style="text-align: center">
+            <p style="margin-bottom: 8px; font-size: 14px">
+              Skanuje foldery tworzy media items, shows jeśli są genre to dodaje do show
+            </p>
+            <button
+              (click)="setUpVideoScanModalValues()"
+              class="btn btn-success"
+              style="width: 100%; padding: 10px; font-weight: bold"
+            >
+              SKANUJ FILMY
+            </button>
+          </div>
 
-          <button
-          style="margin-bottom: 15px; margin-left: 10px"
-          (click)="setUpDeleteAllShows()"
-          class="btn btn-success"
-        >
-          DELETE ALL SHOWS
-        </button>
+          <div style="text-align: center">
+            <p style="margin-bottom: 8px; font-size: 14px">
+              Kowertuje pliki z nieobsługiwalnymi dla przeglądarek codekami audio na takie co
+              przeglądarka może obsłużyc
+            </p>
+            <button
+              (click)="convertMediaItemsAudioCodec()"
+              class="btn btn-success"
+              style="width: 100%; padding: 10px; font-weight: bold"
+            >
+              KONWERTUJ AUDIO CODEC
+            </button>
+          </div>
+
+          <div style="text-align: center">
+            <p style="margin-bottom: 8px; font-size: 14px">
+              Pobiera genre z tmdbi api i zapisuje do bazy danych
+            </p>
+            <button
+              (click)="setUpGenreModalValues()"
+              class="btn btn-success"
+              style="width: 100%; padding: 10px; font-weight: bold"
+            >
+              AKTUALIZUJ GENRE
+            </button>
+          </div>
+
+          <div style="text-align: center">
+            <p style="margin-bottom: 8px; font-size: 14px">
+              Usuwa wszystkie show łącznie z media items
+            </p>
+            <button
+              (click)="setUpDeleteAllShows()"
+              class="btn btn-success"
+              style="width: 100%; padding: 10px; font-weight: bold"
+            >
+              DELETE ALL SHOWS
+            </button>
+          </div>
+        </div>
       </div>
     </mat-tab>
     <mat-tab label="Edycja shows">

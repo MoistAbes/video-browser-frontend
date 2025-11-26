@@ -42,7 +42,6 @@ export class SeasonsComponent implements OnInit {
   constructor(public utilService: UtilService, private showUtilService: ShowUtilService) {}
 
   ngOnInit(): void {
-    console.log('backdrop image: ', this.backdropImagePath);
     this.selectedSeason = this.show!.seasons[0].episodes[0].seasonNumber;
     this.setUpEpisodes();
   }
@@ -54,7 +53,6 @@ export class SeasonsComponent implements OnInit {
       this.selectedEpisode = this.episodes[0];
       this.updateMediaItem.emit(this.selectedEpisode);
     }
-    console.log('subtitles in seasons: ', this.subtitlesUrl);
   }
 
   onEpisodeSelect() {

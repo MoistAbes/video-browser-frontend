@@ -18,6 +18,7 @@ export class TopbarComponent implements OnInit {
   user: UserInfoModel | null = null;
   friendList: UserInfoModel[] = [];
   @Output() openSidebar = new EventEmitter<UserInfoModel[]>();
+  mobileMenuOpen: boolean = false;
 
   constructor(
     public jwtService: JwtService,

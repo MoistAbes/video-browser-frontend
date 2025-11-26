@@ -31,12 +31,10 @@ export class HomePage implements OnInit {
   }
 
   loadRandomShowsByStructureAndGenre() {
-    console.log('this is running');
     this.showApiService
       .findRandomShowsByStructureAndGroupedByGenre()
       .subscribe({
         next: (result: Map<string, ShowModel[]>) => {
-          console.log('GENRE RESULT: ', result);
           this.showGroupedByGenre = result;
         },
         error: (err) => {
@@ -44,7 +42,6 @@ export class HomePage implements OnInit {
         },
         complete: () => {
           this.mapMapToList();
-          console.log('GENRE SHOW LIST: ', this.genreShowList);
         },
       });
   }

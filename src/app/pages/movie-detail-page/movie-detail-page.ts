@@ -55,7 +55,6 @@ export class MovieDetailPage implements OnInit {
   }
 
   loadBackdropImage(rootPath: string) {
-    console.log('loadBackdropImage...... : ', rootPath);
 
     this.videoApiService.getBackdropBlob(rootPath).subscribe({
       next: (blob) => {
@@ -119,9 +118,12 @@ export class MovieDetailPage implements OnInit {
     // Ustawiamy napisy
     const subtitleName = this.currentMediaItem.title;
     const rootPath = encodeURIComponent(this.currentMediaItem.rootPath);
-    this.subtitlesUrl = `${Endpoints.videos.subtitles}/${encodeURIComponent(
-      subtitleName
-    )}?path=${rootPath}`;
+
+    this.videoApiService
+      .getSubtitleBlob(this.currentMediaItem.rootPath, this.currentMediaItem.title)
+      .subscribe((blob) => {
+        this.subtitlesUrl = URL.createObjectURL(blob);
+      });
   }
 
   async onSeekTimeSelected(time: number) {

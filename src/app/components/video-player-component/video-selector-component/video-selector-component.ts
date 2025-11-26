@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {MatNavList} from '@angular/material/list';
 import {ShowModel} from '../../../models/show/show-model';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
@@ -15,18 +15,13 @@ import {MediaItemModel} from '../../../models/show/media-item-model';
   standalone: true,
   styleUrl: './video-selector-component.scss'
 })
-export class VideoSelectorComponent implements OnInit {
-
+export class VideoSelectorComponent {
 
   @Input() currentMediaItem: MediaItemModel | undefined;
   @Input() show: ShowModel | undefined;
 
   @Output() updateVideoData = new EventEmitter<Partial<MediaItemModel>>();
   @Output() playVideoClicked = new EventEmitter<void>();
-
-  ngOnInit(): void {
-    // console.log("curernt video: ", this.currentVideoInfo);
-  }
 
   selectEpisode(mediaItem: MediaItemModel | undefined) {
     if (mediaItem) {
