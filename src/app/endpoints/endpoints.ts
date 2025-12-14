@@ -1,7 +1,6 @@
-import { environment } from "../../environments/environment";
+import { environment } from '../../environments/environment';
 
 const BASE_URL = environment.baseUrl;
-
 
 export const Endpoints = {
   auth: {
@@ -25,7 +24,10 @@ export const Endpoints = {
     addGenre: `${BASE_URL}/add/genre/`,
     removeGenre: `${BASE_URL}/remove/genre/`,
     deleteShow: `${BASE_URL}/show/`,
-    deleteAllShows: `${BASE_URL}/show/deleteAll`
+    deleteAllShows: `${BASE_URL}/show/deleteAll`,
+  },
+  season: {
+    deleteSeasonById: `${BASE_URL}/season/delete/`,
   },
   stream: {
     normal: `${BASE_URL}/stream/normal`,
@@ -37,6 +39,8 @@ export const Endpoints = {
     userInfo: `${BASE_URL}/users/userInfo`,
     updateIcon: `${BASE_URL}/users/update/icon/`,
     findAll: `${BASE_URL}/users/`,
+    delete: `${BASE_URL}/users/delete/`,
+    update: `${BASE_URL}/users/update`,
   },
   userIcon: {
     findAll: `${BASE_URL}/user-icon/find-all`,
@@ -44,9 +48,9 @@ export const Endpoints = {
   genre: {
     findAllNames: `${BASE_URL}/genre/find/all/names`,
     findAll: `${BASE_URL}/genre/find/all`,
-    update: `${BASE_URL}/genre/update`,
   },
   mediaItem: {
-    convertAudioCodec: `${BASE_URL}/mediaItem/convert/audio`
-  }
+    convertAudioCodec: `${BASE_URL}/mediaItem/convert/audio`,
+    deleteById: `${BASE_URL}/mediaItem/delete/`,
+  },
 };

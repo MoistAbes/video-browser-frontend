@@ -31,4 +31,12 @@ export class UserInfoApiService {
     return this.http.get<UserInfoModel[]>(Endpoints.user.findAll)
   }
 
+  public deleteUserById(userId: number): Observable<any> {
+    return this.http.delete<any>(Endpoints.user.delete + userId)
+  }
+
+  public updateUser(user: any): Observable<UserInfoModel> {
+    return this.http.put<UserInfoModel>(Endpoints.user.update, user)
+  }
+
 }

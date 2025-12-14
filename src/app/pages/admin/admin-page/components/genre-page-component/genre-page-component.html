@@ -1,0 +1,36 @@
+<div class="filters" style="display: flex; gap: 12px; margin-bottom: 12px">
+  <input
+    type="number"
+    placeholder="Filter by ID"
+    class="filter-input"
+    [(ngModel)]="filterIdValue"
+    (input)="applyFilter()"
+  />
+
+  <input
+    type="text"
+    placeholder="Filter by name"
+    class="filter-input"
+    [(ngModel)]="filterNameValue"
+    (input)="applyFilter()"
+  />
+</div>
+<div class="table-wrapper">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (genre of filteredGenres; track genre.id) {
+
+      <tr>
+        <td>{{ genre.id }}</td>
+        <td>{{ genre.name }}</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

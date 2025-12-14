@@ -1,0 +1,149 @@
+@if (isModalVisible) {
+<app-custom-modal-component
+  [title]="'Potwierdzenie'"
+  [content]="modalContent"
+  [confirmText]="'Tak'"
+  [cancelText]="'Nie'"
+  (confirmed)="onConfirmed()"
+  (cancelled)="onCancelled()"
+  [confirmAction]="confirmAction"
+></app-custom-modal-component>
+}
+
+<mat-accordion style="margin-bottom: 120px" class="add-user-accordion" multi>
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title class="add-user-header">
+        <span>Add User</span>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div class="add-user-form">
+      <input type="text" [(ngModel)]="newUserUsername" placeholder="Username" class="form-input" />
+      <input
+        type="password"
+        [(ngModel)]="newUserPassword"
+        placeholder="Password"
+        class="form-input"
+      />
+      <input
+        type="password"
+        [(ngModel)]="newUserRepeatPassword"
+        placeholder="Repeat Password"
+        class="form-input"
+      />
+
+      <button
+        mat-raised-button
+        color="success"
+        [disabled]="!areRegisterValuesFilled()"
+        (click)="createUser()"
+        class="create-user-btn"
+      >
+        Create
+      </button>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<div class="filters" style="display: flex; gap: 12px; margin-bottom: 12px">
+  <input
+    type="number"
+    placeholder="Filter by ID"
+    [(ngModel)]="filterId"
+    (input)="applyFilter()"
+    class="filter-input"
+  />
+
+  <input
+    type="text"
+    placeholder="Filter by Username"
+    [(ngModel)]="filterUsername"
+    (input)="applyFilter()"
+    class="filter-input"
+  />
+
+  <input
+    type="text"
+    placeholder="Filter by Role"
+    [(ngModel)]="filterRole"
+    (input)="applyFilter()"
+    class="filter-input"
+  />
+</div>
+
+<div class="table-wrapper">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Username</th>
+        <th>Icon color</th>
+        <th>Icon Id</th>
+        <th>Roles</th>
+        <th>Registration date</th>
+        <th>Account status</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (user of filteredUsers; track $index) {
+      <tr (click)="showMoreUserInfo(user)">
+        <th scope="row">{{ user.id }}</th>
+        <td>{{ user.username }}</td>
+        <td>{{ user.iconColor }}</td>
+        <td>{{ user.icon?.id }}</td>
+        <td>
+          @for (role of user.roles; track $index) {
+          <span class="role-container">{{ role }}</span>
+          }
+        </td>
+        <td>{{ user.registrationDate }}</td>
+        <td class="status-cell">
+          <span class="status-text">
+            {{ user.active ? 'Active' : 'Inactive' }}
+            <span
+              class="status-dot"
+              [class.active]="user.active"
+              [class.inactive]="!user.active"
+            ></span>
+          </span>
+        </td>
+        <td>
+          <i
+            (click)="onUserEditClick(user); $event.stopPropagation()"
+            class="fas fa-edit user-edit-icon"
+          ></i>
+        </td>
+        <td>
+          <i
+            (click)="setUpUserDeleteModal(user.id!, user.username); $event.stopPropagation()"
+            class="fa-solid fa-trash user-delete-icon"
+          ></i>
+        </td>
+      </tr>
+
+      <!-- inline expansion panel -->
+      @if (user === selectedUser) {
+      <tr class="edit-user-row">
+        <td colspan="9">
+          <div class="edit-user-panel">
+            <!-- przyciski akcji -->
+            <div class="edit-user-actions">
+              <p>Tutaj jakies dodatkowe info moze byc</p>
+            </div>
+          </div>
+        </td>
+      </tr>
+      } }
+    </tbody>
+  </table>
+</div>
+
+<app-edit-user-modal-component
+  [isVisible]="isEditUserOpen"
+  [user]="editingUser"
+  (save)="updateUser($event)"
+  (cancel)="isEditUserOpen = false"
+></app-edit-user-modal-component>

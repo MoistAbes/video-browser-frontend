@@ -1,0 +1,218 @@
+@if (isModalVisible) {
+<app-custom-modal-component
+  [title]="'Potwierdzenie'"
+  [content]="modalContent"
+  [confirmText]="'Tak'"
+  [cancelText]="'Nie'"
+  (confirmed)="onConfirmed()"
+  (cancelled)="onCancelled()"
+  [confirmAction]="confirmAction"
+></app-custom-modal-component>
+}
+
+<!-- FILTERS -->
+<div class="filters" style="display: flex; gap: 12px; margin-bottom: 12px">
+  <input
+    type="number"
+    placeholder="Filter by show ID"
+    [(ngModel)]="idShowFilterValue"
+    (input)="applyFilter()"
+    class="filter-input"
+  />
+
+  <input
+    type="text"
+    placeholder="Filter by show name"
+    [(ngModel)]="nameShowFilterValue"
+    (input)="applyFilter()"
+    class="filter-input"
+  />
+
+  <input
+    type="text"
+    placeholder="Filter by Genre"
+    [(ngModel)]="genreFilterValue"
+    (input)="applyFilter()"
+    class="filter-input"
+  />
+</div>
+
+<!-- SHOWS TABLE -->
+<div class="table-wrapper">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Root path</th>
+        <th>Description</th>
+        <th>Structure</th>
+        <th>Genres</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (show of filteredShows; track show.id) {
+
+      <!-- MAIN ROW -->
+      <tr class="clickable-row" (click)="toggleShow(show)">
+        <th scope="row">{{ show.id }}</th>
+        <td>{{ show.name }}</td>
+        <td>{{ show.rootPath }}</td>
+        <td class="truncate-2">{{ show.description }}</td>
+        <td>{{ show.structure }}</td>
+        <td>
+          @for (genre of show.genres; track $index) {
+          <span class="genre-chip">{{ genre.name }}</span>
+          }
+        </td>
+        <td>
+          <i
+            (click)="$event.stopPropagation()"
+            class="show-edit-icon fa-solid fa-pen-to-square"
+          ></i>
+        </td>
+        <td>
+          <i
+            (click)="setUpShowDeleteModal(show.id!, show.name); $event.stopPropagation()"
+            class="show-delete-icon fa-solid fa-trash"
+          ></i>
+        </td>
+      </tr>
+
+      <!-- INLINE EXPANDED PANEL -->
+      @if (selectedShow === show) {
+      <tr class="edit-show-row">
+        <td class="expanded-row-level-1" colspan="8">
+          <div class="edit-show-panel">
+            <!-- SEASONS -->
+            <h4 class="season-header">Seasons</h4>
+            <table class="table table-sm table-hover">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Number</th>
+                  <th>Episodes</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (season of show.seasons; track season.id) {
+                <tr
+                  class="clickable-row"
+                  [class.active-season]="selectedSeason === season"
+                  (click)="toggleSeason(season, $event)"
+                >
+                  <th scope="row">{{ season.id }}</th>
+                  <td>{{ season.number }}</td>
+                  <td>{{ season.episodes.length }}</td>
+                  <td>
+                    <i
+                      (click)="
+                        setUpSeasonDeleteModal(season.id!, show.id!, season.number!);
+                        $event.stopPropagation()
+                      "
+                      class="show-delete-icon fa-solid fa-trash"
+                    ></i>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+
+            @if (selectedSeason) {
+            <h4>Episodes – Season {{ selectedSeason.number }}</h4>
+
+            <table class="table table-sm table-hover">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Parent title</th>
+                  <th>Codec</th>
+                  <th>Type</th>
+                  <th>Filename</th>
+                  <th>Rootpath</th>
+                  <th>Videohash</th>
+                  <th>Duration</th>
+                  <th>Audio</th>
+                  <th></th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @for (episode of selectedSeason.episodes; track episode.id) {
+                <tr>
+                  <th scope="row">{{ episode.id }}</th>
+                  <td>{{ episode.title }}</td>
+                  <td>{{ episode.parentTitle }}</td>
+                  <td>{{ episode.codec }}</td>
+                  <td>{{ episode.type }}</td>
+                  <td>{{ episode.fileName }}</td>
+                  <td>{{ episode.rootPath }}</td>
+                  <td>{{ episode.videoHash }}</td>
+                  <td>{{ episode.duration }}</td>
+                  <td>{{ episode.audio }}</td>
+                  <td>
+                    <i
+                      (click)="
+                        setUpEpisodeDeleteModal(
+                          episode.id!,
+                          selectedSeason.id!,
+                          show.id!,
+                          selectedSeason.number!
+                        );
+                        $event.stopPropagation()
+                      "
+                      class="show-delete-icon fa-solid fa-trash"
+                    ></i>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+            }
+
+            <!-- MOVIES -->
+            <h4>Movies</h4>
+            <table class="table table-sm table-hover">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Parent title</th>
+                  <th>Codec</th>
+                  <th>Type</th>
+                  <th>Filename</th>
+                  <th>Rootpath</th>
+                  <th>Videohash</th>
+                  <th>Duration</th>
+                  <th>Audio</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (movie of show.movies; track movie.id) {
+                <tr>
+                  <th scope="row">{{ movie.id }}</th>
+                  <td>{{ movie.title }}</td>
+                  <td>{{ movie.parentTitle }}</td>
+                  <td>{{ movie.codec }}</td>
+                  <td>{{ movie.type }}</td>
+                  <td>{{ movie.fileName }}</td>
+                  <td>{{ movie.rootPath }}</td>
+                  <td>{{ movie.videoHash }}</td>
+                  <td>{{ movie.duration }}</td>
+                  <td>{{ movie.audio }}</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </td>
+      </tr>
+      } }
+    </tbody>
+  </table>
+</div>

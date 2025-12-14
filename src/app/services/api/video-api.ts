@@ -10,7 +10,7 @@ export class VideoApi {
   constructor(private http: HttpClient) {}
 
   public scanAllVideos(): Observable<any> {
-    return this.http.get<any>(Endpoints.videos.scan);
+    return this.http.post<any>(Endpoints.videos.scan, {});
   }
 
   getIconBlob(rootPath: string | undefined): Observable<Blob> {

@@ -1,0 +1,73 @@
+.filters {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.filter-input {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #2a2a2a;
+  background-color: #141414;
+  color: #fff;
+  font-size: 14px;
+
+  &::placeholder {
+    color: #bbb;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #e50914; /* Netflixowa czerwień przy focusie */
+  }
+}
+
+/* --- Ogólne tło tabeli --- */
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #181818; /* ciemne tło tabeli */
+  color: #fff; /* biały tekst */
+  font-size: 14px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Nagłówki --- */
+.table thead {
+  background: #141414; /* ciemniejszy nagłówek */
+}
+
+.table thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+}
+
+/* --- Wiersze tabeli --- */
+.table tbody tr {
+  transition: background 0.2s, color 0.2s;
+  cursor: default;
+}
+
+/* --- Komórki tabeli --- */
+.table td,
+.table th {
+  padding: 10px 16px;
+}
+
+.table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 6px;
+}
+.table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 6px;
+}
+
+/* --- Scroll jeśli tabeli jest dużo --- */
+.table-wrapper {
+  overflow-y: auto;
+}

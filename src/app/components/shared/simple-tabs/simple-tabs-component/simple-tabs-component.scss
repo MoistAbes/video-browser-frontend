@@ -1,0 +1,43 @@
+/* --- 1. Kontener zakładek --- */
+.tab-header {
+  display: flex;
+  width: 100%;
+  background: #141414; /* netflixowy czarny */
+  border-bottom: 1px solid #2a2a2a;
+  margin-bottom: 20px;
+}
+
+/* --- 2. Pojedyncza zakładka --- */
+.tab-title {
+  flex: 1;
+  padding: 14px 20px;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  color: #b3b3b3; /* netflixowa jasna szarość */
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+/* --- Hover --- */
+.tab-title:hover {
+  background: #1f1f1f; /* delikatny hover */
+  color: #fff;
+}
+
+/* --- Aktywna zakładka --- */
+.tab-title.active {
+  color: #fff;
+  font-weight: 600;
+  border-bottom: 3px solid #e50914; /* netflixowa czerwień */
+}
+
+/* --- 3. Zawartość zakładki --- */
+.tab-content {
+  background: #181818;
+  padding: 20px;
+  color: #fff;
+  min-height: 150px;
+  border-radius: 0 0 4px 4px;
+}

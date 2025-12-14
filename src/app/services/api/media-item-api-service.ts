@@ -12,4 +12,8 @@ export class MediaItemApiService {
   public convertAudioCodec(): Observable<any> {
     return this.http.put<any>(Endpoints.mediaItem.convertAudioCodec, {});
   }
+
+  public deleteById(mediaItemId: number): Observable<any> {
+    return this.http.delete<any>(Endpoints.mediaItem.deleteById + mediaItemId)
+  }
 }

@@ -9,4 +9,5 @@ export class UserInfoModel {
   roles: string[] = [];
   registrationDate: Date | undefined;
   status: UserStatusModel | null = null;
+  active: boolean = false;
 }

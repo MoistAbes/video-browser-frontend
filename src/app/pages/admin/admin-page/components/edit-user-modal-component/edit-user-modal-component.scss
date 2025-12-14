@@ -1,0 +1,154 @@
+@use '../../../../../components/custom-modal-component/custom-modal-component.scss';
+
+.edit-user-container {
+  width: 400px;
+  background: #1a1a1a;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  color: #fff;
+
+  h2 {
+    margin: 0;
+    text-align: center;
+    font-size: 1.5rem;
+    color: #fff;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #333;
+  }
+
+  /* --- FORM GROUP --- */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    label {
+      font-weight: 700;
+      color: #eee;
+      font-size: 1.05rem;
+    }
+  }
+
+  /* --- STATUS SWITCH --- */
+  .active-group {
+    .status-toggle {
+      cursor: pointer;
+      display: inline-block;
+      padding: 8px 12px;
+      background: #222;
+      border-radius: 8px;
+      border: 1px solid #444;
+      width: fit-content;
+
+      &:hover {
+        background: #2c2c2c;
+      }
+    }
+
+    .status-text {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .status-dot.active {
+      background-color: #23e15c;
+    }
+
+    .status-dot.inactive {
+      background-color: #e50914;
+    }
+  }
+
+  /* --- ROLES --- */
+  .roles-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .roles-info {
+      display: flex;
+      padding: 6px 10px;
+      background: #222;
+      border: 1px solid #444;
+      border-radius: 6px;
+      width: fit-content;
+
+      .default-role {
+        font-weight: 600;
+        color: #aaa;
+      }
+    }
+
+    .roles-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .role-btn {
+      flex: 1;
+      padding: 7px 0;
+      text-align: center;
+      border-radius: 6px;
+      background-color: #2a2a2a;
+      border: 1px solid #555;
+      cursor: pointer;
+      transition: 0.2s;
+      font-weight: 600;
+      font-size: 0.9rem;
+
+      &:hover {
+        background-color: #383838;
+      }
+
+      &.active {
+        background-color: #d1000e; /* odróżnione od Save */
+        border-color: #d1000e;
+        color: #fff;
+      }
+    }
+  }
+
+  /* --- ACTIONS --- */
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+
+    .btn {
+      flex: 1;
+      padding: 10px 0;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.2s;
+      border: none;
+    }
+
+    .cancel-btn {
+      background: #838383;
+    }
+
+    .save-btn {
+      background: #03a02a; /* zostaje brandowy */
+      color: #fff;
+
+      &:hover {
+        filter: brightness(1.15);
+      }
+    }
+  }
+}

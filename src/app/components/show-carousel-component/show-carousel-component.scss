@@ -1,4 +1,4 @@
-@use "../../../styles/colors" as *;
+@use '../../../styles/colors' as *;
 
 .carousel-container {
   z-index: 10;
@@ -8,13 +8,31 @@
   overflow: hidden;
 }
 
+// .carousel {
+//   margin: 4rem 2rem 2rem;
+//   display: flex;
+//   gap: 1rem;
+//   overflow: hidden;
+//   scroll-behavior: smooth;
+//   padding: 6px 2rem;
+// }
+
 .carousel {
   margin: 4rem 2rem 2rem;
   display: flex;
   gap: 1rem;
-  overflow: hidden;
+
+  overflow-x: auto; // 🔥 tu!
+  overflow-y: hidden;
+
   scroll-behavior: smooth;
   padding: 6px 2rem;
+
+  -webkit-overflow-scrolling: touch; // 🔥 super płynny scroll na iPhone
+}
+
+.carousel::-webkit-scrollbar {
+  display: none; // jeśli nie chcesz paska
 }
 
 .carousel-title {
@@ -25,8 +43,7 @@
   font-size: 3rem;
   font-weight: bold;
   color: $normal-white;
-  text-shadow: 2px 2px 0 #000, -2px 2px 0 #000, 2px -2px 0 #000,
-    -2px -2px 0 #000; /* czarne kontury wokół tekstu */
+  text-shadow: 2px 2px 0 #000, -2px 2px 0 #000, 2px -2px 0 #000, -2px -2px 0 #000; /* czarne kontury wokół tekstu */
 }
 
 .item {

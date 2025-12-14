@@ -1,0 +1,43 @@
+<app-screen-overlay-component [isOverlayVisible]="isVisible" (overlayClicked)="onCancel()">
+  <div class="modal-container edit-user-container">
+    <h2>Edit user: {{ tempUser.username }}</h2>
+
+    <div class="form-group roles-group">
+      <label>Roles</label>
+
+      <div class="roles-info">
+        <span class="role default-role">USER (default)</span>
+      </div>
+
+      <div class="roles-buttons">
+        <button
+          class="role-btn"
+          [class.active]="tempUser.roles.includes('ADMIN')"
+          (click)="toggleRole('ADMIN')"
+        >
+          ADMIN
+        </button>
+      </div>
+    </div>
+
+    <div class="form-group active-group">
+      <label>Status</label>
+
+      <div class="status-toggle" (click)="tempUser.active = !tempUser.active">
+        <span class="status-text">
+          {{ tempUser.active ? 'Active' : 'Inactive' }}
+          <span
+            class="status-dot"
+            [class.active]="tempUser.active"
+            [class.inactive]="!tempUser.active"
+          ></span>
+        </span>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn cancel-btn" (click)="onCancel()">Cancel</button>
+      <button class="btn save-btn" (click)="onSave()">Save</button>
+    </div>
+  </div>
+</app-screen-overlay-component>

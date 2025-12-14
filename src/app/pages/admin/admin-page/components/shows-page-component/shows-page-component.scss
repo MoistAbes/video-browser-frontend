@@ -1,0 +1,154 @@
+/* FILTERS */
+.filters {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.filter-input {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #2a2a2a;
+  background-color: #141414;
+  color: #fff;
+  font-size: 14px;
+
+  &::placeholder {
+    color: #bbb;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #e50914; /* Netflixowa czerwień przy focusie */
+  }
+}
+
+/* TABLE */
+.clickable-row {
+  cursor: pointer;
+
+  &:hover {
+    background-color: #1f1f1f;
+  }
+}
+
+/* GENRE CHIP */
+.genre-chip {
+  background-color: #2e8b8b;
+  color: #fff;
+  border-radius: 6px;
+  padding: 2px 8px;
+  margin-right: 6px;
+  font-size: 0.8rem;
+}
+
+/* INLINE EXPANSION */
+.edit-show-row {
+  background-color: #1b1b1b;
+
+  td {
+    padding: 16px;
+  }
+}
+
+.expanded-row-level-1 {
+  background-color: #c0c0c0;
+}
+.edit-show-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+}
+
+.edit-show-panel h4 {
+  margin-top: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111;
+}
+
+.active-season {
+  background-color: #2a2a2a;
+  border-left: 4px solid #2e8b8b;
+}
+
+.show-edit-icon {
+  font-size: large;
+  padding: 10px;
+}
+
+.show-delete-icon {
+  font-size: large;
+  padding: 10px;
+  color: #c0020b;
+}
+
+.show-edit-icon:hover {
+  cursor: pointer;
+  border-radius: 6px;
+  background-color: #bbbbbb;
+}
+
+.show-delete-icon:hover {
+  cursor: pointer;
+  border-radius: 6px;
+  background-color: #bbbbbb;
+}
+
+/* SMALL TABLES */
+.table-sm th,
+.table-sm td {
+  padding: 6px 8px;
+  font-size: 0.85rem;
+}
+
+/* --- Ogólne tło tabeli --- */
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #181818; /* ciemne tło tabeli */
+  color: #fff; /* biały tekst */
+  font-size: 14px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Nagłówki --- */
+.table thead {
+  background: #141414; /* ciemniejszy nagłówek */
+}
+
+.table thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+}
+
+/* --- Wiersze tabeli --- */
+.table tbody tr {
+  transition: background 0.2s, color 0.2s;
+  cursor: default;
+}
+
+/* --- Komórki tabeli --- */
+.table td,
+.table th {
+  padding: 10px 16px;
+}
+
+.table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 6px;
+}
+.table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 6px;
+}
+
+/* --- Scroll jeśli tabeli jest dużo --- */
+.table-wrapper {
+  overflow-y: auto;
+}

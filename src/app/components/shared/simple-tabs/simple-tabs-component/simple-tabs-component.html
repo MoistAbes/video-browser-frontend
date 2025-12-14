@@ -1,0 +1,11 @@
+<div class="tab-header">
+  @for (tab of tabs; let i = $index; track $index) {
+  <div class="tab-title" [class.active]="i === selectedIndex" (click)="selectTab(i)">
+    {{ tab.title }}
+  </div>
+  }
+</div>
+
+<div class="tab-body">
+  <ng-content></ng-content>
+</div>

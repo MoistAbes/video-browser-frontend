@@ -3,21 +3,32 @@ import { VideoApi } from '../../../services/api/video-api';
 import { FormsModule } from '@angular/forms';
 import { ShowApiService } from '../../../services/api/show-api-service';
 import { ShowModel } from '../../../models/show/show-model';
-import { MatTab, MatTabGroup } from '@angular/material/tabs';
-import { NgSelectComponent } from '@ng-select/ng-select';
 import { ToastrService } from 'ngx-toastr';
 import { GenreApiService } from '../../../services/api/genre-api-service';
 import { CustomModalComponent } from '../../../components/custom-modal-component/custom-modal-component';
 import { GenreModel } from '../../../models/show/genre-model';
 import { SeasonModel } from '../../../models/show/season-model';
-import { UserInfoApiService } from '../../../services/api/user-info-api-service';
 import { UserInfoModel } from '../../../models/user/user-info-model';
-import { StreamApiService } from '../../../services/api/stream-api-service';
 import { MediaItemApiService } from '../../../services/api/media-item-api-service';
+import { UsersPageComponent } from './components/users-page-component/users-page-component';
+import { SimpleTabsComponent } from '../../../components/shared/simple-tabs/simple-tabs-component/simple-tabs-component';
+import { SimpleTabComponent } from '../../../components/shared/simple-tabs/simple-tab.component/simple-tab.component';
+import { UserInfoApiService } from '../../../services/api/user-info-api-service';
+import { GenrePageComponent } from './components/genre-page-component/genre-page-component';
+import { ShowsPageComponent } from './components/shows-page-component/shows-page-component';
+import { SeasonApiService } from '../../../services/api/season-api-service';
 
 @Component({
   selector: 'app-admin-page',
-  imports: [FormsModule, MatTabGroup, MatTab, NgSelectComponent, CustomModalComponent],
+  imports: [
+    FormsModule,
+    CustomModalComponent,
+    UsersPageComponent,
+    SimpleTabsComponent,
+    SimpleTabComponent,
+    GenrePageComponent,
+    ShowsPageComponent,
+  ],
   templateUrl: './admin-page.html',
   standalone: true,
   styleUrl: './admin-page.scss',
@@ -51,9 +62,9 @@ export class AdminPage implements OnInit {
     private showApiService: ShowApiService,
     private toastService: ToastrService,
     private genreApiService: GenreApiService,
+    private mediaItemApiService: MediaItemApiService,
     private userInfoApiService: UserInfoApiService,
-    private streamApiService: StreamApiService,
-    private mediaItemApiService: MediaItemApiService
+    private seasonApiService: SeasonApiService
   ) {}
 
   ngOnInit(): void {
@@ -62,10 +73,109 @@ export class AdminPage implements OnInit {
     this.findAllUsers();
   }
 
+  onShowDeleted(showId: number) {
+    this.showApiService.deleteShow(showId).subscribe({
+      next: () => {
+        this.showList = this.showList.filter((s) => s.id !== showId);
+        this.toastService.success('Show deleted');
+      },
+      error: (err) => {
+        this.toastService.warning(err.error.message);
+      },
+    });
+  }
+
+  onSeasonDeleted(event: { seasonId: number; showId: number }) {
+    this.seasonApiService.deleteSeason(event.seasonId).subscribe({
+      next: () => {
+        this.showList = this.showList.map((show) => {
+          if (show.id !== event.showId) {
+            return show;
+          }
+
+          return {
+            ...show,
+            seasons: show.seasons.filter((season) => season.id !== event.seasonId),
+          };
+        });
+
+        this.toastService.success('Season deleted');
+      },
+      error: (err) => {
+        this.toastService.warning(err.error.message);
+      },
+    });
+  }
+
+  onEpisodeDeleted(event: { episodeId: number; seasonId: number; showId: number }) {
+    this.mediaItemApiService.deleteById(event.episodeId).subscribe({
+      next: () => {
+        this.showList = this.showList.map((show) => {
+          if (show.id !== event.showId) {
+            return show;
+          }
+
+          return {
+            ...show,
+            seasons: show.seasons.map((season) => {
+              if (season.id !== event.seasonId) {
+                return season;
+              }
+
+              return {
+                ...season,
+                episodes: season.episodes.filter((episode) => episode.id !== event.episodeId),
+              };
+            }),
+          };
+        });
+
+        this.toastService.success('Episode deleted');
+      },
+      error: (err) => {
+        this.toastService.warning(err.error.message);
+      },
+    });
+  }
+
+  onUserDeleted(userId: number) {
+    this.userInfoApiService.deleteUserById(userId).subscribe({
+      next: () => {
+        this.users = this.users.filter((u) => u.id !== userId);
+        this.toastService.success('User deleted');
+      },
+      error: (err) => {
+        this.toastService.warning(err.error.message);
+      },
+    });
+  }
+
+  onUserCreated() {
+    this.findAllUsers();
+  }
+
+  onUserUpdated(updatedUser: UserInfoModel) {
+    const payload = {
+      id: updatedUser.id,
+      active: updatedUser.active,
+      admin: updatedUser.roles.includes('ADMIN'),
+    };
+
+    this.userInfoApiService.updateUser(payload).subscribe({
+      next: (savedUser) => {
+        this.users = this.users.map((u) => (u.id === savedUser.id ? savedUser : u));
+      },
+      error: (err) => {
+        this.toastService.warning(err.error.message);
+      },
+    });
+  }
+
   findAllUsers() {
     this.userInfoApiService.findAll().subscribe({
       next: (result) => {
         this.users = result;
+        console.log('users loaded: ', this.users);
       },
       error: (err) => {
         console.log(err);
@@ -77,27 +187,13 @@ export class AdminPage implements OnInit {
 
   scanAllMovies() {
     this.videoApiService.scanAllVideos().subscribe({
-      next: (result) => {},
+      next: () => {},
       error: (err) => {
         console.log(err);
         this.toastService.error(err.message);
       },
       complete: () => {
         this.toastService.success('Successfully scan All Movies');
-      },
-    });
-  }
-
-  updateGenres() {
-
-    this.genreApiService.updateGenresFromTmdb().subscribe({
-      next: () => {},
-      error: (err) => {
-        console.log('Error while updating genres: ', err);
-      },
-      complete: () => {
-        console.log('ScanAllMovies complete');
-        this.toastService.success('Successfully udpate genres');
       },
     });
   }
@@ -148,15 +244,6 @@ export class AdminPage implements OnInit {
     this.isModalVisible = true;
   }
 
-  setUpGenreModalValues() {
-    this.modalContent =
-      'Czy na pewno chcesz przeprowadzić aktualizacje genre? spowoduje to usuniecie oraz ponowne pobranie genre z tmdb api';
-
-    this.confirmAction = () => this.updateGenres();
-
-    this.isModalVisible = true;
-  }
-
   setUpShowDeleteModalValues(selectedShow: ShowModel) {
     this.selectedShow = selectedShow;
     this.modalContent = 'Czy na pewno chcesz usunąć ' + selectedShow?.name + ' show ?';
@@ -167,7 +254,6 @@ export class AdminPage implements OnInit {
   }
 
   deleteShow() {
-
     this.showApiService.deleteShow(this.selectedShow!.id!).subscribe({
       next: () => {},
       error: (err) => {
@@ -176,17 +262,6 @@ export class AdminPage implements OnInit {
       complete: () => {
         this.toastService.success('Succesfully deleted show');
       },
-    });
-  }
-
-  testStreamAuthorize() {
-    this.streamApiService.authorizeStream().subscribe({
-      next: (value) => {
-      },
-      error: (err) => {
-        console.log('something went wrong while genereating stream key: ', err.error);
-      },
-      complete: () => {},
     });
   }
 

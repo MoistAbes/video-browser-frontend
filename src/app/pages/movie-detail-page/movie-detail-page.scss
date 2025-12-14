@@ -1,9 +1,10 @@
-@use "../../../../src/styles/colors" as *;
-@use "../../../../src/styles/mixins" as *;
+@use '../../../../src/styles/colors' as *;
+@use '../../../../src/styles/mixins' as *;
 
 .top-container {
   position: relative; /* potrzebne, by pozycjonować wewnętrzne elementy */
   overflow: hidden;
+  min-height: 100vh;
 }
 
 .preview-wrapper {
@@ -19,19 +20,12 @@
 
   .movie-details-overlay {
     position: absolute;
-    top: 40px;
-    left: 40px;
+    top: 60px;
     z-index: 10;
-    color: white;
+    color: $normal-white;
     max-width: 500px;
     padding: 1rem;
-
-    /* Frosted glass effect */
-    //background-color: rgba(20, 20, 20, 0.5); /* semi-transparent dark */
-    //backdrop-filter: blur(10px); /* main blur */
-    //-webkit-backdrop-filter: blur(10px); /* Safari support */
-    //border-radius: 10px; /* rounded edges */
-    //box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* depth */
+    margin: 10px;
 
     @include frosted-glass(10px);
   }

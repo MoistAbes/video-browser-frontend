@@ -1,38 +1,12 @@
-@use "../../../styles/colors" as *;
-@use "../../../styles/mixins" as *;
-@use "../../../styles/components/buttons" as *;
+@use '../../../styles/colors' as *;
+@use '../../../styles/mixins' as *;
+@use '../../../styles/components/buttons' as *;
 
 .content-box {
   height: 60vh; /* 90% wysokości okna */
   width: 100vw;
 }
 
-.movie-details-overlay .movie-title {
-  font-size: 2rem;
-  font-weight: bold;
-}
-
-.movie-details-overlay .movie-description {
-  margin-top: 10px;
-  font-size: 1.1rem;
-}
-
-.movie-details-overlay .play-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 1rem;
-  //background-color: #e50914;
-  background-color: $netflix-red;
-  border: none;
-  border-radius: 4px;
-  color: $normal-white;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-.movie-details-overlay .play-button:hover {
-  //background-color: #fc353f;
-  background-color: $netflix-red-hover;
-}
 .title-row {
   display: flex;
   justify-content: flex-start; /* lub flex-start, jeśli chcesz blisko siebie */
@@ -88,7 +62,7 @@ $body-bg: #020202;
 
 /* miękkie, stopniowe przyciemnienie — główny gradient (dłuższy, łagodny) */
 .backdrop-fullbleed::after {
-  content: "";
+  content: '';
   position: absolute;
   inset: auto 0 0 0;
   height: 55%; /* wydłużony fade */
@@ -109,7 +83,7 @@ $body-bg: #020202;
 
 /* dodatkowa, skupiona warstwa przyciemnienia u samego dołu (możesz wyłączyć gdy zbyt ciężkie) */
 .backdrop-fullbleed::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: auto 0 0 0;
   height: 25%; /* mocniejsze przyciemnienie blisko dołu */
@@ -179,18 +153,6 @@ $body-bg: #020202;
   height: 6px; /* dopasowanie do wysokości kontenera */
 }
 
-.movie-details-overlay {
-  position: absolute;
-  top: 40px;
-  left: 40px;
-  z-index: 10;
-  color: $normal-white;
-  max-width: 500px;
-  padding: 1rem;
-
-  @include frosted-glass(10px);
-}
-
 .movie-details-overlay .movie-title {
   font-size: 2rem;
   font-weight: bold;
@@ -199,13 +161,16 @@ $body-bg: #020202;
 .movie-details-overlay .movie-description {
   margin-top: 10px;
   font-size: 1.1rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 5;
 }
 
 .movie-details-overlay .play-button {
   margin-top: 20px;
   padding: 10px 20px;
   font-size: 1rem;
-  //background-color: #e50914;
   background-color: $netflix-red;
   border: none;
   border-radius: 4px;
@@ -214,6 +179,20 @@ $body-bg: #020202;
   transition: background-color 0.2s ease;
 }
 .movie-details-overlay .play-button:hover {
-  //background-color: #fc353f;
   background-color: $netflix-red-hover;
+}
+
+.movie-details-overlay {
+  position: absolute;
+  top: 60px;
+  // left: 2vw;
+  // top: clamp(16px, 5vw, 40px);
+  // left: clamp(0px, 5vw, 40px);
+  z-index: 10;
+  color: $normal-white;
+  max-width: 500px;
+  padding: 1rem;
+  margin: 10px;
+
+  @include frosted-glass(10px);
 }

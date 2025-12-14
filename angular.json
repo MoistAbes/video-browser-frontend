@@ -77,11 +77,13 @@
               "buildTarget": "video-browser-app-frontend:build:production"
             },
             "development": {
-              "buildTarget": "video-browser-app-frontend:build:development"
+              "buildTarget": "video-browser-app-frontend:build:development",
+              "host": "0.0.0.0"
             }
           },
           "defaultConfiguration": "development"
         },
+
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n"
         },
