@@ -19,7 +19,6 @@ export class GenrePageComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['genres'] && this.genres) {
       // Gdy przyjdą dane z rodzica, inicjalizujemy filteredUsers
-      console.log('this is running: ', this.genres);
       this.applyFilter();
     }
   }

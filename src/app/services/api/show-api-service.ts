@@ -24,18 +24,14 @@ export class ShowApiService {
     return this.http.get<ShowModel[]>(Endpoints.show.findRandom);
   }
 
-  findRandomShowsByStructure(
-    showStructure: StructureTypeEnum
-  ): Observable<ShowModel[]> {
+  findRandomShowsByStructure(showStructure: StructureTypeEnum): Observable<ShowModel[]> {
     return this.http.get<ShowModel[]>(
       `${Endpoints.show.findRandomByStructure}?structureType=${showStructure}`
     );
   }
 
   findShowByParentTitle(parentTitle: string): Observable<ShowModel> {
-    return this.http.get<ShowModel>(
-      Endpoints.show.findByParentTitle + '/' + parentTitle
-    );
+    return this.http.get<ShowModel>(Endpoints.show.findByParentTitle + '/' + parentTitle);
   }
 
   findWithRootPath(): Observable<ShowModel[]> {
@@ -43,27 +39,18 @@ export class ShowApiService {
   }
 
   addGenreToShow(showId: number, genreId: number): Observable<void> {
-    return this.http.put<any>(
-      Endpoints.show.addGenre + showId + '/' + genreId,
-      {}
-    );
+    return this.http.put<any>(Endpoints.show.addGenre + showId + '/' + genreId, {});
   }
 
   removeGenreFromShow(showId: number, genreId: number): Observable<void> {
-    return this.http.put<any>(
-      Endpoints.show.removeGenre + showId + '/' + genreId,
-      {}
-    );
+    return this.http.put<any>(Endpoints.show.removeGenre + showId + '/' + genreId, {});
   }
 
   findRandomShowsByStructureAndGroupedByGenre(
     showStructure?: string
   ): Observable<Map<string, ShowModel[]>> {
     const base = Endpoints.show.findRandomShowsByStructureAndGroupedByGenre;
-    const url =
-      showStructure !== undefined
-        ? `${base}?structureType=${showStructure}`
-        : base;
+    const url = showStructure !== undefined ? `${base}?structureType=${showStructure}` : base;
 
     return this.http.get<Record<string, ShowModel[]>>(url).pipe(
       map((obj) => {
@@ -77,7 +64,7 @@ export class ShowApiService {
     return this.http.delete<any>(Endpoints.show.deleteShow + showId);
   }
 
-   deleteAllShows(): Observable<any> {
+  deleteAllShows(): Observable<any> {
     return this.http.delete<any>(Endpoints.show.deleteAllShows);
   }
 }

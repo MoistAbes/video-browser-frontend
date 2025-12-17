@@ -66,7 +66,6 @@ export class UsersPageComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['users'] && this.users) {
       // Gdy przyjdą dane z rodzica, inicjalizujemy filteredUsers
-      console.log('this is running');
       this.applyFilter();
     }
   }

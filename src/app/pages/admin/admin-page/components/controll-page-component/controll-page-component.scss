@@ -1,0 +1,152 @@
+/* FILTERS */
+.filters {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.filter-input {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #2a2a2a;
+  background-color: #141414;
+  color: #fff;
+  font-size: 14px;
+
+  &::placeholder {
+    color: #bbb;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #e50914; /* Netflixowa czerwień przy focusie */
+  }
+}
+
+.scan-panel-horizontal {
+  background-color: #3a3a3a;
+  padding: 20px;
+  border-radius: 10px;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  margin-bottom: 20px;
+
+  .scan-panel-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap; // w razie wąskiego ekranu
+
+    .scan-panel-text {
+      flex: 1;
+      min-width: 200px;
+
+      h1 {
+        margin: 0 0 8px 0;
+        font-size: 1.5rem;
+      }
+
+      p {
+        margin: 0;
+        font-size: 0.9rem;
+        line-height: 1.4;
+      }
+    }
+
+    .btn-scan {
+      padding: 10px 40px;
+      font-weight: bold;
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-right: 40px;
+
+      &:hover {
+        background-color: #218838;
+      }
+    }
+  }
+}
+
+/* TABLE */
+.clickable-row {
+  cursor: pointer;
+
+  &:hover {
+    background-color: #1f1f1f;
+  }
+}
+
+/* INLINE EXPANSION */
+.edit-show-row {
+  background-color: #1b1b1b;
+
+  td {
+    padding: 16px;
+  }
+}
+
+.expanded-row-level-1 {
+  background-color: #c0c0c0;
+}
+
+/* SMALL TABLES */
+.table-sm th,
+.table-sm td {
+  padding: 6px 8px;
+  font-size: 0.85rem;
+}
+
+/* --- Ogólne tło tabeli --- */
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #181818; /* ciemne tło tabeli */
+  color: #fff; /* biały tekst */
+  font-size: 14px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Nagłówki --- */
+.table thead {
+  background: #141414; /* ciemniejszy nagłówek */
+}
+
+.table thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+}
+
+/* --- Wiersze tabeli --- */
+.table tbody tr {
+  transition: background 0.2s, color 0.2s;
+  cursor: default;
+}
+
+/* --- Komórki tabeli --- */
+.table td,
+.table th {
+  padding: 10px 16px;
+}
+
+.table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 6px;
+}
+.table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 6px;
+}
+
+/* --- Scroll jeśli tabeli jest dużo --- */
+.table-wrapper {
+  overflow-y: auto;
+}

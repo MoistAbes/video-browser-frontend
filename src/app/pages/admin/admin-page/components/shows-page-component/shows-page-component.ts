@@ -44,7 +44,6 @@ export class ShowsPageComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['shows'] && this.shows) {
       // Gdy przyjdą dane z rodzica, inicjalizujemy filteredUsers
-      console.log('this is running: ', this.shows);
       this.applyFilter();
     }
   }

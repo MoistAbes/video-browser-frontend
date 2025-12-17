@@ -1,0 +1,119 @@
+@if (isModalVisible) {
+<app-custom-modal-component
+  [title]="'Potwierdzenie'"
+  [content]="modalContent"
+  [confirmText]="'Tak'"
+  [cancelText]="'Nie'"
+  (confirmed)="onConfirmed()"
+  (cancelled)="onCancelled()"
+  [confirmAction]="confirmAction"
+></app-custom-modal-component>
+}
+
+<div class="scan-panel-horizontal">
+  <div class="scan-panel-content">
+    <div class="scan-panel-text">
+      <h1>Full library scan</h1>
+      <p>Skanuje foldery, tworzy media items, shows. Jeśli są genre, dodaje do show.</p>
+    </div>
+    <button (click)="setUpVideoScanModalValues()" class="btn btn-scan">START</button>
+  </div>
+</div>
+
+<div class="scan-panel-horizontal">
+  <div class="scan-panel-content">
+    <div class="scan-panel-text">
+      <h1>Full library scan history</h1>
+      <p>Wyświetla historię poprzednich skanów biblioteki.</p>
+    </div>
+  </div>
+</div>
+
+<div class="table-wrapper">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Status</th>
+        <th>Started at</th>
+        <th>Finished at</th>
+        <th>Media files added</th>
+        <th>Media files deleted</th>
+        <th>Processed files</th>
+        <th>Error message</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (scanSession of scanSessionList; track scanSession.id) {
+
+      <!-- MAIN ROW -->
+      <tr class="clickable-row" (click)="toggleScan(scanSession)">
+        <th scope="row">{{ scanSession.id }}</th>
+        <td>{{ scanSession.status }}</td>
+        <td>{{ scanSession.startedAt }}</td>
+        <td>{{ scanSession.finishedAt }}</td>
+        <td>{{ scanSession.mediaItemsAdded }}</td>
+        <td>{{ scanSession.mediaItemsDeleted }}</td>
+        <td>{{ scanSession.processedFiles }}</td>
+        <td>{{ scanSession.errorMessage }}</td>
+      </tr>
+
+      <!-- INLINE EXPANDED PANEL -->
+      @if (selectedScanSession === scanSession) {
+      <tr class="edit-show-row">
+        <td class="expanded-row-level-1" colspan="7">
+          <div class="edit-show-panel">
+            <!-- SEASONS -->
+            <h4 class="season-header">Files</h4>
+            <table class="table table-sm table-hover">
+              <thead>
+                <tr>
+                  <th>File path</th>
+                  <th>Status</th>
+                  <th>Error message</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (scanSessionFile of scanSession.scanSessionFileDtoList; track
+                scanSessionFile.filePath) {
+                <tr>
+                  <th scope="row">{{ scanSessionFile.filePath }}</th>
+                  <td>{{ scanSessionFile.status }}</td>
+                  <td>{{ scanSessionFile.errorMessage }}</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </td>
+      </tr>
+      } }
+    </tbody>
+  </table>
+</div>
+
+<!-- <div style="text-align: center">
+      <p style="margin-bottom: 8px; font-size: 14px">
+        Kowertuje pliki z nieobsługiwalnymi dla przeglądarek codekami audio na takie co przeglądarka
+        może obsłużyc
+      </p> -->
+<!-- <button
+        (click)="convertMediaItemsAudioCodec()"
+        class="btn btn-success"
+        style="width: 100%; padding: 10px; font-weight: bold"
+      >
+        KONWERTUJ AUDIO CODEC
+      </button> -->
+<!-- </div> -->
+
+<!-- <div style="text-align: center">
+      <p style="margin-bottom: 8px; font-size: 14px">Usuwa wszystkie show łącznie z media items</p> -->
+<!-- <button
+        (click)="setUpDeleteAllShows()"
+        class="btn btn-success"
+        style="width: 100%; padding: 10px; font-weight: bold"
+      >
+        DELETE ALL SHOWS
+      </button> -->
+<!-- </div> -->

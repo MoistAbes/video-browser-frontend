@@ -53,4 +53,7 @@ export const Endpoints = {
     convertAudioCodec: `${BASE_URL}/mediaItem/convert/audio`,
     deleteById: `${BASE_URL}/mediaItem/delete/`,
   },
+  scanSession: {
+    findAll: `${BASE_URL}/scan-session/`,
+  },
 };

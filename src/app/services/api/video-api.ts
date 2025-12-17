@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Endpoints } from '../../endpoints/endpoints';
+import { ApiResponseModel } from '../../models/api-response-model';
 
 @Injectable({
   providedIn: 'root',
@@ -9,8 +10,8 @@ import { Endpoints } from '../../endpoints/endpoints';
 export class VideoApi {
   constructor(private http: HttpClient) {}
 
-  public scanAllVideos(): Observable<any> {
-    return this.http.post<any>(Endpoints.videos.scan, {});
+  public fullLibraryScan(): Observable<ApiResponseModel> {
+    return this.http.post<ApiResponseModel>(Endpoints.videos.scan, {});
   }
 
   getIconBlob(rootPath: string | undefined): Observable<Blob> {

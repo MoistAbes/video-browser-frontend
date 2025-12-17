@@ -11,69 +11,13 @@
 }
 
 <div class="main-container">
-  <!-- <mat-tab-group class="admin-tabs"> -->
   <app-simple-tabs>
-    <app-simple-tab title="Skanowanie video">
-      <div
-        style="
-          margin-top: 20px;
-          background-color: #3a3a3a;
-          padding: 20px;
-          border-radius: 10px;
-          color: #fff;
-          font-family: Arial, sans-serif;
-        "
-      >
-        <h1 style="margin-bottom: 20px">Aktualizacja filmów</h1>
-        <div
-          style="
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px;
-          "
-        >
-          <div style="text-align: center">
-            <p style="margin-bottom: 8px; font-size: 14px">
-              Skanuje foldery tworzy media items, shows jeśli są genre to dodaje do show
-            </p>
-            <button
-              (click)="setUpVideoScanModalValues()"
-              class="btn btn-success"
-              style="width: 100%; padding: 10px; font-weight: bold"
-            >
-              SKANUJ FILMY
-            </button>
-          </div>
-
-          <div style="text-align: center">
-            <p style="margin-bottom: 8px; font-size: 14px">
-              Kowertuje pliki z nieobsługiwalnymi dla przeglądarek codekami audio na takie co
-              przeglądarka może obsłużyc
-            </p>
-            <button
-              (click)="convertMediaItemsAudioCodec()"
-              class="btn btn-success"
-              style="width: 100%; padding: 10px; font-weight: bold"
-            >
-              KONWERTUJ AUDIO CODEC
-            </button>
-          </div>
-
-          <div style="text-align: center">
-            <p style="margin-bottom: 8px; font-size: 14px">
-              Usuwa wszystkie show łącznie z media items
-            </p>
-            <button
-              (click)="setUpDeleteAllShows()"
-              class="btn btn-success"
-              style="width: 100%; padding: 10px; font-weight: bold"
-            >
-              DELETE ALL SHOWS
-            </button>
-          </div>
-        </div>
-      </div></app-simple-tab
-    >
+    <app-simple-tab title="Library scan">
+      <app-controll-page-component
+        [scanSessionList]="scanSessionList"
+        (fullLibraryScanStarted)="fullLibraryScan($event)"
+      ></app-controll-page-component>
+    </app-simple-tab>
 
     <app-simple-tab title="Edycja shows">
       <app-shows-page-component

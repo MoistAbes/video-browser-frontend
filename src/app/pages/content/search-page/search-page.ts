@@ -40,6 +40,7 @@ export class SearchPage implements OnInit {
       next: (result) => {
         this.showList = result;
         this.showListFiltered = result;
+        console.log('show list: ', this.showList);
       },
       error: (err) => {
         console.log('error: ', err);
@@ -71,9 +72,7 @@ export class SearchPage implements OnInit {
 
     //ToDO zrobic filtrowanie po genre
 
-    const filterText: string = this.utilService.normalizeText(
-      this.filterTitleValue
-    );
+    const filterText: string = this.utilService.normalizeText(this.filterTitleValue);
 
     this.showListFiltered = this.showListFiltered.filter((video) =>
       this.utilService.normalizeText(video.name).includes(filterText)

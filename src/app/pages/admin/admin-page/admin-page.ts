@@ -17,6 +17,9 @@ import { UserInfoApiService } from '../../../services/api/user-info-api-service'
 import { GenrePageComponent } from './components/genre-page-component/genre-page-component';
 import { ShowsPageComponent } from './components/shows-page-component/shows-page-component';
 import { SeasonApiService } from '../../../services/api/season-api-service';
+import { ScanSessionApiService } from '../../../services/api/scan-session-api-service';
+import { ScanSessionModel } from '../../../models/camunda/scan-session-model';
+import { ControllPageComponent } from './components/controll-page-component/controll-page-component';
 
 @Component({
   selector: 'app-admin-page',
@@ -28,6 +31,7 @@ import { SeasonApiService } from '../../../services/api/season-api-service';
     SimpleTabComponent,
     GenrePageComponent,
     ShowsPageComponent,
+    ControllPageComponent,
   ],
   templateUrl: './admin-page.html',
   standalone: true,
@@ -38,6 +42,8 @@ export class AdminPage implements OnInit {
   filteredShowList: ShowModel[] = [];
   selectedShow: ShowModel | undefined;
   seletedSeason: SeasonModel | undefined;
+
+  scanSessionList: ScanSessionModel[] = [];
 
   idShowFilterValue: number | null = null;
   nameShowFilterValue: string = '';
@@ -64,13 +70,15 @@ export class AdminPage implements OnInit {
     private genreApiService: GenreApiService,
     private mediaItemApiService: MediaItemApiService,
     private userInfoApiService: UserInfoApiService,
-    private seasonApiService: SeasonApiService
+    private seasonApiService: SeasonApiService,
+    private scanSessionApiService: ScanSessionApiService
   ) {}
 
   ngOnInit(): void {
     this.testFindAllShows();
     this.findAllGenres();
     this.findAllUsers();
+    this.findAllSessionScans();
   }
 
   onShowDeleted(showId: number) {
@@ -185,16 +193,16 @@ export class AdminPage implements OnInit {
     });
   }
 
-  scanAllMovies() {
-    this.videoApiService.scanAllVideos().subscribe({
-      next: () => {},
+  fullLibraryScan(event: void) {
+    this.videoApiService.fullLibraryScan().subscribe({
+      next: (apiResponse) => {
+        this.toastService.success(apiResponse.message);
+      },
       error: (err) => {
         console.log(err);
         this.toastService.error(err.message);
       },
-      complete: () => {
-        this.toastService.success('Successfully scan All Movies');
-      },
+      complete: () => {},
     });
   }
 
@@ -234,14 +242,6 @@ export class AdminPage implements OnInit {
 
   onCancelled() {
     this.isModalVisible = false;
-  }
-
-  setUpVideoScanModalValues() {
-    this.modalContent = 'Czy na pewno chcesz przeprowadzić skanowanie plików video?';
-
-    this.confirmAction = () => this.scanAllMovies();
-
-    this.isModalVisible = true;
   }
 
   setUpShowDeleteModalValues(selectedShow: ShowModel) {
@@ -312,6 +312,20 @@ export class AdminPage implements OnInit {
       complete: () => {
         this.toastService.success('Succesfully deleted all shows');
       },
+    });
+  }
+
+  findAllSessionScans() {
+    this.scanSessionApiService.findAll().subscribe({
+      next: (result) => {
+        this.scanSessionList = result;
+        console.log('scan Session loaded: ', this.scanSessionList);
+      },
+      error: (err) => {
+        console.log(err);
+        this.toastService.error(err.message);
+      },
+      complete: () => {},
     });
   }
 }

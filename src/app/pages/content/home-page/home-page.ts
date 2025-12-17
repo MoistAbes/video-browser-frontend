@@ -20,10 +20,7 @@ export class HomePage implements OnInit {
   showGroupedByGenre: Map<string, ShowModel[]> = new Map<string, ShowModel[]>();
   genreShowList: { genre: string; shows: ShowModel[] }[] = [];
 
-  constructor(
-    private showApiService: ShowApiService,
-    public utilService: UtilService
-  ) {}
+  constructor(private showApiService: ShowApiService, public utilService: UtilService) {}
 
   ngOnInit(): void {
     this.findRandomShows();
@@ -31,28 +28,24 @@ export class HomePage implements OnInit {
   }
 
   loadRandomShowsByStructureAndGenre() {
-    this.showApiService
-      .findRandomShowsByStructureAndGroupedByGenre()
-      .subscribe({
-        next: (result: Map<string, ShowModel[]>) => {
-          this.showGroupedByGenre = result;
-        },
-        error: (err) => {
-          console.error('Failed to load random show random shows', err);
-        },
-        complete: () => {
-          this.mapMapToList();
-        },
-      });
+    this.showApiService.findRandomShowsByStructureAndGroupedByGenre().subscribe({
+      next: (result: Map<string, ShowModel[]>) => {
+        this.showGroupedByGenre = result;
+      },
+      error: (err) => {
+        console.error('Failed to load random show random shows', err);
+      },
+      complete: () => {
+        this.mapMapToList();
+      },
+    });
   }
 
   mapMapToList() {
-    this.genreShowList = Array.from(this.showGroupedByGenre.entries()).map(
-      ([genre, shows]) => ({
-        genre,
-        shows,
-      })
-    );
+    this.genreShowList = Array.from(this.showGroupedByGenre.entries()).map(([genre, shows]) => ({
+      genre,
+      shows,
+    }));
   }
 
   findRandomShows() {
