@@ -12,6 +12,7 @@ import { ShowModel } from '../../../../models/show/show-model';
 import { MediaItemModel } from '../../../../models/show/media-item-model';
 import { UtilService } from '../../../../services/local/util-service';
 import { ShowUtilService } from '../../../../services/local/show-util-service';
+import { SubtitleModel } from '../../../../models/show/subtitle-model';
 
 @Component({
   selector: 'app-seasons-component',
@@ -29,12 +30,17 @@ export class SeasonsComponent implements OnInit {
   @Input() selectedSeason: number | null = null;
   @Input() subtitlesUrl: string = '';
   @Input() backdropImagePath: string = '';
+  @Input() selectedSubtitlesInput: SubtitleModel | undefined;
+
 
   @Output() updateMediaItem: EventEmitter<Partial<MediaItemModel>> = new EventEmitter<
     Partial<MediaItemModel>
   >();
   @Output() playVideoClicked = new EventEmitter<void>();
   @Output() seekChange: EventEmitter<number> = new EventEmitter<number>();
+  @Output() selectedSubtitles = new EventEmitter<SubtitleModel>();
+
+
 
   episodes: MediaItemModel[] = [];
   selectedEpisode: MediaItemModel | undefined;
@@ -62,5 +68,11 @@ export class SeasonsComponent implements OnInit {
   onSeekTimeSelected(time: number) {
     // np. ustawiamy nowy URL streamu
     this.seekChange.emit(time); // wysyłamy wartość do rodzica
+  }
+
+  onSelectedSubtitles(selectedSubtitles: SubtitleModel) {
+    console.log('selected subtitles in seasons and movies component: ', selectedSubtitles);
+
+    this.selectedSubtitles.emit(selectedSubtitles);
   }
 }

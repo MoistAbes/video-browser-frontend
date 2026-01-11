@@ -3,6 +3,7 @@
   [isVideoPlaying]="isVideoPlaying"
   [selectedVideoUrl]="selectedVideoUrl"
   [subtitlesUrl]="subtitlesUrl"
+  [selectedSubtitlesInput]="selectedSubtitles"
   [currentMediaItem]="currentMediaItem"
   [backdropImagePath]="selectedBackdropUrl"
   [show]="show"
@@ -15,6 +16,7 @@
   [isVideoPlaying]="isVideoPlaying"
   [currentMediaItem]="currentMediaItem"
   [subtitlesUrl]="subtitlesUrl"
+  [selectedSubtitlesInput]="selectedSubtitles"
   [show]="show"
   [selectedSeason]="selectedSeason"
   [selectedVideoUrl]="selectedVideoUrl"
@@ -22,6 +24,7 @@
   (playVideoClicked)="playVideo()"
   (updateMediaItem)="onUpdateVideoData($event)"
   (seekChange)="onSeekTimeSelected($event)"
+  (selectedSubtitles)="onSubtitlesSelected($event)"
 >
 </app-seasons-component>
 } @if (show.structure === StructureTypeEnum.MOVIE_COLLECTION) {
@@ -29,11 +32,13 @@
   [isVideoPlaying]="isVideoPlaying"
   [selectedVideoUrl]="selectedVideoUrl"
   [subtitlesUrl]="subtitlesUrl"
+  [selectedSubtitlesInput]="selectedSubtitles"
   [currentMediaItem]="currentMediaItem"
   [backdropImagePath]="selectedBackdropUrl"
   [show]="show"
   (updateVideoData)="onUpdateVideoData($event)"
   (playVideoClicked)="playVideo()"
+  (selectedSubtitles)="onSubtitlesSelected($event)"
 >
 </app-series-component>
 } @if (show.structure === StructureTypeEnum.HYBRID) {
@@ -43,9 +48,12 @@
   [selectedSeason]="selectedSeason"
   [selectedVideoUrl]="selectedVideoUrl"
   [backdropImagePath]="selectedBackdropUrl"
+  [subtitlesUrl]="subtitlesUrl"
+  [selectedSubtitlesInput]="selectedSubtitles"
   [show]="show"
   (updateMediaItem)="onUpdateVideoData($event)"
   (playVideoClicked)="playVideo()"
+  (selectedSubtitles)="onSubtitlesSelected($event)"
 >
 </app-seasons-and-movies-component>
 } }

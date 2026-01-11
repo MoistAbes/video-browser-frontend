@@ -14,6 +14,7 @@ import { ShowModel } from '../../../../models/show/show-model';
 import { MediaItemModel } from '../../../../models/show/media-item-model';
 import { UtilService } from '../../../../services/local/util-service';
 import { ShowUtilService } from '../../../../services/local/show-util-service';
+import { SubtitleModel } from '../../../../models/show/subtitle-model';
 
 @Component({
   selector: 'app-seasons-and-movies-component',
@@ -27,15 +28,17 @@ export class SeasonsAndMoviesComponent implements OnInit, OnChanges {
   @Input() currentMediaItem: MediaItemModel | undefined;
   @Input() isVideoPlaying: boolean = false;
   @Input() selectedVideoUrl: string = '';
+  @Input() subtitlesUrl: string = '';
   @Input() show: ShowModel | undefined;
-
   @Input() selectedSeason: number | null = null;
   @Input() backdropImagePath: string = '';
+  @Input() selectedSubtitlesInput: SubtitleModel | undefined;
 
   @Output() updateMediaItem: EventEmitter<Partial<MediaItemModel>> = new EventEmitter<
     Partial<MediaItemModel>
   >();
   @Output() playVideoClicked: EventEmitter<void> = new EventEmitter<void>();
+  @Output() selectedSubtitles = new EventEmitter<SubtitleModel>();
 
   selectedContentType: string = 'seasons';
 
@@ -57,7 +60,6 @@ export class SeasonsAndMoviesComponent implements OnInit, OnChanges {
   }
 
   watchMovie(mediaItem: MediaItemModel) {
-
     this.currentMediaItem = mediaItem;
     this.updateMediaItem.emit(this.currentMediaItem);
     this.resetPlayingVideo();
@@ -84,7 +86,6 @@ export class SeasonsAndMoviesComponent implements OnInit, OnChanges {
   }
 
   setUpEpisodes() {
-
     this.episodes = this.showUtilService.getEpisodesForSeason(this.show, this.selectedSeason);
 
     if (this.episodes.length > 0) {
@@ -95,5 +96,11 @@ export class SeasonsAndMoviesComponent implements OnInit, OnChanges {
 
   onEpisodeSelect() {
     this.updateMediaItem.emit(this.selectedEpisode);
+  }
+
+  onSelectedSubtitles(selectedSubtitles: SubtitleModel) {
+    console.log('selected subtitles in seasons and movies component: ', selectedSubtitles);
+
+    this.selectedSubtitles.emit(selectedSubtitles);
   }
 }

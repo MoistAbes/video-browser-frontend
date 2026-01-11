@@ -9,14 +9,13 @@
     preload="auto"
   ></video>
 
- <div [class.visible]="showControls" class="movie-details-overlay">
-  <div class="movie-header">
-    <h1 class="movie-title">{{ show?.name }}</h1>
-    <h5>{{ getSubtitle() }}</h5>
+  <div [class.visible]="showControls" class="movie-details-overlay">
+    <div class="movie-header">
+      <h1 class="movie-title">{{ show?.name }}</h1>
+      <h5>{{ getSubtitle() }}</h5>
+    </div>
   </div>
-</div>
 
-  
   @if (isNextEpisodeNoticeVisible) {
   <div class="next-episode-notice">
     <div class="notice-content">
@@ -27,7 +26,7 @@
   } @if (overlayText) {
   <div class="overlay-message">{{ overlayText }}</div>
   }
-  <div class="timeline-box" [class.visible]="showControls">
+  <div class="timeline-box visible">
     <div class="row">
       <div class="col-12">
         <app-video-timeline-component
@@ -42,44 +41,55 @@
     </div>
   </div>
 
-  <div class="custom-control-bar" [class.visible]="showControls">
+  <div class="custom-control-bar visible">
     <div class="row">
       <div class="col-10">
         <!-- Left: Play/Pause -->
         <div class="left-controls">
-          <button
-            class="netflix-button"
-            (click)="togglePlay()"
-            (keydown.space)="$event.preventDefault()"
-            (keydown.enter)="$event.preventDefault()"
-          >
-            @if (isPlaying) {
-            <i class="fa-solid fa-pause"></i>
-            } @if (!isPlaying) {
-            <i class="fa-solid fa-play"></i>
-            }
-          </button>
+          <div class="ui-element-container">
+            <button
+              class="netflix-button"
+              (click)="togglePlay()"
+              (keydown.space)="$event.preventDefault()"
+              (keydown.enter)="$event.preventDefault()"
+            >
+              @if (isPlaying) {
+              <i class="fa-solid fa-pause"></i>
+              } @if (!isPlaying) {
+              <i class="fa-solid fa-play"></i>
+              }
+            </button>
+          </div>
 
-          @if (volume > 0) {
-          <i
-            style="cursor: pointer"
-            (click)="changeVolume(0)"
-            class="fa-solid fa-volume-low me-1"
-          ></i>
-          } @if (volume == 0) {
-          <i class="fas fa-volume-mute"></i>
-          }
+          <div class="ui-element-container">
+            <div class="ui-volume-changer">
+              @if (volume > 0) {
+              <i
+                style="cursor: pointer"
+                (click)="changeVolume(0)"
+                class="fa-solid fa-volume-low me-1"
+              ></i>
+              } @if (volume == 0) {
+              <i class="fas fa-volume-mute"></i>
+              }
 
-          <mat-slider min="0" max="1" step="0.01">
-            <input matSliderThumb [value]="volume" (input)="onVolumeChange($event)" />
-          </mat-slider>
+              <mat-slider class="volume-slider" min="0" max="1" step="0.01">
+                <input matSliderThumb [value]="volume" (input)="onVolumeChange($event)" />
+              </mat-slider>
+            </div>
+          </div>
 
-          <span>{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</span>
+          <div class="ui-element-container">
+            <div class="time-counter">
+              <span>{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</span>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="col-2">
         <!-- Right: Fullscreen -->
+
         <div class="right-controls float-end">
           @if (isVideoListVisible) {
           <app-video-selector-component
@@ -89,28 +99,56 @@
             [show]="show"
           >
           </app-video-selector-component>
+          } @if (isSubtitleListVisible) {
+          <app-video-subtitle-component
+            [subtitleList]="currentMediaItem!.subtitles"
+            [selectedSubtitlesInput]="selectedSubtitlesInput"
+            (selectedSubtitles)="onSelectedSubtitles($event)"
+          >
+          </app-video-subtitle-component>
           }
 
-          <div class="video-list-container"></div>
+          <div class="ui-element-container">
+            @if (show!.movies.length > 1 || show!.seasons.length > 0) {
 
-          @if (show!.movies.length > 1 || show!.seasons.length > 0) {
-          <button
-            (click)="isVideoListVisible = !isVideoListVisible"
-            class="netflix-button"
-            (keydown.space)="$event.preventDefault()"
-            (keydown.enter)="$event.preventDefault()"
-          >
-            <i class="fa-solid fa-list"></i>
-          </button>
-          }
-          <button
-            class="netflix-button"
-            (click)="toggleFullscreen()"
-            (keydown.space)="$event.preventDefault()"
-            (keydown.enter)="$event.preventDefault()"
-          >
-            <i class="fa-solid fa-expand"></i>
-          </button>
+            <div class="autoplay-ui-element">
+              <mat-slide-toggle
+                [(ngModel)]="autoplayEnabled"
+                matTooltip="Autoplay"
+                matTooltipPosition="above"
+              >
+              </mat-slide-toggle>
+            </div>
+            }
+
+            <button
+              matTooltip="Subtitles"
+              matTooltipPosition="above"
+              class="netflix-button"
+              (click)="toggleSubtitles()"
+            >
+              <i class="fa-regular fa-closed-captioning"></i>
+            </button>
+
+            @if (show!.movies.length > 1 || show!.seasons.length > 0) {
+            <button
+              (click)="toggleVideoList()"
+              class="netflix-button"
+              (keydown.space)="$event.preventDefault()"
+              (keydown.enter)="$event.preventDefault()"
+            >
+              <i class="fa-solid fa-list"></i>
+            </button>
+            }
+            <button
+              class="netflix-button video-ui-element"
+              (click)="toggleFullscreen()"
+              (keydown.space)="$event.preventDefault()"
+              (keydown.enter)="$event.preventDefault()"
+            >
+              <i class="fa-solid fa-expand"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>

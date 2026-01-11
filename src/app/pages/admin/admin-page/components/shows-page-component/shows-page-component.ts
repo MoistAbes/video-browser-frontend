@@ -123,4 +123,7 @@ export class ShowsPageComponent implements OnChanges {
   onCancelled() {
     this.isModalVisible = false;
   }
+
+  
+
 }

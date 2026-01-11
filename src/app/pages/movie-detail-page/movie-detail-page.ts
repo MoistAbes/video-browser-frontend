@@ -12,6 +12,7 @@ import { MediaItemModel } from '../../models/show/media-item-model';
 import { StructureTypeEnum } from '../../enums/structure-type-enum';
 import { StreamKeyService } from '../../services/local/stream-key-service';
 import { VideoApi } from '../../services/api/video-api';
+import { SubtitleModel } from '../../models/show/subtitle-model';
 
 @Component({
   standalone: true,
@@ -34,6 +35,7 @@ export class MovieDetailPage implements OnInit {
   selectedVideoUrl: string = '';
   selectedBackdropUrl: string = '';
   subtitlesUrl: string = '';
+  selectedSubtitles: SubtitleModel | undefined;
 
   selectedSeason: number | null = null;
 
@@ -55,7 +57,6 @@ export class MovieDetailPage implements OnInit {
   }
 
   loadBackdropImage(rootPath: string) {
-
     this.videoApiService.getBackdropBlob(rootPath).subscribe({
       next: (blob) => {
         this.selectedBackdropUrl = URL.createObjectURL(blob);
@@ -70,6 +71,9 @@ export class MovieDetailPage implements OnInit {
     this.showApiService.findShowByParentTitle(parentTitle).subscribe({
       next: (data) => {
         this.show = data;
+
+        console.log('show details: ', this.show);
+
         this.loadBackdropImage(this.show.rootPath);
       },
       error: (err) => {
@@ -107,6 +111,8 @@ export class MovieDetailPage implements OnInit {
   async playVideo() {
     if (!this.currentMediaItem) return;
 
+    console.log('play video is running test');
+
     this.isVideoPlaying = true;
 
     // Pobieramy klucz z serwisu
@@ -115,12 +121,14 @@ export class MovieDetailPage implements OnInit {
     // Aktualizujemy URL video
     this.updateVideoUrl(key);
 
-    // Ustawiamy napisy
-    const subtitleName = this.currentMediaItem.title;
-    const rootPath = encodeURIComponent(this.currentMediaItem.rootPath);
+    if (this.currentMediaItem.subtitles.length == 0) {
+      return;
+    }
+
+    this.selectedSubtitles = this.currentMediaItem.subtitles[0];
 
     this.videoApiService
-      .getSubtitleBlob(this.currentMediaItem.rootPath, this.currentMediaItem.title)
+      .getSubtitleBlob(this.currentMediaItem.rootPath, this.currentMediaItem.subtitles[0].filename)
       .subscribe((blob) => {
         this.subtitlesUrl = URL.createObjectURL(blob);
       });
@@ -146,5 +154,26 @@ export class MovieDetailPage implements OnInit {
     } else {
       console.warn('Nieznany typ struktury show:', this.show?.structure);
     }
+  }
+
+  onSubtitlesSelected(selectedSubtitles: SubtitleModel | undefined) {
+    if (!this.currentMediaItem) return;
+
+    console.log('selected subtitles in movie details page: ', selectedSubtitles);
+
+    this.selectedSubtitles = selectedSubtitles;
+
+    if (!selectedSubtitles) {
+      this.subtitlesUrl = '';
+      return;
+    }
+
+    this.videoApiService
+      .getSubtitleBlob(this.currentMediaItem.rootPath, selectedSubtitles.filename)
+      .subscribe((blob) => {
+        this.subtitlesUrl = URL.createObjectURL(blob);
+      });
+
+    console.log('subtitle url: ', this.subtitlesUrl);
   }
 }

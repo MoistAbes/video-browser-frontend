@@ -1,0 +1,44 @@
+<div class="video-selector-container" data-lenis-prevent>
+  <mat-tab-group dynamicHeight>
+    <mat-tab label="Subtitles">
+      <mat-nav-list>
+        <div class="episode-list">
+          <!-- OFF -->
+          <div
+            class="episode-card off"
+            (click)="selectSubtitleLanguage(undefined)"
+            [class.playing]="isSubtitleDisabled()"
+          >
+            <div class="thumbnail"></div>
+            <div class="episode-info">
+              <span class="episode-title">
+                @if (isSubtitleDisabled()) {
+                <ng-container>▶</ng-container>
+                } Off
+              </span>
+            </div>
+          </div>
+
+          @for (subtitle of subtitleList; track subtitle.filename) {
+          <div
+            class="episode-card"
+            (click)="selectSubtitleLanguage(subtitle)"
+            [class.playing]="isSubtitleSelected(subtitle)"
+          >
+            <div class="thumbnail"></div>
+            <div class="episode-info">
+              <span class="episode-title">
+                @if (isSubtitleSelected(subtitle)) {
+                <ng-container>▶</ng-container>
+                }
+                {{ subtitle.displayName }}
+              </span>
+            </div>
+          </div>
+
+          }
+        </div>
+      </mat-nav-list>
+    </mat-tab>
+  </mat-tab-group>
+</div>

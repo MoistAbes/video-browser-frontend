@@ -1,15 +1,15 @@
-import {Component, signal} from '@angular/core';
-import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
-import {MatIcon} from '@angular/material/icon';
-import {MatButton, MatIconButton} from '@angular/material/button';
-import {NgClass} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {AuthRequest} from '../../models/security/auth-request';
-import {AuthApiService} from '../../services/api/auth-api-service';
-import {JwtService} from '../../services/local/jwt-service';
-import {Router} from '@angular/router';
-import {ToastrService} from 'ngx-toastr';
-import {UserService} from '../../services/local/user-service';
+import { Component, signal } from '@angular/core';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { NgClass } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AuthRequest } from '../../models/security/auth-request';
+import { AuthApiService } from '../../services/api/auth-api-service';
+import { JwtService } from '../../services/local/jwt-service';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { UserService } from '../../services/local/user-service';
 import { AuthService } from '../../services/local/auth-service';
 
 @Component({
@@ -28,7 +28,7 @@ import { AuthService } from '../../services/local/auth-service';
   ],
   templateUrl: './login-page.html',
   standalone: true,
-  styleUrl: './login-page.scss'
+  styleUrl: './login-page.scss',
 })
 export class LoginPage {
   username: string = '';
@@ -45,13 +45,14 @@ export class LoginPage {
 
   isOverlayVisible: boolean = false;
 
-  constructor(private authApiService: AuthApiService,
-              private jwtService: JwtService,
-              private router: Router,
-              private toastr: ToastrService,
-              private userService: UserService,
-              private authService: AuthService) {
-  }
+  constructor(
+    private authApiService: AuthApiService,
+    private jwtService: JwtService,
+    private router: Router,
+    private toastr: ToastrService,
+    private userService: UserService,
+    private authService: AuthService
+  ) {}
 
   togglePassword(event: MouseEvent) {
     this.hide.set(!this.hide());
@@ -59,22 +60,19 @@ export class LoginPage {
   }
 
   registerUser() {
-
     if (this.validateRegisterValues()) {
-      const authRequest: AuthRequest = new AuthRequest(this.username.trim(), this.password.trim())
+      const authRequest: AuthRequest = new AuthRequest(this.username.trim(), this.password.trim());
       this.register(authRequest);
     }
   }
 
   loginUser() {
-
     if (this.validateLoginValues()) {
-      const authRequest: AuthRequest = new AuthRequest(this.username.trim(), this.password.trim())
+      const authRequest: AuthRequest = new AuthRequest(this.username.trim(), this.password.trim());
       this.login(authRequest);
-    }else {
-      console.log("validation failed")
+    } else {
+      console.log('validation failed');
     }
-
   }
 
   validateLoginValues(): boolean {
@@ -83,7 +81,6 @@ export class LoginPage {
 
     this.usernameError = formattedUsername.length === 0;
     this.passwordError = formattedPassword.length === 0;
-
 
     return !(this.usernameError || this.passwordError);
   }
@@ -101,23 +98,22 @@ export class LoginPage {
   }
 
   validateRegisterValues(): boolean {
-
     const formattedUsername: string = this.username.trim();
     const formattedPassword: string = this.password.trim();
     const formattedRepeatPassword: string = this.repeatPassword.trim();
 
     if (formattedUsername.length < 3) {
-      this.toastr.warning("Username must be at least 3 characters");
+      this.toastr.warning('Username must be at least 3 characters');
       return false;
     }
 
     if (formattedPassword.length < 6) {
-      this.toastr.warning("Password must be at least 6 characters");
+      this.toastr.warning('Password must be at least 6 characters');
       return false;
     }
 
     if (formattedPassword !== formattedRepeatPassword) {
-      this.toastr.warning("Passwords do not match");
+      this.toastr.warning('Passwords do not match');
       return false;
     }
 
@@ -125,51 +121,47 @@ export class LoginPage {
   }
 
   register(authRequest: AuthRequest) {
-
-    this.isLoading = true
+    this.isLoading = true;
 
     this.authApiService.register(authRequest).subscribe({
       next: () => {},
-      error: err => {
-        this.toastr.warning(err.error.message)
-        this.isLoading = false
+      error: (err) => {
+        this.toastr.warning(err.error.message);
+        this.isLoading = false;
       },
       complete: () => {
-        this.toastr.success("Successfully registered account")
-        this.clearForm()
-        this.isLoading = false
+        this.toastr.success('Successfully registered account');
+        this.clearForm();
+        this.isLoading = false;
         this.isLogin = true;
-      }
-    })
+      },
+    });
   }
 
   login(authRequest: AuthRequest) {
-
-    this.isLoading = true
+    this.isLoading = true;
 
     this.authApiService.login(authRequest).subscribe({
-      next: token => {
-        this.authService.login(token.token)
+      next: (token) => {
+        this.authService.login(token.token);
         this.userService.loadUser();
       },
-      error: err => {
-        this.isLoading = false
-
+      error: (err) => {
+        this.isLoading = false;
+        this.toastr.error('Error while login: ', err.error);
       },
       complete: () => {
-        this.isLoading = false
+        this.isLoading = false;
         this.router.navigateByUrl('/home');
-
-      }
-    })
+      },
+    });
   }
 
-
   onSubmit() {
-    if (this.isLoading){
-      return
+    if (this.isLoading) {
+      return;
     }
-    console.log("on Submit")
+    console.log('on Submit');
     // Logika
     if (this.isLogin) {
       this.loginUser();
@@ -178,15 +170,14 @@ export class LoginPage {
     }
   }
 
-  clearForm () {
-    this.username = ''
+  clearForm() {
+    this.username = '';
     this.password = '';
-    this.repeatPassword = ''
-    this.usernameError = false
-    this.passwordError = false
-    this.repeatPasswordError = false
+    this.repeatPassword = '';
+    this.usernameError = false;
+    this.passwordError = false;
+    this.repeatPasswordError = false;
   }
-
 
   onConfirmed() {
     this.isOverlayVisible = false;
@@ -197,6 +188,4 @@ export class LoginPage {
     this.isOverlayVisible = false;
     console.log('Anulowano!');
   }
-
-
 }

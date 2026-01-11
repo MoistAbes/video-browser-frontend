@@ -1,7 +1,34 @@
 @use 'styles/colors' as *;
 @use './app/pages/movie-detail-page/movie-detail-page' as *;
+@use '@angular/material' as mat;
+
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
+:root {
+  @include mat.slider-overrides(
+    (
+      // rozmiar
+      handle-width: 0px,
+      handle-height: 0px,
+
+      // kolory
+      handle-color: transparent,
+      hover-handle-color: transparent,
+      focus-handle-color: transparent,
+      disabled-handle-color: transparent,
+
+      // obramowanie / outline
+      handle-shape: 0px,
+      with-overlap-handle-outline-width: 0px,
+      with-overlap-handle-outline-color: transparent,
+
+      // ripple i focus
+      ripple-color: transparent,
+      focus-state-layer-color: transparent,
+      hover-state-layer-color: transparent
+    )
+  );
+}
 html,
 body {
   overflow-y: auto; /* lub scroll, jeśli chcesz zawsze */

@@ -21,11 +21,11 @@
   .custom-control-bar {
     position: absolute;
     width: 100%;
-    bottom: 0;
+
+    bottom: 5px;
     left: 0;
     right: 0;
-    background-color: rgba(0, 0, 0, 0.3);
-    color: white;
+    // color: white;
     pointer-events: none;
     opacity: 0;
     transform: translateY(100%); // na starcie schowana poza ekranem
@@ -42,7 +42,8 @@
   .timeline-box {
     position: absolute;
     width: 100%;
-    bottom: 33px;
+    // bottom: 33px;
+    bottom: 50px;
     left: 0;
     right: 0;
     z-index: 1000;
@@ -62,6 +63,9 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    margin-left: 5px;
+    margin-right: 5px;
+
     flex: 0 0 auto; /* keep size to content */
   }
 
@@ -71,27 +75,29 @@
     margin: 0;
   }
 
-  .netflix-button {
-    width: 48px; // Fixed width
-    height: 48px; // Fixed height (optional)
-    font-size: 24px;
-    text-align: center;
+  .ui-element-container {
+    background-color: #0000005b;
+    padding: 4px;
+    border-radius: 16px;
+  }
 
-    margin-left: 5px;
-    background: transparent;
+  .netflix-button {
+    width: clamp(32px, 4vw, 60px);
+    height: clamp(28px, 3vw, 44px);
+    font-size: clamp(14px, 1.2vw, 20px);
+    text-align: center;
+    padding: 0;
+
     border: none;
     outline: none;
     cursor: pointer;
-    padding: 8px;
-    border-radius: 50%;
+    padding: 0px;
+    border-radius: 16px;
     color: white;
+    background: transparent;
 
     &:hover {
-      transform: scale(1.1);
-    }
-
-    &:active {
-      transform: scale(0.95);
+      background-color: #c9c9c93d;
     }
   }
 
@@ -161,6 +167,55 @@
       transform: translateY(0);
       pointer-events: auto;
     }
+
+    .video-ui-element {
+      background-color: #e50914;
+    }
+  }
+
+  .ui-volume-changer {
+    border-radius: 16px;
+    padding: 8px;
+
+    .volume-slider {
+      --mdc-slider-track-height: 2px; /* grubość paska */
+      --mdc-slider-handle-width: 14px; /* wielkość kółka */
+      --mdc-slider-handle-height: 14px;
+      --mdc-slider-active-track-height: 2px;
+      --mdc-slider-track-inactive-opacity: 0.3;
+      height: 24px; /* całkowita wysokość slidera */
+    }
+
+    &:hover {
+      background-color: #c9c9c93d;
+    }
+  }
+
+  .time-counter {
+    height: clamp(28px, 3vw, 44px);
+    font-size: clamp(14px, 1.2vw, 20px);
+    padding: 0 6px;
+    border-radius: 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: auto;
+    white-space: nowrap; /* ← najważniejsze */
+
+    &:hover {
+      background-color: #c9c9c93d;
+    }
+  }
+
+  .autoplay-ui-element {
+    display: inline;
+    padding: 8px;
+    border-radius: 16px;
+    &:hover {
+      background-color: #c9c9c93d;
+    }
   }
 }
 
@@ -183,20 +238,6 @@
   display: flex;
   align-items: center;
   gap: 8px; /* odstęp między tekstem a przyciskiem */
-}
-
-.play-btn {
-  background-color: #e50914;
-  color: white;
-  padding: 4px 10px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.play-btn:hover {
-  background-color: #f6121d;
 }
 
 .hide-cursor {

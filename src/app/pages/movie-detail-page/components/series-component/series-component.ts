@@ -11,6 +11,7 @@ import { VideoCardComponent } from '../../../../components/video-card-component/
 import { ShowModel } from '../../../../models/show/show-model';
 import { MediaItemModel } from '../../../../models/show/media-item-model';
 import { UtilService } from '../../../../services/local/util-service';
+import { SubtitleModel } from '../../../../models/show/subtitle-model';
 
 @Component({
   selector: 'app-series-component',
@@ -23,15 +24,15 @@ import { UtilService } from '../../../../services/local/util-service';
 export class SeriesComponent implements OnInit {
   @Input() currentMediaItem: MediaItemModel | undefined;
   @Input() show: ShowModel | undefined;
-
   @Input() isVideoPlaying: boolean = false;
   @Input() selectedVideoUrl: string = '';
   @Input() backdropImagePath: string = '';
-
   @Input() subtitlesUrl: string = '';
+  @Input() selectedSubtitlesInput: SubtitleModel | undefined;
 
   @Output() updateVideoData = new EventEmitter<Partial<MediaItemModel>>();
   @Output() playVideoClicked = new EventEmitter<void>();
+  @Output() selectedSubtitles = new EventEmitter<SubtitleModel>();
 
   constructor(public utilService: UtilService) {}
 
@@ -41,7 +42,6 @@ export class SeriesComponent implements OnInit {
   }
 
   watchMovie(mediaItem: MediaItemModel) {
-
     this.currentMediaItem = mediaItem;
     this.updateVideoData.emit(this.currentMediaItem);
     this.resetPlayingVideo();
@@ -50,5 +50,11 @@ export class SeriesComponent implements OnInit {
   resetPlayingVideo() {
     this.selectedVideoUrl = '';
     this.isVideoPlaying = false;
+  }
+
+  onSelectedSubtitles(selectedSubtitles: SubtitleModel) {
+    console.log('selected subtitles in series component: ', selectedSubtitles);
+
+    this.selectedSubtitles.emit(selectedSubtitles);
   }
 }

@@ -20,12 +20,26 @@ import { MediaItemModel } from '../../models/show/media-item-model';
 import { ShowUtilService } from '../../services/local/show-util-service';
 import { VideoTimelineComponent } from '../video-timeline-component/video-timeline-component';
 import { StructureTypeEnum } from '../../enums/structure-type-enum';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FormsModule } from '@angular/forms';
+import { VideoSubtitleComponent } from './video-subtitle-component/video-subtitle-component';
+import { SubtitleModel } from '../../models/show/subtitle-model';
 
 type VideoJSPlayer = ReturnType<typeof videojs>;
 
 @Component({
   selector: 'app-video-player-component',
-  imports: [MatSlider, MatSliderThumb, VideoSelectorComponent, VideoTimelineComponent],
+  imports: [
+    MatSlider,
+    MatSliderThumb,
+    VideoSelectorComponent,
+    VideoTimelineComponent,
+    MatSlideToggleModule,
+    MatTooltipModule,
+    FormsModule,
+    VideoSubtitleComponent,
+  ],
   templateUrl: './video-player-component.html',
   styleUrl: './video-player-component.scss',
   standalone: true,
@@ -37,12 +51,14 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
 
   @Input() currentMediaItem: MediaItemModel | undefined;
   @Input() show: ShowModel | undefined;
-
   @Input() src: string = '';
   @Input() subtitlesUrl: string = '';
+  @Input() selectedSubtitlesInput: SubtitleModel | undefined;
+
   @Output() playVideoClicked = new EventEmitter<void>();
   @Output() updateMediaItem = new EventEmitter<Partial<MediaItemModel>>();
   @Output() seekChange = new EventEmitter<number>();
+  @Output() selectedSubtitles = new EventEmitter<SubtitleModel>();
 
   player!: VideoJSPlayer;
 
@@ -54,10 +70,12 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
   volume: number = 1;
   isPlaying: boolean = false;
   isVideoListVisible: boolean = false;
+  isSubtitleListVisible: boolean = false;
   wasPlaying: boolean = true;
   isSeeking = false;
 
   showControls: boolean = false;
+  autoplayEnabled: boolean = true;
 
   nextEpisodeTimerCounter: number = 16;
   isNextEpisodeNoticeVisible: boolean = false;
@@ -69,6 +87,20 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
   ngOnInit() {}
 
   ngAfterViewInit(): void {
+    console.log('subtitle url: ', this.subtitlesUrl);
+
+    const tracks = this.subtitlesUrl
+      ? [
+          {
+            kind: 'captions',
+            src: this.subtitlesUrl,
+            srclang: 'en',
+            label: 'English',
+            default: true,
+          },
+        ]
+      : [];
+
     this.player = videojs(
       this.target.nativeElement,
       {
@@ -81,15 +113,7 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
           hotkeys: false, // 👈 wyłącza wbudowane hotkeye
         },
         sources: [{ src: this.src, type: 'video/mp4' }],
-        tracks: [
-          {
-            kind: 'captions',
-            src: this.subtitlesUrl,
-            srclang: 'en',
-            label: 'English',
-            default: true,
-          },
-        ],
+        tracks,
       },
       () => {
         const container = document.querySelector('.video-player-container') as HTMLElement;
@@ -127,7 +151,11 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
 
             const timeLeft: number = this.duration - this.currentTime;
 
-            if (timeLeft <= 15 && this.show?.structure != StructureTypeEnum.SINGLE_MOVIE) {
+            if (
+              timeLeft <= 15 &&
+              this.show?.structure != StructureTypeEnum.SINGLE_MOVIE &&
+              this.autoplayEnabled
+            ) {
               this.isNextEpisodeNoticeVisible = true;
               // licznik w sekundach, zaokrąglony w dół
               this.nextEpisodeTimerCounter = Math.floor(timeLeft);
@@ -204,20 +232,16 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
 
   onTimeUpdate(): void {
     this.currentTime = this.player.currentTime()!;
-
-    // const input = this.progressSlider?.nativeElement;
-    // if (input) {
-    //   const value = (this.currentTime / Number(input.max)) * 100;
-    //   input.style.background = `linear-gradient(to right, #e50914 ${value}%, rgba(255,255,255,0.3) ${value}%)`;
-    // }
   }
 
   onVideoEnd() {
-    const nextMediaItem: MediaItemModel | undefined =
-      this.showUtilService.findNextMediaItemAutoplay(this.show, this.currentMediaItem);
+    if (this.autoplayEnabled) {
+      const nextMediaItem: MediaItemModel | undefined =
+        this.showUtilService.findNextMediaItemAutoplay(this.show, this.currentMediaItem);
 
-    if (nextMediaItem) {
-      this.playNextMedia(nextMediaItem);
+      if (nextMediaItem) {
+        this.playNextMedia(nextMediaItem);
+      }
     }
   }
 
@@ -233,12 +257,12 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     if (changes['subtitlesUrl'] && !changes['subtitlesUrl'].firstChange && this.player) {
-      // Usuń stare napisy
-      const tracks = this.player.remoteTextTracks() as any; // rzutujemy na any
+      console.log('change to subtitles in player: ', this.subtitlesUrl);
 
-      for (let i = tracks.length - 1; i >= 0; i--) {
-        const track = tracks[i]; // możemy traktować jak tablicę
-        this.player.removeRemoteTextTrack(track);
+      // Usuń stare napisy
+      const remoteTracks = this.player.remoteTextTracks() as any;
+      for (let i = remoteTracks.length - 1; i >= 0; i--) {
+        this.player.removeRemoteTextTrack(remoteTracks[i]);
       }
 
       // Dodaj nowe napisy
@@ -248,10 +272,13 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
           src: this.subtitlesUrl,
           srclang: 'en',
           label: 'English',
-          default: true,
         },
         false
       );
+
+      // 🔥 Włącz JEDYNY track
+      const tracks = this.player.textTracks() as unknown as TextTrack[];
+      tracks[0].mode = 'showing';
     }
   }
 
@@ -342,17 +369,6 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
   };
 
-  // Toggle play/pause when clicking on the video area
-  // onVideoClick() {
-  //   if (this.player.paused()) {
-  //     this.player.play();
-  //     this.isPlaying = true;
-  //   } else {
-  //     this.player.pause();
-  //     this.isPlaying = false;
-  //   }
-  // }
-
   togglePlay() {
     if (this.player.paused()) {
       this.player.play();
@@ -400,5 +416,26 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, AfterViewInit, O
       default:
         return null;
     }
+  }
+
+  toggleSubtitles() {
+    this.isSubtitleListVisible = !this.isSubtitleListVisible;
+    if (this.isSubtitleListVisible) {
+      this.isVideoListVisible = false;
+    }
+    console.log('toogle sutbitles: ', this.isSubtitleListVisible + ' ' + this.isVideoListVisible);
+  }
+
+  toggleVideoList() {
+    this.isVideoListVisible = !this.isVideoListVisible;
+    if (this.isVideoListVisible) {
+      this.isSubtitleListVisible = false;
+    }
+    console.log('toogle video list: ', this.isSubtitleListVisible + ' ' + this.isVideoListVisible);
+  }
+
+  onSelectedSubtitles(selectedSubtitles: SubtitleModel | undefined) {
+    console.log('selectedf subtitle in video player: ', selectedSubtitles);
+    this.selectedSubtitles.emit(selectedSubtitles);
   }
 }

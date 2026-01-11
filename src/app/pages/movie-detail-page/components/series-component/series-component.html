@@ -37,8 +37,10 @@
       [currentMediaItem]="currentMediaItem"
       [src]="selectedVideoUrl"
       [subtitlesUrl]="subtitlesUrl"
+      [selectedSubtitlesInput]="selectedSubtitlesInput"
       (playVideoClicked)="playVideoClicked.emit()"
       (updateMediaItem)="updateVideoData.emit($event)"
+      (selectedSubtitles)="onSelectedSubtitles($event)"
     ></app-video-player-component>
   </div>
   }

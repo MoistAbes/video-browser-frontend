@@ -1,0 +1,81 @@
+.video-selector-container {
+  position: absolute;
+  overflow-y: auto;
+  border: none;
+  padding: 15px;
+  height: 45vh;
+  width: 400px;
+  bottom: 100px;
+  right: 10px;
+  border-radius: 8px;
+  background: rgba(20, 20, 20, 0.95);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+  color: white;
+  backdrop-filter: blur(6px);
+
+  //ToDO to na kiedys do zrobienia zeby animacja wysuwania byla
+  //opacity: 0;
+  //transform: translateX(100%); // start poza ekranem
+  //transition: opacity 0.3s ease, transform 0.3s ease;
+  //
+  //&.visible {
+  //  opacity: 1;
+  //  transform: translateX(0); // wysuwa się na ekran
+  //}
+}
+
+.season-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 5px;
+}
+
+.episode-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 15px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.episode-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  padding: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease, border 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(4px);
+  }
+
+  &.playing {
+    background: rgba(255, 0, 0, 0.3); // wyróżnienie czerwonym tłem (Netflix vibe)
+    border: 1px solid crimson;
+  }
+}
+
+.thumbnail {
+  width: 60px;
+  height: 35px;
+  background: #555;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.episode-info {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+}
+
+.episode-title {
+  font-weight: 500;
+}

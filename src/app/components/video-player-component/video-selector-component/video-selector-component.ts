@@ -32,7 +32,7 @@ export class VideoSelectorComponent {
 
 
   isCurrentlyPlaying(videoInfo: MediaItemModel | undefined): boolean {
-      return this.currentMediaItem?.id == videoInfo!.id; // zakładam że VideoInfoModel ma ID
+      return this.currentMediaItem?.id == videoInfo!.id; 
   }
 
 }
